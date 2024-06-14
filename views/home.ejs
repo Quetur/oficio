@@ -1,0 +1,65 @@
+<!-- <%- include('includes/cabecera.ejs') %> -->
+<!-- <%- include('includes/navbar.ejs') %> -->
+<!-- -->
+<link href="css/home.css" rel="stylesheet">
+</head>
+  
+  <body>
+    
+    <div class="container">
+      <div class="heading">
+        <table  style="border-collapse: separate;" id="tabla">
+          <tr>
+            <td align="center" colspan="2">
+              <button class="btn btn-lg btn-primary" type="submit">Oficio</button>
+              <button class="btn btn-lg btn-primary" type="submit">Zona</button>
+            </td>
+          </tr>
+        </table >
+      </div>  
+      <div class="row">
+          <% registro.forEach((usuario) =>{ %>
+          <div class="tarjeta">
+            <table border=1 >
+              <tr border=1 class="titulo">
+                <!--<td style="width: 20px;"><%= usuario.dni %></td> -->
+                <!--<td style="width: 200px;"><%= usuario.nombre %> <%= usuario.apellido %></td>
+                <td style="align-items: right; width:50px;  align-items: center; text-align: left;">
+                  <a href="/home">
+                    <img class="estrella" align="center" src="img/m_estrella2.png"></img>
+                  <a class="numestrella"><%= usuario.calificacion %></h2>
+                </td>
+               
+              </tr>
+            </table>
+            <table>
+              <tr class="cuerpo">
+                <td> <%= usuario.oficio %> </td>
+              </tr>
+            </table>
+            <table>
+              <tr class="pie">
+                <td>
+                  <img class="whatsapp" align="center" src="img/whatsapp.png"></img>
+                  <a href=""></a> <%= usuario.celular %> - <%= usuario.localidad %></td>
+                <!--<td> <%= usuario.localidad %></td>-->
+              <!--</tr>
+            </table>
+          </div>
+          <% }); %>
+        </div>
+      </table>
+      </div>
+      </article>
+      </div>
+
+     
+
+
+
+      </tbody>
+  <script>
+
+  </script>
+  </script>
+</body>

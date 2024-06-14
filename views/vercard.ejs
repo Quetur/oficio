@@ -1,0 +1,161 @@
+<link href="/css/bootstrap.bundle.min.js" rel="stylesheet">
+<link href="/css/vercard.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.6.3.min.js"></script>
+<body>
+  <form id="agregar_comentario" action="/new_comment" method="POST">
+    <div id="mimodal" class="card-header bg-primary text-white">
+      <table style="border-bottom: thick black;" class="formato" >
+      
+          <tr>
+            <td style="width:500px;">
+              <input type="text" id="dni" name="dni" hidden value="<%= usuario[0].dni  %>"></input>
+              <h2 class="fs-subtitle subti" style="font-size: 2.5rem;"><%= usuario[0].nombre +' '+usuario[0].apellido %> </h2>
+            </td>
+            <td width="500px" style="padding-right: 0px; text-align: right;">
+
+              <input type="image" style="width: 80px; height: 50px;" src="/img/close2.png" onclick="window.close()">
+
+            </td>
+          </tr> 
+
+      </table>
+      <table style="border-bottom: thick black;" class="formato">
+        <tr class="linea formato">
+          <td style="padding: 20px;" rowspan="4" class="linea"> 
+            <img class="grid-img" style="width: 250px;height: 250px;" src="https://oficio.s3.sa-east-1.amazonaws.com/<%= usuario[0].imagen %> " />' </td>
+        </tr>
+
+        <tr>
+          <td colspan="2" > <label style="font-size: 2.5rem;" > <%= usuario[0].calle +' '+usuario[0].numero  %> </label> </td>
+        </tr>
+        <tr>
+          <td colspan="2"> <label style="font-size: 2.5rem;"> <%= usuario[0].localidad +'  -   '+usuario[0].provincia %> </label> </td>
+        </tr>
+        <tr>
+          <td  width="40px"> <img class="img_whatsapp" src="/img/whatsapp.png"></img></td>
+          <td> <input width="300px" class="formato_celu sinborde" id="celular" name="celular" value=" <%= usuario[0].celular %> " type="text"></td>
+        </tr>
+        <tr>
+          <td colspan="3" width="780px">
+            <textarea style="height: 100px; width: 850px;" class="formato sinborde" value=""><%= usuario[0].oficio %></textarea>
+          </td>
+        </tr>
+        <tr  class="border_bottom">
+          <td colspan="3" width="100px"> <textarea style="height: 180px; width: 850px;" class="formato sinborde" value=""><%= usuario[0].presentacion %></textarea></td>
+        </tr>
+
+      </table >
+
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; border-top: none;">
+              <button  value="" type="button" class="btn btn-primary comentario"  id="comentario" onclick="AgregarComentario()" >
+                Agregar Comentario
+              </button>
+            </div>
+    
+          <h2  style="text-align: center;"><%= largo_cali %>  - Comentarios Destacados  </h2>
+
+      <table  id="calif" class="table table-sm table-hover  cards " style="width: 100%;font-size: 2rem;">
+        <thead>
+          <tr >
+            <th  style="text-align: left;border-bottom: 4px solid #a09f9f; ">Comentario </th>
+            <th  style="text-align: center;border-bottom: 4px solid #a09f9f;">Lo Escribió </th>
+            <th  style="text-align: center;border-bottom: 4px solid #a09f9f;">Calificacion &nbsp &nbsp <%= promedio  %> 
+              <img class="img_estrellita" style="height:40px; width:40px;" src="/img/m_estrella2.png"></img>
+             </th>
+
+            <!--
+            <th>comentario</th>
+
+            <th>usuario</th>
+    -->
+          </tr>
+        </thead>
+          <% califica.forEach((cali) =>{ %>
+                <tr  class="titulo border_bottom">
+                  <!--<td style="width: 20px;"><%= cali.id_usuarioOrigen %></td> -->
+                  <!--<td style="width: 200px;"><%= cali.id_usuarioDestino %> </td>-->
+                  <td style="width: 600px; font-size: 1.5rem;" class="formato"><%= cali.nota %> </td>
+                  <td style="width: 100px; font-size: 1.5rem;" class="formato"><%= cali.nombre_origen %> </td>
+                  <td style="width: 125px; text-align: rights">
+                    <div style="display: flex; flex-wrap: wrap; justify-content: right;">
+                    <!--<input class="sinborde" style="width: 20px; font-size: 1.5rem;" value="<%= cali.calificacion %>"> </input> -->
+                    <% for (let i=0; i<cali.calificacion ; i++){ %>
+                    
+                      <img class="img_estrellita" src="/img/m_estrella2.png"></img>
+                    
+                    <%  } %>
+                    </div>
+                  </td>
+                </tr>
+        <% }); %>
+      </table>
+    </div>
+  </form>
+</body>
+
+<script>
+  let filtro = "/" + document.getElementById("dni").value
+  console.log("filtro 1", filtro)
+  let url = "/api/calificacion" + filtro
+  console.log("servidor ->", url)
+  var row = document.createElement('tr');
+  console.log("row antes: ", row);
+  
+  console.log("usuario", )
+
+  function _close() {
+    document.getElementById('image').click();
+  }
+  var cel = document.getElementById('celular').value
+  console.log(cel)
+  document.getElementById('celular').value = '(' + cel.substring(1, 3) + ') ' + cel.substring(3, 7) + '-' + cel.substring(7, 11)
+  $("input[name='celular']").keyup(function() {
+    console.log("hola")
+    var num = $(this).val().replace(/\D/g, '');
+    //$(this).val($(this).val().replace(/^(\d{2})(\d{4})(\d+)$/, "($1)$2-$3"));
+    $(this).val($(this).val().replace(/^(\d{2})(\d{4})(\d+)$/, "($1) $2-$3"));
+  });
+
+  $('#modal-edit').data('row', $(this).closest('tr'));
+
+
+
+ console.log("calificaciones", cargarCalificacion())
+ function AgregarComentario(){
+  console.log("agregarcomentario",  document.getElementById("dni").value )
+  document.getElementById("agregar_comentario").submit();
+ }
+
+  function cargarCalificacion(){
+    fetch(url)
+      .then(response => response.json())
+      .then((responseData) => {
+        console.log("calificacion ->", responseData)
+
+/*
+        for (var count = 0; count < responseData.length; count++) {
+          console.log("nota ",count, responseData[count].nota )
+          row.innerHTML = row.innerHTML + `<tr> <td><input id="nota_` + count+ `"value="` + responseData[count].nota +`"></td></tr>`;
+
+      
+        }
+        console.log("row a agregar: ",count, row.innerHTML);
+        calif.appendChild(row);
+
+*/
+      largo = -1
+      const row = document.createElement('tr');
+      responseData.forEach(function () {
+    
+        largo++
+        console.log("largo", largo)
+        //console.log("nota ",largo, cali[largo].nota )
+          //  row.innerHTML = row.innerHTML + `<tr> <td><input id="nota_` + count+ `"value="` + cali[largo].nota +`"></td></tr>`;
+            console.log("row a agregar: ",largo, row.innerHTML);
+        calif.appendChild(row);
+    })
+  })
+}
+
+</script>

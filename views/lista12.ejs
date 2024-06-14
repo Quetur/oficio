@@ -1,0 +1,539 @@
+<%- include('menu2.ejs') %>
+
+<body>
+
+ 
+
+
+  <script src="https://code.jquery.com/jquery-latest.js"></script>
+  <link href="css/lista12.css" rel="stylesheet">
+
+  <!-- saque esto para ocultar el boton de grilla <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">-->
+  <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/b-1.5.6/sc-2.0.5/sl-1.3.0/datatables.min.css">
+
+  <script src="https://cdn.datatables.net/v/bs4/dt-1.10.18/b-1.5.6/sc-2.0.5/sl-1.3.0/datatables.min.js"></script>
+
+
+<!-- esto es para los filtros del footer
+  <link href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.js"></script>
+-->
+
+  <div class="container container-center position-relative ">
+    
+    <img src="/img/filter.png" height="50px" width="50px" type="button" value="Filtrar" id="boton-servicio" onclick="showHide()">
+    <- Aplicar Filtros</img>
+
+      <div id="div-servicios">
+        <div class="mb-3 material-textfield" style="margin-left: 10px;">
+          <label for="select_provi" >Seleccione una Provincia </label>
+          <select name="select_provi" id="select_provi" class="form-select" onchange="functionProv(this)">
+
+            <!-- aca cargo solo las provincias que tienen registro -->
+          </select>
+        </div>
+        <div class="mb-3 material-textfield" style="margin-left: 10px;">
+          <label  >Seleccione una Localidad</label>
+          <select name="select_localidad" id="select_localidad" class="form-select">
+            <!-- aca cargo solo las localidades que tienen registro  
+            <option value="-">Seleccione localidad</option> -->
+          </select>
+        </div>
+        <div class="mb-3 material-textfield" style="margin-left: 10px;">
+          <label  >Seleccione un Oficio</label>
+           <select name="select_oficio" id="select_oficio" class="form-select">
+            <!-- aca cargo solo los oficios que tienen registro  --> 
+          </select> 
+        </div>
+        <!-- <button style="margin-left: 10px;" value="">filtrar merlo</button>  -->
+        </div>
+      <!-- <table id="example" class="table table-sm table-hover cards " style="width: 100%;">  -->
+      <table id="example" class="table table-sm table-hover  cards " style="width: 100%;">
+        <thead>
+          <tr>
+            <th></th>
+            <th></th>
+
+            <th>Oficio</th>
+            <th></th>
+            <th>Localidad</th>
+
+            <th>Provincia</th>
+            <th>Celular</th>
+          </tr>
+        </thead>
+        <tfoot hidden>
+          <tr>
+            <th></th>
+            <th></th>
+
+            <th>Oficio</th>
+            <th></th>
+            <th>Localidad</th>
+
+            <th>Provincia</th>
+            <th>Celular</th>
+          </tr>
+        </tfoot>
+      </table>
+  </div>
+
+
+  <script>
+    console.log("lista12")
+    let filtro = "/1"
+
+    function functionProv(e) {
+      //datatable.columns.adjust().draw(); // Redraw the DataTable
+      // datatable.clear().draw();
+      // datatable.ajax.reload(null, false);
+      let prov = e.options[e.selectedIndex].getAttribute("title")
+      console.log(" function e provincia elejida", prov)
+      $("#select_localidad").find('option').remove(); // borro las localidades anteriores
+
+
+      console.log("eligio provincia : ", prov)
+
+      //document.getElementById("button").value =  document.getElementById("select_provi").value´
+      //table.buttons.text(document.getElementById("select_provi").value)
+      let url = "/api/localidades"
+      if (prov == undefined || prov < 1) {
+        console.log("prov", prov)
+      } else {
+        console.log("tiene prov", prov)
+        url = url + "/" + prov
+        filtro = "/u.id_provincia = " + prov
+      }
+      console.log("servidor ->", url)
+      fetch(url)
+        .then(response => response.json())
+        .then((responseData) => {
+          console.log("localidad ->", responseData)
+          // alert('HAY ' + lista_de_provincias.length) // Puedes poner este alert para ver si la llamada POST te devuelve algo
+          // creamos un elemento de tipo option
+          //var opt = document.createElement("option");
+          //let modelList = document.createElement("select_localidad");
+          var html = '<option id="select_localidad" name="select_localidad" value="">Todas</option>'
+
+          for (var count = 0; count < responseData.length; count++) {
+            console.log("dato1", responseData[count], "codigo ", responseData[count].cod)
+            console.log("codigo ", responseData[count].cod)
+
+            html = html + '<option id="select_localidad" name="select_localidad" value="' + responseData[count].descripcion + '" title="' + responseData[count].cod + '">' + responseData[count].descripcion + '</option>';
+          }
+
+          console.log("html ->", html)
+
+          select_localidad.innerHTML = html;
+
+        });
+    }
+
+    function showHide() {
+      // Definir elemento
+      let div = document.getElementById("div-servicios");
+      if (!div) {
+        // No existe, hay que crearlo
+        div = document.createElement("div");
+        div.setAttribute("id", "div-servicios");
+        document.body.appendChild(div);
+
+        var servicio1 = document.createElement("a");
+        servicio1.innerHTML = "This is a paragraph.";
+        servicio1.setAttribute("class", "servicios");
+        div.appendChild(servicio1);
+
+        var servicio2 = document.createElement("a");
+        servicio2.innerHTML = "This is a paragraph.";
+        servicio2.setAttribute("class", "servicios");
+        div.appendChild(servicio2);
+
+        var servicio3 = document.createElement("a");
+        servicio3.innerHTML = "This is a paragraph.";
+        servicio3.setAttribute("class", "servicios");
+        div.appendChild(servicio3);
+        // Retardar para que aparezca con transición
+        setTimeout(showHide, 50);
+      } else {
+        // Mostrar u ocultar
+        div.classList.toggle('activo');
+      }
+    }
+
+
+    // saco de usuarios solo las prov que existen 
+    // saco de usuario solo las localidades que existen SELECT DISTINCT l.descripcion as loc FROM usuario x INNER JOIN localidad l on x.id_localidad = l.id_localidad;
+
+    let url = "/api/oficios"
+     
+      console.log("servidor ->", url)
+      fetch(url)
+        .then(response => response.json())
+        .then((responseData) => {
+          console.log("oficio ->", responseData)
+          // alert('HAY ' + lista_de_provincias.length) // Puedes poner este alert para ver si la llamada POST te devuelve algo
+          // creamos un elemento de tipo option
+          //var opt = document.createElement("option");
+          //let modelList = document.createElement("select_localidad");
+          var html = '<option id="select_oficio" name="select_oficio" value="" >Todos</option>'
+
+          for (var count = 0; count < responseData.length; count++) {
+            console.log("dato1", responseData[count], "codigo ", responseData[count].cod)
+            console.log("codigo ", responseData[count].cod)
+
+            html = html + '<option id="select_oficio" name="select_oficio" value="' + responseData[count].descripcion + '" title="' + responseData[count].cod + '">' + responseData[count].descripcion + '</option>';
+          }
+
+          console.log("html ->", html)
+
+          select_oficio.innerHTML = html;
+
+        });
+
+
+    function createtabla(usuario) {
+
+      var sampleData = usuario
+      var table = $('#example').DataTable({
+        responsive: true,
+        language: {
+          lengthMenu: "Mostrar _MENU_ registros por página",
+          zeroRecords: "Ningún usuario encontrado",
+          info: "Mostrando de _START_ a _END_ de un total de _TOTAL_ registros",
+          infoEmpty: "Ningún usuario encontrado",
+          infoFiltered: "(filtrados desde _MAX_ registros totales)",
+          search: "Buscar:",
+          loadingRecords: "Cargando...",
+          paginate: {
+            first: "Pri",
+            last: "Últ",
+            next: "Sig",
+            previous: "Ant"
+          }
+        },
+        pageLength: 6,
+        pagingType: `simple_numbers`,
+        data: sampleData,
+        'dom': "<'row'<'col-sm-12 col-md-6'<'float-md-right ml-2'B>f>>" +
+          "<'row'<'col-sm-12'tr>>" +
+          "<'row'<'col-sm-12 col-md-5'i> <'col-sm-12 col-md-7'p> >",
+
+        'buttons': ['csv', {
+          'text': '<i class="fa fa-id-badge fa-fw" aria-hidden="true" ></i>',
+          'action': function(e, dt, node) {
+
+            $(dt.table().node()).toggleClass('cards justify-content-center');
+            $("#example thead").toggle();
+            $("#card-toggle .fa").toggleClass("fa-table fa-id-badge");
+            $("#card-toggle .fa").toggleClass("fa-id-badge");
+            $('.fa', node).toggleClass(['fa-table', 'fa-id-badge']);
+            $("#card-toggle .fa").toggleClass("fa-table");
+            if ($("#example").hasClass("cards")) {
+              var max = 0;
+              $('#example tr').each(function() {
+                max = Math.max($(this).height(), max);
+              }).height(max);
+            } else {
+              $("#example tr").each(function() {
+                $(this).height("auto");
+              });
+            }
+
+            dt.draw('page');
+
+          },
+          'className': 'btn-sm',
+          'attr': {
+            'title': 'Change views',
+            'hidden': true,
+          }
+        }],
+        'select': 'single',
+        'columns': [{
+            data: "nombre",
+            name: "nombre",
+            render: function(data, type, row, meta) {
+              return (function(data, type, row) {
+                return data + ' ' + row.apellido + ' - ' + row.calificacion + '*'
+              })(data, type, row, meta);
+            }
+          },
+          {
+            render: function(data, type, row, meta, full) {
+              data = '<img class="grid-img" src="/file_user/' + row.imagen + '" />';
+
+
+
+              {
+                return data
+              };
+            }
+          },
+
+          {
+            data: "oficio",
+            name: "oficio",
+            render: function(data, type, row, meta) {
+              return data;
+            }
+          },
+          {
+            data: "presentacion",
+            name: "presentacion",
+            class: 'text-center',
+            render: function(data, type, row, meta) {
+              return data;
+            }
+          },
+          {
+            data: "localidad",
+            name: "localidad",
+            class: 'text-center',
+            render: function(data, type, row, meta) {
+              return data;
+            }
+          },
+
+          {
+            data: "provincia",
+            name: "provincia",
+            render: function(data, type, row, meta) {
+              return data;
+            }
+          },
+          {
+            data: "celular",
+            name: "celular",
+            render: function(data, type, row, meta) {
+              return (function(data) {
+                return ' ' + data + ''
+              })(data, type, row, meta);
+            }
+          }
+        ],
+        'drawCallback': function(settings) {
+          var api = this.api();
+          var $table = $(api.table().node());
+
+          if ($table.hasClass('cards')) {
+
+            // Create an array of labels containing all table headers
+            var labels = [];
+            $('thead th', $table).each(function() {
+              labels.push($(this).text());
+            });
+
+            // Add data-label attribute to each cell
+            $('tbody tr', $table).each(function() {
+              $(this).find('td').each(function(column) {
+                $(this).attr('data-label', labels[column]);
+              });
+            });
+
+            var max = 0;
+            $('tbody tr', $table).each(function() {
+              max = Math.max($(this).height(), max);
+            }).height(max);
+
+          } else {
+            // Remove data-label attribute from each cell
+            $('tbody td', $table).each(function() {
+              $(this).removeAttr('data-label');
+            });
+
+            $('tbody tr', $table).each(function() {
+              $(this).height('auto');
+            });
+          }
+        },
+        
+        initComplete: function(settings, json) {
+          // Add select filter
+          $('#dataTable_length').append('<label>&nbsp; App ID:</label>');
+          $('#dataTable_length').append('<select class="form-control input-sm"  id="am_aplicacion_id"></select>');
+          am_aplicacion_ids = [{
+            0: 'All Apps'
+          }, {
+            1: 'App ID 1'
+          }, {
+            2: 'App ID 2'
+          }];
+          for (var key in am_aplicacion_ids) {
+            var obj = am_aplicacion_ids[key];
+            for (var prop in obj) {
+              if (obj.hasOwnProperty(prop)) {
+                $('#am_aplicacion_id').append('<option value="' + prop + '">' + obj[prop] + '</option>');
+              }
+            }
+          }
+          // Filter results on select change
+          /*$('#am_aplicacion_id').on('change', function () {
+              oTable.columns(2).search($(this).val()).draw();
+          });
+          */
+
+
+          $('#select_provi').on('change', function() {
+            //table.clear().draw();
+            //datatable.columns.adjust().draw();
+            //  table.ajax.reload();
+            prov = document.getElementById("select_provi").value
+            console.log("filtrado de sprovi ", prov)
+
+            // table.search(this.value).draw();  // con esto busca por columna pero agrega eltexto en search 
+            table.columns(5).search(prov).draw();
+
+
+
+          });
+
+
+          $('#select_localidad').on('change', function() {
+            loc = document.getElementById("select_localidad").value
+            console.log("filtrado de sloc ", loc)
+            // table.search(this.value).draw();  // con esto busca por columna pero agrega eltexto en search 
+            table.columns(4).search(loc).draw();
+          });
+
+          //var selectedValue = $("#select_provi").val();
+
+          
+          $('#select_oficio').on('change', function() {
+            ofi = document.getElementById("select_oficio").value
+            console.log("filtrado de sofi ", ofi)
+            // table.search(this.value).draw();  // con esto busca por columna pero agrega eltexto en search 
+            table.columns(2).search(ofi).draw();
+          });
+
+
+        }
+        
+      })
+
+      // filtros de abajo tengo que agregar en html el footer
+      //buildSelect(table);
+     
+
+      function filterColumn(colum, value) {
+        table.column(colum).search(value).draw();
+      }
+    
+      /*
+            $('button').on('click', function() {
+              let prov = "Entre Ríos"
+              console.log("filtar provi", prov)
+              filterColumn(5, prov);
+            })
+      */
+
+
+      filtro_provincia()
+
+
+
+
+      let url = "/api/localidades"
+      console.log("servidor ->", url)
+      fetch(url)
+        .then(response => response.json())
+        .then((responseData) => {
+          console.log("localidad ->", responseData)
+          // alert('HAY ' + lista_de_provincias.length) // Puedes poner este alert para ver si la llamada POST te devuelve algo
+          // creamos un elemento de tipo option
+          var opt = document.createElement("option");
+          let modelList = document.createElement("select_localidad");
+          var html = '<option id="select_localidad" name="select_localidad" value="">Todas</option>'
+
+          for (var count = 0; count < responseData.length; count++) {
+            console.log("dato1", responseData[count], "codigo ", responseData[count].cod)
+            console.log("codigo ", responseData[count].cod)
+            html += '<option id="select_localidad" name="select_localidad" value="' + responseData[count].descripcion + '" title="' + responseData[count].cod + '">' + responseData[count].descripcion + '</option>';
+          }
+
+          console.log("html ->", html)
+
+          select_localidad.innerHTML = html;
+
+        });
+
+
+      function filtro_provincia() {
+        let url = "/api/provincias"
+        console.log("servidor ->", url)
+        fetch(url)
+          .then(response => response.json())
+          .then((responseData) => {
+            console.log("provincias ->", responseData)
+            // alert('HAY ' + lista_de_provincias.length) // Puedes poner este alert para ver si la llamada POST te devuelve algo
+            // creamos un elemento de tipo option
+            var opt = document.createElement("option");
+            let modelList = document.createElement("select_provi");
+            var html = '<option value="">Todas</option>'
+
+            for (var count = 0; count < responseData.length; count++) {
+              console.log("dato1", responseData[count], "codigo ", responseData[count].cod)
+              console.log("codigo ", responseData[count].cod)
+              html += '<option id="select_provi" name="select_provi" value="' + responseData[count].descripcion + '" title="' + responseData[count].cod + '">' + responseData[count].descripcion + '</option>';
+            }
+
+            console.log("html ->", html)
+
+            select_provi.innerHTML = html;
+
+          });
+        console.log("salio")
+        // console.log("nombre de la provincia =", e.options[e.selectedIndex].getAttribute("data-provname"))
+      }
+
+      function buildSelect(table) {
+      console.log("dentro de buildselect")
+      table.columns().every(function() {
+        console.log("dentro de buildselect 2")
+        var column = table.column(this, { search: 'applied' });
+        var select = $('<select><option value=""></option></select>')
+          .appendTo($(column.footer()).empty())
+          .on('change', function() {
+            console.log("dentro de buildselect 3")
+            var val = $.fn.dataTable.util.escapeRegex( $(this).val());
+
+            column
+              .search(val ? '^' + val + '$' : '', true, false)
+              .draw();
+          });
+
+        column.data().unique().sort().each(function(d, j) {
+          select.append('<option value="' + d + '">' + d + '</option>');
+        });
+
+        // The rebuild will clear the exisiting select, so it needs to be repopulated
+        var currSearch = column.search();
+        if (currSearch) {
+          select.val(currSearch.substring(1, currSearch.length - 1));
+        }
+      });
+    }
+
+
+    }
+
+    $(document).ready(function() {
+      url = "/api/usuarios" + filtro
+      console.log("servidor ->", url)
+      fetch(url)
+        .then(response => response.json())
+        .then((data) => {
+          createtabla(data)
+        });
+
+
+
+    });
+
+   
+  </script>
+  <script src=""></script>
+</body>

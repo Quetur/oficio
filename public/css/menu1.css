@@ -1,0 +1,155 @@
+/* Definimos un ancho fluido y una altura fija para nuestro menú*/
+header {
+  background: #22282e;
+  height: 60px;
+  position: relative;
+  width: 100%;
+}
+
+/* El logo sera flotado a la izquierda*/
+#logo {
+  float: left;
+  padding: 6px 20px;
+  width: auto;
+  height: 60px;
+
+  a {
+    display: block;
+    text-decoration: none;
+    text-align: center;
+    color: #fff;
+    font-weight: bold;
+    line-height: 44px;
+    text-transform: uppercase;
+  }
+}
+
+/* Fijamos nuestro nav en 100% ancho*/
+#menu {
+  position: absolute;
+  top: 60px;
+  width: 100%;
+
+  /* Quitamos estilos por defecto de el tag UL*/
+  ul {
+    max-height: 0;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 14px;
+  }
+
+  /* Convertimos nuestra lista de enlaces en un menú horizontal*/
+  li {
+    display: block;
+    background: #33363b;
+    text-transform: uppercase;
+    text-align: center;
+    border-bottom: 1px solid #282b30;
+
+    /* Damos estilo a nuestros enlaces*/
+    a {
+      display: block;
+      color: #fff;
+      text-decoration: none;
+      line-height: 60px;
+      padding: 0 26px;
+
+      &:active,
+      &:focus   {
+        color: #ffc700;
+      }
+    }
+  }
+
+  /* Agregamos una animación al despliegue del menú*/
+  .open-menu {
+    box-shadow: 0 1px 2px rgba(0,0,0,.5);
+    max-height: 400px;
+    transition: max-height .4s ease;
+  }
+}
+
+/* Botón mostrar menú*/
+#nav-mobile {
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    float: right;
+    width: 60px;
+    height: 60px;
+    position: absolute;
+    right: 0;
+    top: -60px;
+    opacity: 0.6;
+  
+    /* Agregaremos esta clase a #nav-mobile, cuando el menu mobile haya sido desplegado*/
+    &.nav-open {
+      opacity: 1;
+    }
+  
+    span {
+      display: block;
+      width: 60%;
+      margin: 4px auto;
+      height: 4px;
+      background: #fff
+    }
+  }
+  
+  @media only screen and (min-width: 768px) {
+    /* ocultamos botón #nav-mobile*/
+    #nav-mobile{ display: none; }
+  
+    /* Nuestro nav con id #menu lo flotaremos a la derecha*/
+    #menu {
+      width: auto;
+      float: right;
+      top: 0;
+      position: relative;
+  
+      .open-menu {
+        box-shadow: none;
+      }
+  
+      /* Hacemos reset de max-height*/
+      ul {
+        max-height: inherit;
+      }
+  
+      /* Alineamos los items de forma horizontal*/
+      li {
+        float: left;
+        border: 0;
+        background: transparent;
+  
+        a {
+          display: block;
+          color: #fff;
+          padding: 0 26px;
+  
+          &:hover {
+            color: #ffc700;
+            background: #151a1e;
+          }
+        }
+      }
+    }
+  }
+  
+  
+  /* Content */
+  main {
+    display: flex;
+    min-height: 400px;
+    color: #fff;
+    margin: 15px;
+    align-items: center;
+    background-image: linear-gradient(to right, #f78ca0 0%, #f9748f 19%, #fd868c 60%, #fe9a8b 100%);
+  }
+  
+  main h1 {
+    width: 100%;
+    text-align: center;
+  }

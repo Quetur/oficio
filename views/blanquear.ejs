@@ -1,0 +1,164 @@
+<%- include('includes/cabecera.ejs') %>
+<%- include('menu2.ejs') %>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<title>Tus Oficios</title>
+</head>
+
+<body>
+  <div class="container container-home">
+
+    <div class="shadow-lg p-3 mb-5">
+      <div class="card">
+        <div class="card-header bg-primary text-white"><img src="/img/volver.png" height="20px" width="30px">
+          <a href="/" type="button" style="color: white;"> Volver </a>
+        </div>
+        <h1 style="font-size: 1.5em;  text-align: center;">Blanquear contraseña</h1>
+        <p style="font-size: 1em;  text-align: center;">Introduzca su nueva contraseña</p>
+        <main class="form-signin container text-center ">
+
+          <form id="formBlanquear" action="/nuevopassword" method="POST">
+            <!--<img class="mb-4" src="img/logo.png" alt="" width="72" height="57">-->
+            <table>
+              <tr style="height: 30px"></tr>
+              <tr>
+                <td>
+                  <div class="mb-3 material-textfield">
+                    <input class="form-control" id="dni" name="dni" style="width: 250px;" value="<%= user %>" hidden>
+                    <input type="text" class="form-control" id="mdni" name="mdni" value="" hidden>
+                </td>
+              </tr>
+              <tr style="height: 50px"></tr>
+              <tr>
+                <div class="mb-3 material-textfield">
+                  <input id="password" name="password" type="text" class="form-control " placeholder="Contraseña" autocapitalize="off">
+                  <label for="password" class="">Contraseña</label>
+                </div>
+              </tr>
+              <tr>
+                <div class="mb-3 material-textfield">
+                  <input id="confirm_password" name="confirm_password" type="text" class="form-control " placeholder="confirme la contraseña" autocapitalize="off">
+                  <label for="confirm_password" class="">Confirme la contraseña</label>
+                  <span id='message'></span>
+                </div>
+              </tr>
+            </table>
+            <input class="w-100 btn btn-lg btn-primary" value="Blanquear" onclick="blanquear()"></button>
+          </form>
+      </div>
+      <br>
+
+      <!--
+      <a style="margin-top: 10px;" href="/register" type="button" class="w-100 btn btn-lg btn-bd-primary">Registrarse</a>
+        -->
+      </main>
+    </div>
+  </div>
+  </div>
+
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <% if(alert) { %>
+  <script>
+    Swal.fire({
+      title: '<%= alertTitle %>',
+      text: '<%= alertMessage %>',
+      icon: '<%= alertIcon %>',
+      showConfirmButton: '<%= showConfirmButton %>',
+      timer: '<%= timer %>',
+
+    }).then(() => {
+      sessionStorage.clear();
+
+      sessionStorage.setItem("dni", '<%= dni%>');
+      sessionStorage.setItem("nombre", '<%= user %>');
+      window.location = '/<%= ruta %>'
+    })
+
+
+
+
+    // formato dni
+  </script>
+  <% } %>
+
+
+
+
+
+  <script type="text/javascript">
+    console.log("blanquear", document.getElementById("dni").value)
+
+    let dniencript = document.getElementById("dni").value;
+
+
+    let dniablanquear = hextoString(dniencript)
+    let temp = dniablanquear
+    temp = temp.replaceAll('.', '')
+    dniablanquear = temp
+    console.log("dni decodificado", dniablanquear)
+
+    document.getElementById("mdni").value = dniablanquear
+
+
+    function hextoString(hexx) {
+      var hex = hexx.toString(); //force conversion
+      var str = '';
+      for (var i = 0; i < hex.length; i += 2)
+        str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+      return str;
+    }
+
+
+
+    function ingresar() {
+      if ((document.getElementById('dni').value).length == 0) {
+        document.getElementById("dni").focus();
+        Swal.fire({
+          icon: 'error',
+          title: ' USUARIO INCORRECTO',
+          text: 'cargue su DNI !!!...',
+          showConfirmButton: false,
+          timer: 2000,
+        });
+        return false;
+      } else {
+        if ((document.getElementById('pass').value).length == 0) {
+          console.log("pass = nada")
+          //console.log("cliente : "document.getElementById('combo_cliente').value);
+          document.getElementById("pass").focus();
+          Swal.fire({
+            icon: 'error',
+            title: ' PASSWORD VACIO',
+            text: 'cargue su contraseña !!!...',
+            showConfirmButton: false,
+            timer: 2000,
+          });
+          return false;
+
+        }
+        document.getElementById("formLogin").submit();
+      }
+    }
+
+
+
+    function blanquear() {
+      document.getElementById("formBlanquear").submit();
+    }
+
+
+    // funcion para validar el password
+    $('#confirm_password').on('keyup', function() {
+      console.log("entro password")
+      if ($('#password').val() == $('#confirm_password').val()) {
+        $('#message').html('Contraseña igual').css('color', 'green');
+      } else
+        $('#message').html('Contraseña desigual').css('color', 'red');
+    });
+  </script>
+  </script>
+
+</body>
+
+</html>

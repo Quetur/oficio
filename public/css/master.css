@@ -1,0 +1,103 @@
+/* * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * Reseting CSS
+ */
+
+ * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+ }
+ 
+ /* * * * * * * * * * * * * * * * * * * * * * * * * * *
+  * Styling navigation bar for large screen devices
+  */
+ 
+ .navbar {
+    position: relative;
+ 
+    background: Black;
+ }
+ 
+ .navbar-left {
+    display: inline-block;
+ 
+    margin-left: 15px;
+ }
+ 
+ .navbar-right {
+    display: inline-block;
+ 
+    margin-right: 15px;
+ 
+    position: absolute;
+    top: 0;
+    right: 0;
+ }
+ 
+ .navbar-brand,
+ .navbar .nav-link {
+    color: White;
+    text-decoration: none;
+ 
+    display: inline-block;
+    padding: 15px;
+ }
+ 
+ .navbar-brand {
+    font-weight: bold;
+ 
+    padding-left: 30px;
+    padding-right: 30px;
+ 
+    background: RoyalBlue;
+ }
+ 
+ .navbar .nav-link:hover {
+    color: LightGray;
+ }
+ 
+ .navbar-collapse,
+ .navbar-toggler {
+    display: none;
+ }
+ 
+ /* * * * * * * * * * * * * * * * * * * * * * * * * * *
+  * Override styles to support mobile devices
+  */
+ 
+ @media (max-width: 842px) {
+    .navbar-right,
+    .navbar-left {
+       display: block;
+ 
+       border-top: 1px solid DimGray;
+    }
+ 
+    .navbar-right {
+       position: static;
+    }
+ 
+    .navbar .nav-link {
+       display: block;
+    }
+ 
+    .navbar-collapse:checked + .navbar {
+       max-height: 50px;
+       overflow: hidden;
+    }
+ 
+    .navbar-toggler {
+       color: White;
+ 
+       display: inline-block;
+       padding: 15px 25px;
+ 
+       position: absolute;
+       top: 0;
+       right: 0;
+ 
+       border-left: 1px solid DimGray;
+ 
+       cursor: pointer;
+    }
+ } /* @media */

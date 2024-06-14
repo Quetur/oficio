@@ -1,0 +1,76 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.toggle{
+  width: 100%;
+  display: none;
+}
+
+.toggle i{
+  width: 100%;
+  text-align: left;
+  padding: 10px;
+  font-size: 25px;
+  background:  #1b5c70;
+  color: white;
+}
+
+.navbar{
+  width: 100%;
+  background:  #1b5c70;
+}
+
+.navbar .links ul li{
+  display: inline-block;
+  padding: 15px 20px;
+}
+
+.navbar .links ul li:hover{
+  background: #ff9f1c;
+  cursor: pointer;
+}
+
+.navbar .links ul li a{
+  text-decoration: none;
+  font-size: 18px;
+  color: white;
+}
+
+@media (max-width:768px){
+  .toggle{
+      display: block;
+  }
+
+  .navbar{
+      background: #2aaad1;
+      display: none;
+  }
+
+  .navbar .links ul li{
+      display: block;
+      text-align: center;
+  }
+
+  .active{
+      display: block;
+  }
+}
+
+.masthead {
+  color: white;
+  min-height: 30rem;
+  width: 100%;
+  height: 100%;
+  /*margin-bottom: 1500px;*/
+  padding-top: 1rem;
+  padding-bottom: 0rem;
+  /*background: url('/img/fondo.jpeg');*/
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  
+}

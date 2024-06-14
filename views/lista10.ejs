@@ -1,0 +1,175 @@
+<%- include('includes/cabecera.ejs') %>
+<%- include('menu2.ejs') %>
+
+
+
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>tarjetas</title>
+
+  <link rel="stylesheet" href="css/lista10.css">
+
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.5.2/animate.min.css">
+
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous" type="7caed6d53d62b29227787649-text/javascript"></script>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous" type="7caed6d53d62b29227787649-text/javascript"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous" type="7caed6d53d62b29227787649-text/javascript"></script>
+
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.16/b-1.5.1/sc-1.4.3/sl-1.2.4/datatables.min.css" />
+  <script type="7caed6d53d62b29227787649-text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.16/b-1.5.1/sc-1.4.3/sl-1.2.4/datatables.min.js"></script>
+
+  <script type="7caed6d53d62b29227787649-text/javascript">
+    
+    url="/api/usuarios"
+    console.log("servidor ->",url)
+    fetch(url)
+    .then(response => response.json())
+    .then((data) => {
+      createtabla(data)
+    });
+    
+    
+    function createtabla  (usuario) {
+        //let content = ``;
+        //console.log("users 1", usuario[1].nombre)
+        //usuario.forEach((usuario, index) => {
+    
+        //})
+        var sampleData = usuario
+        //console.log("sampledata " ,sampleData)
+        var colors = ["Crimson ", "Cyan ", "DarkBlue ", "DarkCyan ", "DarkGoldenRod ", "DarkGray ", "DarkGrey ", "DarkGreen ", "DarkKhaki ", "DarkMagenta ", "DarkOliveGreen ", "DarkOrange "];
+          var table = $('#register').DataTable({
+            language: {
+                lengthMenu: "Mostrar _MENU_ registros por página",
+                zeroRecords: "Ningún usuario encontrado",
+                info: "Mostrando de _START_ a _END_ de un total de _TOTAL_ registros",
+                infoEmpty: "Ningún usuario encontrado",
+                infoFiltered: "(filtrados desde _MAX_ registros totales)",
+                search: "Buscar:",
+                loadingRecords: "Cargando...",
+                paginate: {
+                  first: "Primero",
+                  last: "Último",
+                  next: "Siguiente",
+                  previous: "Anterior"
+                }
+              },
+            lengthMenu: [5, 10, 15, 20, 100, 200, 500],
+            dom: 'fBtip',
+            pageLength: 6,
+            buttons: [
+                {
+                    text: '<i class="fa fa-id-badge fa-fw fa-lg" aria-hidden="true"></i>',
+                    className: 'animated bounce',
+                    action: function () {
+                     // para ver centrado  $("tbody").toggleClass("row").toggleClass("justify-content-center");
+
+                        $("#register").toggleClass("cards");
+                        $("#register thead").toggle();
+                        $("#card-toggle .fa").toggleClass("fa-table");
+                        $("#card-toggle .fa").toggleClass("fa-id-badge");
+                    
+                        if($("#register").hasClass("cards")){
+                            var max = 0;
+                            $('#register tr').each(function() {
+                              
+                                max = Math.max($(this).height(), max);
+                            }).height(max);
+                        } else {
+                            $("#register tr").each(function(){
+                                $(this).height("auto");
+                            });
+                        }
+                    },
+                    attr:  {
+                        title: 'Cambio de vista',
+                        id: 'card-toggle'
+                    }
+                }
+            ],
+            select: 'single',
+            data: sampleData,
+            columns: [
+                {   /* crea la columna dela foto */
+                    orderable: false, data: 'Photo', name: 'Photo', orderable: false, defaultContent: '', title: 'Photo',
+                    visible: true, className: 'text-center', width: '20px',
+    
+                    createdCell: function (td, cellData, rowData, row, col) {
+                        var $ctl = $('<i class="fa fa-user fa-fw"></i>').css('color', colors[Math.round(Math.random() * colors.length) + 1])
+                        $(td).append($ctl);
+                    }
+                },
+                /* armo la tarjeta */
+                {
+                    data: "nombre", name: "nombre",
+                    render: function (data, type, row, meta) { return (type === 'display' ? '<label>'+ $($('#register').DataTable().column(meta.col).header()).html() +':</label>' : null ) + (function(data, type, row) { return data +' '+ row.apellido + ' - '+ row.calificacion +'*'})(data, type, row, meta); } 
+                },
+                {
+                    data: "oficio", name: "oficio",
+                    render: function (data, type, row, meta) { return (type === 'display' ? '<label>'+ $($('#register').DataTable().column(meta.col).header()).html() +':</label>' : null ) + data; }
+                },
+                {
+                    data: "localidad", name: "localidad", class: 'text-center',
+                    render: function (data, type, row, meta) { return (type === 'display' ? '<label>'+ $($('#register').DataTable().column(meta.col).header()).html() +':</label>' : null ) + data; }
+                },
+                {
+                    data: "codigopostal", name: "codigopostal", class: 'text-center',
+                    render: function (data, type, row, meta) { return (type === 'display' ? '<label>'+ $($('#register').DataTable().column(meta.col).header()).html() +':</label>' : null ) + data; }
+                },
+                {
+                    data: "provincia", name: "provincia",
+                    render: function (data, type, row, meta) { return (type === 'display' ? '<label>'+ $($('#register').DataTable().column(meta.col).header()).html() +':</label>' : null ) + data; }
+                },
+                {
+                    data: "celular", name: "celular",
+                    render: function (data, type, row, meta) { return (type === 'display' ? '<label>'+ $($('#register').DataTable().column(meta.col).header()).html() +':</label>' : null ) +  (function(data) { return ' '+ data +'' })(data, type, row, meta); }
+                }
+            ]
+        })
+        .on('select', function (e, dt, type, indexes) {
+            var rowData = table.rows(indexes).data().toArray()
+            $('#row-data').html(JSON.stringify(rowData))
+        })
+        .on('deselect', function () {
+            $('#row-data').html('')
+        })       
+    }
+    
+    document.querySelector('.cards');
+    console.log("pepe")
+
+  </script>
+  
+
+</head>
+
+<body>
+  <div class="container-fluid">
+
+
+    <div class="row m-3">
+      <div class="col">
+        <table id="register" class="table table-sm table-hover" cellspacing="0" style="width:100%">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Nombre</th>
+              <th>Oficio</th>
+              <th>Localidad</th>
+              <th>CodigoPostal</th>
+              <th>Provincia</th>
+              <th>Celular</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </div>
+  </div>
+  <script src="https://ajax.cloudflare.com/cdn-cgi/scripts/7089c43e/cloudflare-static/rocket-loader.min.js" data-cf-settings="7caed6d53d62b29227787649-|49" defer=""></script>
+</body>
+
+</html>

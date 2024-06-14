@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Node Image Upload</title>
+    <!-- BOOTSTRAP 4 -->
+</head>
+<body>
+    <a>formarchivo 0</a>
+    <div class="container">
+        <form id="formarchivo" action="/graba_archivo" method="post" enctype="multipart/form-data" >
+                <input type='file' onchange="openFile(event)" name="image" id="image"></input>
+                <input type='text' name="pp" id="pp"></input>
+                <img src="" id="output" height="200" alt="Image preview...">
+                <input type="button" class="w-100 btn btn-lg btn-primary"  value="Enviar" onclick="enviar()" ></button> 
+        </form>
+    </div>
+    <script>
+
+    function enviar(){      
+        document.getElementById("formarchivo").submit();  
+    }
+
+
+    var openFile = function (event) {
+        var input = event.target;
+
+        var reader = new FileReader();
+        reader.onload = function () {
+            var dataURL = reader.result;
+            var output = document.getElementById('output');
+            output.src = dataURL;
+        };
+        reader.readAsDataURL(input.files[0]);
+        var file = document.querySelector('input[type=file]').files[0];
+        console.dir(file);
+    };
+    $('#image').change(function (event) {
+        console.log("hola");
+
+        var tmppath = URL.createObjectURL(event.target.files[0]);
+        
+        console.log(tmppath);
+        $("img").fadeIn("fast").attr('src', URL.createObjectURL(event.target.files[0]));
+
+        $("#disp_tmp_path").html("Temporary Path(Copy it and try pasting it in browser address bar) --> <strong>[" + tmppath + "]</strong>");
+    });
+
+    </script>
+</body>
+</html>

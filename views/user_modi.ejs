@@ -1,0 +1,839 @@
+<%- include('includes/cabecera.ejs') %>
+<%- include('menu2.ejs') %>
+
+<head>
+
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap CSS -->
+  <link href="/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/css/register.css" rel="stylesheet">
+  <link href="/css/loading.css" rel="stylesheet">
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!--<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>-->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+  <!-- select con busqueda -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+
+  <style>
+    .select2-container .select2-selection--single {
+      box-sizing: border-box;
+      cursor: pointer;
+      display: block;
+      height: 28px;
+      user-select: none;
+      -webkit-user-select: none;
+      font-size: 15px !important;
+    }
+
+    .select2-selection__choice {
+      background-color: var(--bs-gray-200);
+      border: none !important;
+      font-size: 15px !important;
+      padding-right: 30px !important;
+    }
+
+    .select2-container--default .select2-selection--multiple:before {
+      content: ' ';
+      display: block;
+      position: absolute;
+      border-color: #888 transparent transparent transparent;
+      border-style: solid;
+      border-width: 5px 4px 0 4px;
+      height: 0;
+      right: 6px;
+      margin-left: -4px;
+      font-size: 2px !important;
+      margin-top: -2px;
+      top: 50%;
+      width: 0;
+      cursor: pointer
+    }
+
+    .select2-container--open .select2-selection--multiple:before {
+      content: ' ';
+      display: block;
+      position: absolute;
+      border-color: transparent transparent #888 transparent;
+      border-width: 0 4px 5px 4px;
+      height: 0;
+      right: 6px;
+      font-size: 15px !important;
+      margin-left: -4px;
+      margin-top: -2px;
+      top: 50%;
+      width: 0;
+      cursor: pointer
+    }
+
+    input.largerCheckbox {
+      width: 30px;
+      height: 30px;
+    }
+  </style>
+
+
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12 shadow-lg p-3 mb-5">
+
+        <div class="card border-primary">
+          <div class="card-header bg-primary text-white">Editar Perfil</div>
+          <div class="card-body text-primary" style="padding-top: 0px;padding-bottom: 0px;">
+            <form id="registro-usuario" action="/usuario_modi" method="POST">
+              <div class="all-steps" id="all-steps">
+                <span class="step"></span> <span class="step"></span>
+                <span class="step"></span> <span class="step"></span>
+              </div>
+              <div class="tab" style="padding-top: 0px !important;padding-bottom: 0px !important">
+
+
+                <h2 class="fs-subtitle subti">Datos Personales</h2>
+
+                <div class="mb-3 material-textfield">
+                  <!--<label for="dni" class="form-label">DNI (Su DNI sera su cuenta de usuario)</label>-->
+                  <input id="dni" name="dni" type="text" class="form-control input-number" placeholder="DNI (*)" maxlength="10" readonly>
+                  <label for="dni" class="">Numero de DNI : </label>
+                </div>
+                <div class="mb-3 material-textfield">
+                  <input id="mnombre" name="mnombre" type="text" class="form-control" placeholder="Nombre (*)">
+                  <label for="mnombre" class="">Nombre(*)</label>
+                </div>
+                <div class="mb-3 material-textfield">
+                  <input id="apellido" name="apellido" type="text" class="form-control" placeholder="Apellido (*)">
+                  <label for="apellido" class="">Apellido (*)</label>
+                </div>
+                <div class="mb-3 material-textfield">
+                  <input id="celular" name="celular" type="text" class="form-control input-number" placeholder="Celular(*) Ej.(11) 1111-1111" maxlength="14">
+                  <label for="celular" class="form-label">celular(*)</label>
+                </div>
+                <div class="mb-3 material-textfield">
+                  <input id="email" name="email" type="text" class="form-control" placeholder="Email" maxlength="30">
+                  <label for="email" class="form-label">Email</label>
+                  <span id="emailOK"></span>
+                </div>
+
+              </div>
+
+              <div class="tab">
+                <h2 class="fs-subtitle subti" style="text-decoration: underline;">Ubicación</h2>
+                <div class="mb-3 material-textfield">
+                  <select name="pais" id="pais" class="form-select">
+                    <label for="pais" class="form-label">pais</label>
+                    <option value="">Seleccione pais</option>
+                    <option value='AR' selected disabled hidden>Argentina</option>
+                    <% for(var count = 0; count < pais_data.length; count++) { %>
+
+                    <option value="<%= pais_data[count].codigo %>"><%= pais_data[count].descripcion %></option>
+
+                    <% } %>
+                  </select>
+
+                </div>
+                <div class="mb-3 material-textfield">
+                  <select name="provincia" id="provincia" class="form-select" onchange="myFunction(this)">
+                    <option value="">Seleccione provincia</option>
+                  </select>
+                </div>
+                <div class="mb-3 form-group">
+                  <table >
+                    <tr>
+                      <td>
+                        <select name="localidad" id="localidad" type="text" class="mb3-3 form-select select2" style="font-size: 15px !important;">
+                          <option value="" style="font-size: 15px !important; width: 200px;">Seleccione localidad</option>
+                        </select>
+                      </td>
+                      <td >
+                        <div  class="preload">
+                          <div  class="emoji"></div>
+                        </div>
+                      </td>
+                    </tr>
+                  </table>
+
+
+                </div>
+
+                <table style="border-collapse: collapse; width: 100%;" class="mb-3">
+                  <tr style="height: 25px;">
+                    <td> <a></a> </td>
+                  <tr>
+                    <div class="mb-3">
+                      <td style="width: 65%;" class="material-textfield">
+                        <input id="calle" name="calle" type="text" class="form-control" placeholder="Calle">
+                        <label for="calle" class="form-label">calle</label>
+                      </td>
+                      <td style="width: 35%;" class="material-textfield">
+                        <input id="numero" name="numero" type="text" class="form-control" placeholder="Numero">
+                        <label for="numero" class="form-label">numero</label>
+                      </td>
+                    </div>
+                  </tr>
+                  <tr style="height: 30px;">
+                    <div class="mb-3">
+                      <td style="width: 65%;" class="material-textfield">
+                        <input id="codigopostal" name="codigopostal" type="text" class="form-control" placeholder="Codigo Postal">
+                        <label for="codigopostal" class="form-label">Codigo Postal</label>
+                      </td>
+                      <td style="width: 35%;" class="material-textfield">
+
+                      </td>
+                    </div>
+                </table>
+
+              </div>
+
+              <div class="tab">
+                <h2 class="fs-subtitle subti" style="text-decoration: underline;">Datos Laborales</h2>
+                <div class="mb-3 material-textfield">
+                  <select name="categoria" id="categoria" class="form-select">
+                    <label for="categoria" class="form-label">categoria</label>
+                    <option value="">Seleccione una Categoria</option>
+                    <% for(var count = 0; count < categoria_data.length; count++) { %>
+                    <option value="<%= categoria_data[count].id_categoria %>"><%= categoria_data[count].descripcion %></option>
+                    <% } %>
+                  </select>
+                  <input id="id_categoria" name="id_categoria" type="text" hidden>
+                </div>
+                <div class="mb-3 material-textfield">
+                  <div class="mb-3 form-group col-6">
+                    <!--<select class="form-select" id="multiple-select-field" data-placeholder="Choose anything" multiple></select>-->
+                    <select name="oficio[]" id="oficio" type="text" class="mb3-3 form-select" multiple>
+                      <!--<option value="">Seleccione oficio</option>-->
+                    </select>
+                  </div>
+                </div>
+                <!--
+                <input id="oficio2" name="oficio2" type="text" > -->
+                <TABLE>
+                  <TR>
+                    <TD ROWSPAN=2>
+                      <div class="mb-3 material-textfield">
+                        <textarea id="presentacion" name="presentacion" cols='30' rows='5' style="font-size: 1rem !important;font-family: inherit; line-height: inherit;" placeholder="Presentacion Laboral" class="mb-3 material-textfield form-control"></textarea>
+                        <label for="presentacion" class="form-label"></label>
+                      </div>
+                    </TD>
+
+                    <td style="text-align: left;">
+
+                      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+                      <input type="file" id="image" name="image" style="display:none" onchange="openFile(event)">
+
+                      <label></label>Subir archivo ->&nbsp;&nbsp;<a href="#">
+                        <i id="icon_upload" class="fa fa-upload floating" onclick="_upload()"></i></a>
+
+                      <script>
+                        function _upload() {
+                          document.getElementById('image').click();
+                        }
+                      </script>
+                    </td>
+
+                  </TR>
+                  <TR>
+                    <TD> <img src="img/user.png" id="output" height="150" alt="Image preview..."> </TD>
+                  </TR>
+                </TABLE>
+                <table>
+                  <tr style="height: 10px;">
+                    <td> <a></a> </td>
+                </table>
+
+              </div>
+
+              <div class="tab">
+
+                <h2 class="fs-subtitle subti" style="text-decoration: underline;">Seguridad</h2>
+                <h2 style="font-size: medium;">(El usuario es su DNI)</h2>
+                <table>
+                  <tr style="height: 5px;">
+                    <td> <a></a> </td>
+                </table>
+                <table>
+                  <tr style="height: 70px;">
+                    <td style="width: 100px;">
+                      <input style="text-decoration: underline;font-size: 1.5rem; color: red; font-size: 1.2rem;border: 0; text-align: right;" value="Usuario:"></h2>
+                    </td>
+                    <td><input id="mdni" style="color: red; font-size: 1.2rem; border: 0; text-align: left;"></td>
+
+                  <tr style="height: 30px;">
+                    <td> <a></a> </td>
+                  </tr>
+                </table>
+                <div class="mb-3 material-textfield">
+                  <input id="password" name="password" type="text" class="form-control " placeholder="Contraseña" autocapitalize="off">
+                  <label for="password" class="">Contraseña</label>
+                </div>
+                <div class="mb-3 material-textfield">
+                  <input id="confirm_password" name="confirm_password" type="text" class="form-control " placeholder="confirme la contraseña" autocapitalize="off">
+                  <label for="confirm_password" class="">Confirme la contraseña</label>
+                  <span id='message'></span>
+                </div>
+                <table>
+                  <tr>
+                    <td style="width: 30;">
+                      <input class="largerCheckbox" type="checkbox" id="terminos" name="terminos" />
+                    </td>
+                    <td style="width: auto !important;">
+                      <a style="font-size: 16px !important;"> &nbsp &nbsp leí y acepto los</a>
+                    </td>
+                    <td class="mb-3" style="width: auto">
+                      <input class="" type="button" id="link_termino los" value="terminos y condiciones" style="width: auto; font-size: 18px;font-family: var(--bs-body-font-family); border:none;color:inherit; background-color: var(--bs-body-bg);text-decoration: underline; margin-bottom: none !important;" onclick="termCond()">
+                      </input>
+                    </td>
+                </table>
+
+              </div>
+          </div>
+          <div id="nextprevious">
+            <div style="float: right;">
+              <button type="button" id="prevBtn" onclick="nextPrev(-1)">
+                Anterior
+              </button>
+              <button type="button" id="nextBtn" onclick="nextPrev(1)">
+                Proximo
+              </button>
+            </div>
+          </div>
+          <div class="card-footer bg-transparent border-primary">
+            <a href="/" type="button" class="btn btn-secondary">Cancelar</a>
+            <!--<input class="btn btn-primary" id="Registrarse" value="Registrarse" onclick=validar()></input>
+                  <button onclick=validar() class="btn btn-primary">Registrar</button>-->
+          </div>
+          </form>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    console.log("user_modi dni nombre-> ", dni, nombre )
+
+    url="/api/usuario/"+dni
+    console.log("servidor ->",url)
+    fetch(url)
+    .then(response => response.json())
+    .then((data) => {
+      console.log("data", data)
+      ponerdatos(data)
+    });
+
+    function ponerdatos(data){
+      console.log("ponerdatos", data)
+    document.getElementById('dni').value = data[0].dni;
+    document.getElementById('mdni').value = data[0].dni;
+    document.getElementById('mnombre').value = data[0].nombre;
+    console.log("nombre", data[0].nombre)
+    document.getElementById('apellido').value = data[0].apellido;
+    document.getElementById('celular').value = data[0].celular;
+    document.getElementById('email').value = data[0].email;
+    document.getElementById('calle').value = data[0].calle;
+    document.getElementById('numero').value = data[0].numero;
+    document.getElementById('codigopostal').value = data[0].codigopostal;
+    document.getElementById('presentacion').value = data[0].presentacion;
+  }
+    function termCond() {
+      window.open("/terminos", "byspel", "width=600,height=600,menubar=no");
+    }
+
+    $(function() {
+
+      $("#localidad").select2();
+      $("#oficio").select2({
+        width: '300px',
+        closeOnSelect: false,
+        minimumResultsForSearch: Infinity,
+
+        //createTag: function() {
+        // Disable tagging
+        //  return null;
+        //}
+      });
+
+      $('#oficio').on('select2:opening select2:closing', function(event) {
+        var $searchfield = $(this).parent().find('.select2-search__field');
+        $searchfield.prop('disabled', true);
+      })
+
+      /*$('#oficio').on('select2:select', function(e) {
+        var data = e.params.data;
+        console.log("data",data.id);
+        console.log(data.text);
+      })
+      */
+
+
+      var data_oficio = {};
+      $('#oficio').on('change', function(e) {
+        var x = oficio.selectedOptions
+        for (i = 0; i < x.length; i++) {
+          console.log("oficio ->", x[i].value)
+        }
+        /*
+         data_oficio = $('#oficio').select2('data').map(function(elem) {
+          console.log("pepe2", data_oficio)
+          return elem.text
+        });
+        console.log("datos :", data_oficio);
+        document.getElementById('oficio2').value = data_oficio
+        console.log("je: ",document.getElementById('oficio').value);
+        console.log("jesus", document.getElementById('select2-oficio-container'));
+        */
+      })
+      $('#terminos').on('change', function(e) {
+        console.log(document.getElementById('terminos').checked)
+      })
+    });
+
+
+
+
+    // formato dni
+    $("#dni").on({
+      "focus": function(event) {
+        $(event.target).select();
+      },
+      "keyup": function(event) {
+        $(event.target).val(function(index, value) {
+          return value.replace(/\D/g, "")
+            .replace(/([0-9])/, '$1')
+            .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ".");
+        });
+      }
+    });
+
+
+    // formato Celular
+    $("input[name='celular']").keyup(function() {
+      console.log("hola")
+      var num = $(this).val().replace(/\D/g, '');
+      //$(this).val($(this).val().replace(/^(\d{2})(\d{4})(\d+)$/, "($1)$2-$3"));
+      $(this).val($(this).val().replace(/^(\d{2})(\d{4})(\d+)$/, "($1) $2-$3"));
+    });
+
+
+    $('.input-number').on('input', function() {
+      this.value = this.value.replace(/[^0-9,]/g, '');
+    });
+
+    function _(element) {
+      console.log("paso element", element)
+      return document.getElementById(element);
+    }
+
+    // funcion para validar el password
+    $('#confirm_password').on('keyup', function() {
+      console.log("entro password")
+      if ($('#password').val() == $('#confirm_password').val()) {
+        $('#message').html('Contraseña igual').css('color', 'green');
+      } else
+        $('#message').html('Contraseña desigual').css('color', 'red');
+    });
+
+
+
+    function fetch_data(parent_element, child_element, type) {
+
+      fetch('/get_data?type=' + type + '&parent_value=' + parent_element.value + '').then(function(response) {
+        return response.json();
+      }).then(function(responseData) {
+
+        var html = '';
+
+        if (type == 'load_provincia') { //console.log("cargando provincias")
+          html = '<option value="">Seleccione provincia</option>';
+        }
+
+        if (type == 'load_localidad') {
+          console.log("cargando localidades")
+          document.querySelector(".preload").style.display = "none" //stop the load
+          html = '<option value="">Seleccione una localidad</option>';
+
+        }
+        if (type == 'load_oficio') {
+          console.log("cargando oficios")
+          html = '';
+
+        }
+
+        for (var count = 0; count < responseData.length; count++) {
+          //console.log("dato1", responseData[count], "codigo ",responseData[count].cod)
+          //console.log("codigo ",responseData[count].cod)
+          html += '<option value="' + responseData[count].cod + '">' + responseData[count].descripcion + '</option>';
+        }
+        // cierro relogito
+
+        child_element.innerHTML = html;
+
+      });
+
+    }
+
+    _('pais').onchange = function() {
+      console.log("pais", )
+      fetch_data(_('pais'), _('provincia'), 'load_provincia');
+
+
+    };
+
+    _('dni').onchange = function() {
+      var temp = document.getElementById('dni').value
+      temp = temp.replaceAll('.', '')
+      console.log("nuevo dni", temp)
+      document.getElementById('mdni').value = temp
+      console.log("mdni >", document.getElementById('mdni').value)
+      // fetch('/get_data?type=' + type +
+      fetch('/chequeo_dni?dni=' + document.getElementById('mdni').value)
+        // Exito
+        .then(response => response.json()) // convertir a json
+        .then(json => Swal.fire({
+          icon: 'error',
+          title: "usuario ya existente",
+          text: "Ingrese a la aplicacion con su DNI",
+          showConfirmButton: true
+        })) //imprimir los datos en la consola
+        .catch(err => console.log('Solicitud fallida', err)); // Capturar errores
+    };
+
+    _('provincia').onchange = function() {
+      console.log("eligio la provincia", provincia)
+      cargo_relojito()
+      fetch_data(_('provincia'), _('localidad'), 'load_localidad')
+        
+      
+
+
+    };
+
+    function cargo_relojito() {
+      const loader = document.querySelector('.preload');
+
+
+      const emoji = loader.querySelector('.emoji');
+
+      const emojis = ["🕐", "🕜", "🕑", "🕝", "🕒", "🕞", "🕓", "🕟", "🕔", "🕠", "🕕", "🕡", "🕖", "🕢", "🕗", "🕣", "🕘", "🕤", "🕙", "🕥", "🕚", "🕦", "🕛", "🕧"];
+
+      const interval = 125;
+
+      const loadEmojis = (arr) => {
+        setInterval(() => {
+          emoji.innerText = arr[Math.floor(Math.random() * arr.length)];
+          //console.log(Math.floor(Math.random() * arr.length))
+        }, interval);
+      }
+
+      const init = () => {
+        loadEmojis(emojis);
+      }
+      init();
+
+    }
+
+    function pepe() {
+      console.log("adentro de pepe")
+      document.querySelector(".preload").style.display = "none" //stop the load
+    }
+
+    _('localidad').onchange = function() {
+
+      console.log("eligio la localidad", document.getElementById('localidad').value)
+
+    };
+
+    _('categoria').onchange = function() {
+      console.log("eligio la categoria", categoria)
+      fetch_data(_('categoria'), _('oficio'), 'load_oficio');
+
+    };
+
+
+
+
+    // funcion para validar el correo
+    document.getElementById('email').addEventListener('input', function() {
+      campo = event.target;
+      valido = document.getElementById('emailOK');
+
+      emailRegex = /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i;
+      //Se muestra un texto a modo de ejemplo, luego va a ser un icono
+      if (emailRegex.test(campo.value)) {
+        valido.innerText = "";
+      } else {
+        valido.innerText = "email incorrecto";
+      }
+    });
+
+    function valida1() {
+      console.log("valida1");
+      // corrijo lospuntos del dni
+      var temp = document.getElementById('dni').value
+      temp = temp.replaceAll('.', '')
+      document.getElementById('dni').value = temp
+
+      // corrijo celular
+      var temp = document.getElementById('celular').value
+      temp = temp.replaceAll('(', '')
+      console.log("validar cel (", temp);
+      temp = temp.replaceAll(')', '')
+      console.log("validar cel )", temp);
+      temp = temp.replaceAll('-', '')
+      temp = temp.replaceAll(' ', '')
+      console.log("validar cel (", temp);
+      console.log("validar cel (", temp);
+      document.getElementById('celular').value = temp
+
+      if (Chequeo_campo("dni", "Cargue su Numero de DNI") == true) {
+        console.log("dni_ok")
+        if (Chequeo_campo("nombre", "Cargue su Nombre") == true) {
+          console.log("nombre_ok")
+          if (Chequeo_campo("celular", "Cargue su Numero de celular") == true) {
+            console.log("celular_ok")
+            return true
+          }
+        }
+      }
+      return false
+    }
+
+    function valida2() {
+      console.log("valida2");
+
+      if (Chequeo_campo("pais", "Cargue su pais") == true) {
+        console.log("pais_ok")
+        if (Chequeo_campo("provincia", "Cargue su provincia") == true) {
+          console.log("provincia_ok")
+          if (Chequeo_campo("localidad", "Cargue su localidad") == true) {
+            console.log("localidad_ok")
+            return true
+          }
+        }
+      }
+      return false
+    }
+
+    function valida3() {
+      console.log("valida3");
+
+      if (Chequeo_campo("categoria", "Cargue una categoria") == true) {
+        console.log("categoria_ok")
+        if (Chequeo_campo("oficio", "Cargue un oficio") == true) {
+          console.log("poficio_ok")
+          if (Chequeo_campo("presentacion", "Cargue una presentacion") == true) {
+            console.log("presentacion_ok")
+            return true
+          }
+        }
+      }
+      return false
+    }
+
+    function valida4() {
+      console.log("valida4");
+
+      if (Chequeo_campo("password", "Cargue un password") == true) {
+        console.log("password_ok")
+        if (Chequeo_campo("confirm_password", "Cargue un oficio") == true) {
+          console.log("confirm_password_ok")
+
+        }
+        return
+      }
+    }
+
+    function wait(espera_segundos) {
+      espera = espera_segundos * 1000
+      const tiempo_inicio = Date.now();
+      let tiempo_actual = null;
+      do {
+        tiempo_actual = Date.now();
+      } while (tiempo_actual - tiempo_inicio < espera);
+    }
+
+    function Chequeo_campo(campo, mensaje) {
+      console.log("funcion chequeo ", campo)
+      mcampo = document.getElementById(campo).value.trim();
+      console.log(campo, mcampo)
+      if (mcampo == null || mcampo.length == 0) {
+        document.getElementById(campo).focus();
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: mensaje,
+          showConfirmButton: false,
+          timer: 2000
+        });
+        return false;
+      }
+      return true
+    }
+
+
+
+    // tab
+    console.log("paso por aca")
+    var currentTab = 0;
+    document.addEventListener("DOMContentLoaded", function(event) {
+      showTab(currentTab);
+    });
+
+    function showTab(n) {
+      var x = document.getElementsByClassName("tab");
+      x[n].style.display = "block";
+      if (n == 0) {
+        document.getElementById("prevBtn").style.display = "none";
+      } else {
+        document.getElementById("prevBtn").style.display = "inline";
+      }
+      if (n == (x.length - 1)) {
+        document.getElementById("nextBtn").innerHTML = "Grabar";
+      } else {
+        document.getElementById("nextBtn").innerHTML = "Próximo";
+      }
+      fixStepIndicator(n)
+    }
+
+    function nextPrev(n) {
+      var x = document.getElementsByClassName("tab");
+      if (n == 1 && !validateForm()) return false;
+      x[currentTab].style.display = "none";
+      currentTab = currentTab + n;
+      if (currentTab >= 4) {
+        valid = valida4()
+        if ((document.getElementById('terminos').checked) == true) {
+          console.log("terminos_ok")
+          document.getElementById("registro-usuario").submit();
+        } else {
+          valid = false
+          currentTab = 3
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'tiene que aceptar los terminos y condiciones',
+            showConfirmButton: true
+          });
+          document.getElementById('terminos').focus();
+          showTab(currentTab);
+          document.getElementById('terminos').focus();
+          return false
+        }
+        return true
+        document.getElementById("nextprevious").style.display = "none";
+        document.getElementById("all-steps").style.display = "none";
+        document.getElementById("register").style.display = "none";
+        document.getElementById("text-message").style.display = "block";
+      }
+      showTab(currentTab);
+    }
+
+    function validateForm() {
+
+      var x, y, i, valid = true;
+
+      x = document.getElementsByClassName("tab");
+      y = x[currentTab].getElementsByTagName("input");
+      console.log("valida x", x.length, "valida y", y.length)
+      pp = y[0].id
+      console.log("campo", pp)
+      switch (pp) {
+        case "dni": {
+          console.log("case dni")
+          valid = valida1()
+          console.log("devuelve valida1", valid)
+          break;
+        }
+        case "calle": {
+          console.log("case calle")
+          valid = valida2()
+          console.log("devuelve valida2", valid)
+          break;
+        }
+        case "id_categoria": {
+          console.log("case id_categoria")
+          valid = valida3()
+          console.log("devuelve valida3", valid)
+          break;
+        }
+        case "password": {
+          console.log("case password")
+          valid = valida4()
+          console.log("devuelve valida4", valid)
+          break;
+        }
+      }
+      console.log("pasovalid")
+      return valid
+      /*
+      for (i = 0; i < y.length; i++) {
+        if (y[i].value == "") {
+          y[i].className += " invalid";
+          valid = false;
+        }
+      }
+      if (valid) {
+        document.getElementsByClassName("step")[currentTab].className += " finish";
+      }
+      return valid;
+      */
+    }
+
+    function fixStepIndicator(n) {
+      var i, x = document.getElementsByClassName("step");
+      for (i = 0; i < x.length; i++) {
+        x[i].className = x[i].className.replace(" active", "");
+      }
+      x[n].className += " active";
+    }
+
+    var openFile = function(event) {
+      var input = event.target;
+
+      var reader = new FileReader();
+      reader.onload = function() {
+        var dataURL = reader.result;
+        var output = document.getElementById('output');
+        output.src = dataURL;
+      };
+      reader.readAsDataURL(input.files[0]);
+      var file = document.querySelector('input[type=file]').files[0];
+      console.dir(file);
+    };
+    
+  $('#file_upload_id').change(function(event) {
+    console.log("hola");
+
+    var tmppath = URL.createObjectURL(event.target.files[0]);
+
+    console.log(tmppath);
+    $("img").fadeIn("fast").attr('src', URL.createObjectURL(event.target.files[0]));
+
+    $("#disp_tmp_path").html("Temporary Path(Copy it and try pasting it in browser address bar) --> <strong>[" + tmppath + "]</strong>");
+  });
+  </script>
+  <% if(alert) { %>
+  <script>
+    Swal.fire({
+      title: '<%= alertTitle %>',
+      text: '<%= alertMessage %>',
+      icon: '<%= alertIcon %>',
+      showConfirmButton: '<%= showConfirmButton %>',
+      timer: '<%= timer %>'
+    }).then(() => {
+      window.location = '/<%= ruta %>'
+    })
+  </script>
+  <% } %>
+
+</body>
+
+</html>

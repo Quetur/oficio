@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Node Image Upload</title>
+  <!-- BOOTSTRAP 4 -->
+  <style>
+    .form-group2>input {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+ 
+  <p>formarchivo</p>
+  <div class="container">
+    <!-- <form id="formarchivo" action="/graba_archivo" method="post" enctype="multipart/form-data"> -->
+      <form id="formarchivo" action="/new_user" method="post" enctype="multipart/form-data">
+      <TABLE bore>
+        <TR>
+          <TD ROWSPAN=2>
+            <div class="mb-3 material-textfield">
+              <textarea id="presentacion" name="presentacion" cols='30' rows='5' style="font-size: 1rem !important;font-family: inherit; line-height: inherit;" placeholder="Presentacion Laboral" class="mb-3 material-textfield form-control"></textarea>
+              <label for="presentacion" class="form-label"></label>
+            </div>
+          </TD>
+
+          <td>
+
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+            <input type="file" id="image" name="image" style="display:none" onchange="openFile(event)"  >
+            <label> archivo -></label>&nbsp;&nbsp;<a href="#">
+                <i id="icon_upload" class="fa fa-upload" onclick="_upload()"></i></a>
+
+            <script>
+              function _upload() {
+                document.getElementById('image').click();
+              }
+            </script>
+          </td>
+
+        </TR>
+        <TR>
+          <TD> <img src="img/user.png" id="output" height="150" alt="Image preview..."> </TD>
+        </TR>
+      </TABLE>
+
+
+
+      <input type="button" class="w-100 btn btn-lg btn-primary" value="Enviar" onclick="enviar()"></button>
+    </form>
+  </div>
+  <script>
+    function enviar() {
+      document.getElementById("formarchivo").submit();
+    }
+
+
+    var openFile = function(event) {
+      var input = event.target;
+
+      var reader = new FileReader();
+      reader.onload = function() {
+        var dataURL = reader.result;
+        var output = document.getElementById('output');
+        output.src = dataURL;
+      };
+      reader.readAsDataURL(input.files[0]);
+      var file = document.querySelector('input[type=file]').files[0];
+      console.dir(file);
+    };
+
+    
+   
+  </script>
+</body>
+
+</html>

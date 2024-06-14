@@ -1,0 +1,288 @@
+<%- include('includes/cabecera.ejs') %>
+<%- include('menu2.ejs') %>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<title>Tus Oficios</title>
+</head>
+
+<body>
+  <div class="container container-home">
+
+    <div class="shadow-lg p-3 mb-5">
+      <div class="card">
+        <div class="card-header bg-primary text-white"><img src="/img/volver.png" height="20px"  width="30px"> 
+        <a href="/" type="button" style="color: white;"> Volver  </a></div>
+
+        <h1 style="text-align: center;">Olvido su contraseña</h1>
+        <p style="text-align: center;">Para restablecer la contraseña se te enviara un correo al email almacenado</p>
+        <main class="form-signin container text-center ">
+          <div class="card-body text-primary" style="padding-top: 0px;padding-bottom: 0px;"></div>
+          <form id="formEnviomail" action="/sendmail" method="POST">
+            <!--<img class="mb-4" src="img/logo.png" alt="" width="72" height="57">-->
+            <div class="tab" style="padding-top: 0px !important;padding-bottom: 0px !important">
+            <table>
+              <div class="mb-3 material-textfield">
+                <!--<label for="dni" class="form-label">DNI (Su DNI sera su cuenta de usuario)</label>-->
+                <input id="dni" name="dni" type="text" class="form-control input-number" placeholder="DNI (*)" maxlength="10" onchange="cambiodni(this)">
+                <label for="dni" class="">Numero de DNI : </label>
+                <input id="mdni" readonly hidden>
+                <input id="mnombre"  name="mnombre" readonly hidden >
+              </div>
+              <tr>
+                <div class="mb-3 material-textfield">        
+                  <input id="email" name="email" type="text" class="form-control" placeholder="Email(*)" maxlength="30" onchange="cambioemail(this)">
+                  <label for="email" class="form-label">Email(*)</label>
+                  <span id="emailOK"></span>
+                  <input id="memail" readonly hidden>
+                </div>
+              </tr>
+            </table>
+              
+      </div>
+  
+
+  
+      
+      <input type="button" class="w-100 btn btn-lg btn-primary"  value="Enviar" onclick="enviar()" ></button>
+      <br>
+
+      <!--
+      <a style="margin-top: 10px;" href="/register" type="button" class="w-100 btn btn-lg btn-bd-primary">Registrarse</a>
+        -->
+      </main>
+    </div>
+  </div>
+  </div>
+
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <% if(alert) { %>
+  <script>
+    Swal.fire({
+      title: '<%= alertTitle %>',
+      text: '<%= alertMessage %>',
+      icon: '<%= alertIcon %>',
+      showConfirmButton: '<%= showConfirmButton %>',
+      timer: '<%= timer %>',
+   
+    }).then(() => {
+      sessionStorage.clear();
+      
+      sessionStorage.setItem("dni", '<%= dni%>');
+      sessionStorage.setItem("nombre", '<%= user %>');
+      window.location = '/<%= ruta %>'
+    })
+
+
+
+
+    // formato dni
+    $("#dni").on({
+      "focus": function(event) {
+        $(event.target).select();
+      },
+      "keyup": function(event) {
+        $(event.target).val(function(index, value) {
+          return value.replace(/\D/g, "")
+            .replace(/([0-9])/, '$1')
+            .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ".");
+        });
+      }
+    });
+
+ 
+  </script>
+  <% } %>
+
+
+
+
+
+  <script type="text/javascript">
+    console.log("olvidoPass")
+    var dnicorrecto=false
+    var correocorrecto=false
+
+    async function  cambiodni() {
+      var temp = (document.getElementById('dni').value).trim()
+      if (temp == ""){
+        document.getElementById("dni").focus();
+        Swal.fire({
+          icon: 'error',
+          title: "DNI VACIO",
+          text: "Ingrese su DNI",
+          showConfirmButton: true
+        })
+        return
+      }
+      temp = temp.replaceAll('.', '')
+      console.log("nuevo dni", temp)
+
+      url="/api/usuario/"+temp
+      console.log("consulto fetch ->  ",url)
+      const response = await fetch(url)
+      .then(response => response.json()) // convertir a json
+      .then((data) => {
+        if (data.length==0){
+          console.log("DNI no existe")
+          document.getElementById("dni").focus();
+          Swal.fire({
+          icon: 'error',
+          title: "DNI no existente",
+          text: "Ingrese su DNI",
+          showConfirmButton: true
+        })}
+        else{
+         nombre = data[0].nombre
+         document.getElementById("memail").value=data[0].email
+         document.getElementById("mnombre").value=data[0].nombre
+         console.log("usuario 1 :", data[0].nombre, data[0].email)
+         document.getElementById('mdni').value = temp
+         console.log("mdni >", document.getElementById('mdni').value)
+         dnicorrecto=true
+        }
+      });
+      //console.log("usuario 2 :", data[0].nombre, data[0].email)
+    }
+    
+
+    async function  cambioemail() {
+      if ((document.getElementById('dni').value).trim() == ""){
+        document.getElementById("dni").focus();
+        dnicorrecto=false
+        Swal.fire({
+          icon: 'error',
+          title: "No cargo un DNI valido",
+          text: "Ingrese su DNI",
+          showConfirmButton: true
+        })
+      }
+      else{
+        dnicorrecto=true
+        correocorrecto=chequeomail()
+      }
+    }
+
+    function chequeomail(){
+      var temp = document.getElementById('email').value
+      console.log("email >", document.getElementById('email').value)
+      let emailBase = document.getElementById('memail').value
+      console.log("email base", emailBase)
+      if (document.getElementById("email").value == emailBase ){
+          return true
+      }
+      else{
+        correocorrecto=false
+        document.getElementById("email").focus();
+        Swal.fire({
+            icon: 'error',
+            title: "email incorrecto",
+            text:"Cargue un email correcto",
+            showConfirmButton: true})
+            return false
+      }
+    }  
+  
+
+    function ingresar(){
+      if ((document.getElementById('dni').value).length == 0 ) {
+          document.getElementById("dni").focus();
+          Swal.fire({
+            icon: 'error',
+            title: ' USUARIO INCORRECTO',
+            text: 'cargue su DNI !!!...',
+            showConfirmButton: false,
+            timer: 2000,
+          });
+          return false;
+        }
+      else{
+        if ((document.getElementById('pass').value).length == 0 ) {
+          console.log("pass = nada")
+          //console.log("cliente : "document.getElementById('combo_cliente').value);
+          document.getElementById("pass").focus();
+          Swal.fire({
+            icon: 'error',
+            title: ' PASSWORD VACIO',
+            text: 'cargue su contraseña !!!...',
+            showConfirmButton: false,
+            timer: 2000,
+          });
+          return false;
+
+      }  
+      document.getElementById("formLogin").submit();  
+      }
+    }
+
+    function enviar(){
+      console.log("dnicorrecto ->", dnicorrecto)
+
+      if (dnicorrecto){
+        correocorrecto=chequeomail()
+        console.log("correocorrecto ->", correocorrecto)
+        if (correocorrecto){
+          document.getElementById("formEnviomail").submit();  
+        }
+
+      }
+    }
+
+
+    $('#togglePassword').click(function() {
+      console.log("ojito")
+      const eyeIcon = $(this);
+      const pwdInput = $('#pass');
+
+      pwdInput.off('blur');
+
+      if (eyeIcon.hasClass('fa-eye')) {
+        eyeIcon.removeClass('fa-eye').addClass('fa-eye-slash');
+        pwdInput.attr('type', 'text').focus();
+
+        pwdInput.one('blur', function(e) {
+          if ($(e.relatedTarget).attr('id') !== 'togglePassword') {
+            pwdInput.attr('type', 'password');
+            eyeIcon.removeClass("fa-eye-slash").addClass('fa-eye');
+          }
+        });
+
+      } else {
+        eyeIcon.removeClass('fa-eye-slash').addClass('fa-eye');
+        pwdInput.attr('type', 'password');
+      }
+    });
+
+
+    // formato dni
+    $("#dni").on({
+      "focus": function(event) {
+        $(event.target).select();
+      },
+      "keyup": function(event) {
+        $(event.target).val(function(index, value) {
+          return value.replace(/\D/g, "")
+            .replace(/([0-9])/, '$1')
+            .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ".");
+        });
+      }
+    });
+
+
+    function formatoDni(e) {
+      console.log("dni : ", (document.getElementById('dni').value).length)
+      var temp = document.getElementById('dni').value
+      temp = temp.replaceAll('.', '')
+      console.log("nuevo dni", temp)
+      document.getElementById('mdni').value = temp
+      console.log("mdni >", document.getElementById('mdni').value)
+      document.getElementById('mdni').value = temp
+    }
+   
+
+  </script>
+  </script>
+
+</body>
+
+</html>
