@@ -101,7 +101,7 @@ router.get("/home", async (req, res) => {
     else {
       console.log("no tiene cookies") 
       //res.render("lista10",{ user: false});
-      res.render("lista13",{ user: false});
+      res.render("lista14",{ user: false});
       //res.render("home", { registro: results, user: false });
     }
 
@@ -312,6 +312,15 @@ router.get("/contacto", (req, res) => {
   }
 });
 
+router.get("/acercade", (req, res) => {
+  console.log("ejecuto acercade router");
+  console.log("req.user", req.user);
+  if (req.user) {
+    res.render("acercade", { alert: false, user: req.user[0] });
+  } else {
+    res.render("acercade", { alert: false, user: false });
+  }
+});
 
 
 
