@@ -239,11 +239,11 @@
                   <TR>
                     <TD ROWSPAN=2>
                       <div class="mb-3 material-textfield">
-                        <textarea id="presentacion" name="presentacion" cols='30' rows='5' style="font-size: 1rem !important;font-family: inherit; line-height: inherit;" placeholder="Presentacion Laboral" class="mb-3 material-textfield form-control"></textarea>
+                        <textarea id="presentacion" name="presentacion" cols='30' rows='5' style="font-size: 1rem !important;font-family: inherit; line-height: inherit;" placeholder="Presentacion Laboral" class="mb-3 material-textfield form-control" maxlength="200" onkeyup="contarLongitud()"></textarea>
                         <label for="presentacion" class="form-label"></label>
                       </div>
                     </TD>
-
+                    <span id="longitud">asdf</span>
                     <td style="text-align: left;">
 
                       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -445,6 +445,7 @@
       return document.getElementById(element);
     }
 
+    /*
     $("#presentacion").on({"oninput": function(event) {
         console.log("cargo ")
         $(event.target).select();
@@ -457,7 +458,7 @@
         });
       }
     });
-
+    */
     // funcion para validar el password
     $('#confirm_password').on('keyup', function() {
       console.log("entro password")
@@ -848,6 +849,19 @@
       }
       x[n].className += " active";
     }
+
+  var presentacion = document.querySelector('#presentacion');
+  var longitud = document.querySelector('#longitud');
+  var restan =0;
+
+  function contarLongitud(e) {
+    presentacion = document.querySelector('#presentacion');
+    longitud = document.querySelector('#longitud');
+   
+    restan = 200 - presentacion.value.length
+    longitud.innerHTML = `Restan : `+ restan + ' caracteres';
+    console.log("contar : ", restan) 
+  }
   </script>
   <% if(alert) { %>
   <script>

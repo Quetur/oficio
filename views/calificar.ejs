@@ -1,17 +1,18 @@
 <style>
-    .formato{
-        font-size: 5rem;
-    }
-      
-    .sinborde {
+  .formato {
+    font-size: 5rem;
+  }
+
+  .sinborde {
     border: none;
     background-color: transparent;
     resize: none;
     outline: none;
   }
+
   .material-textfield {
-  position: relative;  
-}
+    position: relative;
+  }
 </style>
 <link href="/css/califica.css" rel="stylesheet">
 <link href="/css/bootstrap.bundle.min.js" rel="stylesheet">
@@ -19,378 +20,390 @@
 <form id="grabarcalificacion" action="/grabarcalificacion" method="post">
 
 
-<table >
+  <table>
     <tr>
-        <td width="auto">
-            <input style="width: 180px; align-items: right;" type="text" class="form__field" value="Calificar a : ">
-        </td>
-        <td width="500px">
-            <input readonly id="ndestino" name="ndestino" type="text" class="form__field" value="<%= results[0].nombre +' '+results[0].apellido %> ">
-        </td>
+      <td width="auto">
+        <input style="width: 180px; align-items: right;" type="text" class="form__field" value="Calificar a : ">
+      </td>
+      <td width="500px">
+        <input readonly id="ndestino" name="ndestino" type="text" class="form__field" value="<%= results[0].nombre +' '+results[0].apellido %> ">
+      </td>
 
-        <td style="width: 300px; height: 50px; align-items: right; display: flex; flex-wrap: wrap; justify-content: right ;">
-            <input type="image" style="width: 80px; height: 50px; align-items: right;text-align: right;" src="/img/close2.png" onclick="window.close()"  value="<%= cierra %>">
-        </td>
+      <td style="width: 300px; height: 50px; align-items: right; display: flex; flex-wrap: wrap; justify-content: right ;">
+        <input type="image" style="width: 80px; height: 50px; align-items: right;text-align: right;" src="/img/close2.png" onclick="window.close()" value="<%= cierra %>">
+      </td>
     </tr>
-</table>
+  </table>
 
+
+  <input id="dnidestino" name="dnidestino" type="text" class="form-control" value="<%= results[0].dni %>" hidden>
+  <label for="usuario" class="form-label"> </label>
+  <input id="procesa" name="procesa" type="text" class="form-control" value="false" hidden>
+
+  <div class="mb-3 material-textfield form__group ">
+
+
+    <textarea style="width:900px; text-align: left; font-size: 3rem;" id="presentacion" name="presentacion" cols='30' rows='5' style="font-size: 1rem !important;font-family: inherit; line-height: inherit;" placeholder="" class="mb-3 material-textfield form-control" maxlength="200" onkeyup="contarLongitud()"></textarea>
+    <label style="size: 300px; height: 80px;top: -20;" for="presentacion" class="form__label ">Escriba aqui su comentario :</label>
     
-    <input id="dnidestino" name="dnidestino" type="text" class="form-control"  value="<%= results[0].dni %>" hidden>
-    <label for="usuario" class="form-label">  </label>
-    <input id="procesa" name="procesa" type="text" class="form-control"  value="false" hidden>
-    
-    <div class="mb-3 material-textfield form__group ">
-
- 
-        <textarea style="width:900px; text-align: left; font-size: 3rem;"    id="presentacion" name="presentacion"
-         cols='30' rows='5' style="font-size: 1rem !important;font-family: inherit; line-height: inherit;" placeholder="" 
-         class="mb-3 material-textfield form-control" onkeypress="return check(event)"
-         ></textarea>
-        <label style="size: 300px; height: 80px;top: -20;" for="presentacion" class="form__label ">Escriba aqui su comentario :</label>
-
-    </div>
-
-    <div style="size: 300px; height: 80px;" class="form__group">
-        <input style="size: 300px; height: 80px;" id="nombre" name="nombre" type="text" class="form__field" >
-        <label style="size: 300px; height: 80px;" for="nombre" class="form__label">Nombre :</label>
-    </div>
-<!-- 
+  </div>
+  <span id="longitud"></span>
+  <div style="size: 300px; height: 80px;" class="form__group">
+    <input style="size: 300px; height: 80px;" id="nombre" name="nombre" type="text" class="form__field">
+    <label style="size: 300px; height: 80px;" for="nombre" class="form__label">Nombre :</label>
+  </div>
+  <!-- 
         <div class="material-textfield"> 
         <input id="nombre" name="nombre" type="text" class="form-control" placeholder="Nombre y Apellido(*)" ></input>
         <label for="nombre" class="">Nombre(*)</label>
     </div>
 -->
-    <input id="dniorigen" name="dniorigen" type="text" class="form-control" hidden >
-    <table >
-        
-        <tr>
-            <td colspan="6">
-                <input style="width:800px; text-align: center;" id="cali1" name="cali1"  value="" class="formato sinborde" readonly></input> 
-            </td>
-        </tr>
-        <tr>
-            <td style="width: 150px;" >
-                <input style="width:100px; text-align: right;" id="cali" name="cali"  value="" class="formato sinborde"></input> 
-            </td>
-            <td style="width: 150px;" >
-                <img alt="false" id="unastart" style="width: 100px;" class="img_estrellita" src="/img/m_estrella.png" onclick="unaestrella()"></img>
-            </td>
-            <td style="width: 150px;" >
-                <img alt="false" id="dosstart"  style="width: 100px;" class="img_estrellita" src="/img/m_estrella.png" onclick="dosestrella()"></img> 
-            </td> 
-            <td style="width: 150px;" >
-                <img alt="false" id="tresstart"  style="width: 100px;" class="img_estrellita" src="/img/m_estrella.png" onclick="tresestrella()"></img>
-            </td>
-            <td style="width: 150px;" >
-                <img alt="false" id="cuatrostart" style="width: 100px;" class="img_estrellita" src="/img/m_estrella.png" onclick="cuatroestrella()"></img>
-            </td> 
-            <td style="width: 150px;" >
-                <img alt="false" id="cincostart" style="width: 100px;" class="img_estrellita" src="/img/m_estrella.png" onclick="cincoestrella()"></img>
-            </td>
-        </tr>
-        <tr>
-            <td  colspan="6">
-                <h2 style="text-decoration: underline; text-align: center;"> pulse cada estrella</h2>
-            </td>
-        </tr>
-        <tr style=" align-items: right" >
-            <!--<td>
+  <input id="dniorigen" name="dniorigen" type="text" class="form-control" hidden>
+  <table>
+
+    <tr>
+      <td colspan="6">
+        <input style="width:800px; text-align: center;" id="cali1" name="cali1" value="" class="formato sinborde" readonly></input>
+      </td>
+    </tr>
+    <tr>
+      <td style="width: 150px;">
+        <input style="width:100px; text-align: right;" id="cali" name="cali" value="" class="formato sinborde"></input>
+      </td>
+      <td style="width: 150px;">
+        <img alt="false" id="unastart" style="width: 100px;" class="img_estrellita" src="/img/m_estrella.png" onclick="unaestrella()"></img>
+      </td>
+      <td style="width: 150px;">
+        <img alt="false" id="dosstart" style="width: 100px;" class="img_estrellita" src="/img/m_estrella.png" onclick="dosestrella()"></img>
+      </td>
+      <td style="width: 150px;">
+        <img alt="false" id="tresstart" style="width: 100px;" class="img_estrellita" src="/img/m_estrella.png" onclick="tresestrella()"></img>
+      </td>
+      <td style="width: 150px;">
+        <img alt="false" id="cuatrostart" style="width: 100px;" class="img_estrellita" src="/img/m_estrella.png" onclick="cuatroestrella()"></img>
+      </td>
+      <td style="width: 150px;">
+        <img alt="false" id="cincostart" style="width: 100px;" class="img_estrellita" src="/img/m_estrella.png" onclick="cincoestrella()"></img>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="6">
+        <h2 style="text-decoration: underline; text-align: center;"> pulse cada estrella</h2>
+      </td>
+    </tr>
+    <tr style=" align-items: right">
+      <!--<td>
                     <input type="image" style="width: 80px; height: 50px;" src="/img/close2.png" onclick="window.close()">
                 </td>
             -->
-            <td></td><td></td><td></td><td></td>
-            <td colspan=6 style=" align-items: right" >
-              <button style="height: 80px; width: 350px; align-items: right;font-size: 2rem;"  type="button"  id="graba" onclick="grabar()" >
-                Grabar
-              </button>
-            </td> 
-          </tr>
-    </table>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td colspan=6 style=" align-items: right">
+        <button style="height: 80px; width: 350px; align-items: right;font-size: 2rem;" type="button" id="graba" onclick="grabar()">
+          Grabar
+        </button>
+      </td>
+    </tr>
+  </table>
 </form>
 <script type="text/javascript">
-    
-    function unaestrella(){  
-        let alt = document.getElementById('unastart').alt
-        console.log("alt1", alt)
-        if (alt=="false"){
-            console.log("falso")
-            document.getElementById('cali').value="1"
-            document.getElementById('cali1').value="Deficiente"
-            dosstart.src = tresstart.src=cuatrostart.src=cincostart.src="/img/m_estrella.png"
-            unastart.src= "/img/m_estrella2.png"
-            document.getElementById('unastart').alt = "true";
-            document.getElementById('dosstart').alt =
-            document.getElementById('tresstart').alt=
-            document.getElementById('cuatrostart').alt=
-            document.getElementById('cincostart').alt="false"
-        }
-        else{
-            console.log("alt",alt)
-            document.getElementById('cali').value=""
-            document.getElementById('cali1').value=""
-            unastart.src= "/img/m_estrella.png"
-            dosstart.src = tresstart.src= cuatrostart.src= cincostart.src= unastart.src= "/img/m_estrella.png"
-            document.getElementById('unastart').alt = "false"
-            document.getElementById('dosstart').alt =
-            document.getElementById('tresstart').alt=
-            document.getElementById('cuatrostart').alt=
-            document.getElementById('cincostart').alt="false";
-        }  
+  function unaestrella() {
+    let alt = document.getElementById('unastart').alt
+    console.log("alt1", alt)
+    if (alt == "false") {
+      console.log("falso")
+      document.getElementById('cali').value = "1"
+      document.getElementById('cali1').value = "Deficiente"
+      dosstart.src = tresstart.src = cuatrostart.src = cincostart.src = "/img/m_estrella.png"
+      unastart.src = "/img/m_estrella2.png"
+      document.getElementById('unastart').alt = "true";
+      document.getElementById('dosstart').alt =
+        document.getElementById('tresstart').alt =
+        document.getElementById('cuatrostart').alt =
+        document.getElementById('cincostart').alt = "false"
+    } else {
+      console.log("alt", alt)
+      document.getElementById('cali').value = ""
+      document.getElementById('cali1').value = ""
+      unastart.src = "/img/m_estrella.png"
+      dosstart.src = tresstart.src = cuatrostart.src = cincostart.src = unastart.src = "/img/m_estrella.png"
+      document.getElementById('unastart').alt = "false"
+      document.getElementById('dosstart').alt =
+        document.getElementById('tresstart').alt =
+        document.getElementById('cuatrostart').alt =
+        document.getElementById('cincostart').alt = "false";
     }
-    
-    function dosestrella(){  
-        let alt = document.getElementById('dosstart').alt
-        if (alt=="false"){
-            console.log("falso")
-            document.getElementById('cali').value="2"
-            document.getElementById('cali1').value="Regular"
-            dosstart.src = unastart.src = "/img/m_estrella2.png"
-            tresstart.src=cuatrostart.src=cincostart.src="/img/m_estrella.png"
-            document.getElementById('dosstart').alt = "true";
-            document.getElementById('unastart').alt = "true";
-            document.getElementById('tresstart').alt=
-            document.getElementById('cuatrostart').alt=
-            document.getElementById('cincostart').alt="false"
-        }
-        else{
-            console.log("true")
-            document.getElementById('cali').value="1"
-            document.getElementById('cali1').value="Deficiente"
-            unastart.src="/img/m_estrella2.png"
-            dosstart.src=tresstart.src=cuatrostart.src=cincostart.src="/img/m_estrella.png"
-            document.getElementById('unastart').alt = "true"
-            document.getElementById('dosstart').alt = "false"
-            document.getElementById('tresstart').alt=
-            document.getElementById('cuatrostart').alt=
-            document.getElementById('cincostart').alt="false";
-        }  
-    }
+  }
 
-    function tresestrella(){     
-        let alt = document.getElementById('tresstart').alt
-        if (alt=="false"){
-            console.log("falso")
-            document.getElementById('cali').value=3
-            document.getElementById('cali1').value="Bueno"
-            dosstart.src = "/img/m_estrella2.png"
-            unastart.src = "/img/m_estrella2.png"
-            tresstart.src= "/img/m_estrella2.png"
-            cuatrostart.src=cincostart.src="/img/m_estrella.png"
-            document.getElementById('dosstart').alt = "true";
-            document.getElementById('unastart').alt = "true";
-            document.getElementById('tresstart').alt="true";
-            document.getElementById('cuatrostart').alt=
-            document.getElementById('cincostart').alt="false"
-        }
-        else{
-            console.log("true")
-            document.getElementById('cali').value=2
-            document.getElementById('cali1').value="Regular"
-            unastart.src="/img/m_estrella2.png"
-            dosstart.src="/img/m_estrella2.png"
-            tresstart.src="/img/m_.estrella.png"
-            cuatrostart.src=
-            cincostart.src="/img/m_estrella.png"
-            document.getElementById('unastart').alt = "true"
-            document.getElementById('dosstart').alt = "true"
-            document.getElementById('tresstart').alt= "false"
-            document.getElementById('cuatrostart').alt=
-            document.getElementById('cincostart').alt="false";
-        }  
+  function dosestrella() {
+    let alt = document.getElementById('dosstart').alt
+    if (alt == "false") {
+      console.log("falso")
+      document.getElementById('cali').value = "2"
+      document.getElementById('cali1').value = "Regular"
+      dosstart.src = unastart.src = "/img/m_estrella2.png"
+      tresstart.src = cuatrostart.src = cincostart.src = "/img/m_estrella.png"
+      document.getElementById('dosstart').alt = "true";
+      document.getElementById('unastart').alt = "true";
+      document.getElementById('tresstart').alt =
+        document.getElementById('cuatrostart').alt =
+        document.getElementById('cincostart').alt = "false"
+    } else {
+      console.log("true")
+      document.getElementById('cali').value = "1"
+      document.getElementById('cali1').value = "Deficiente"
+      unastart.src = "/img/m_estrella2.png"
+      dosstart.src = tresstart.src = cuatrostart.src = cincostart.src = "/img/m_estrella.png"
+      document.getElementById('unastart').alt = "true"
+      document.getElementById('dosstart').alt = "false"
+      document.getElementById('tresstart').alt =
+        document.getElementById('cuatrostart').alt =
+        document.getElementById('cincostart').alt = "false";
     }
+  }
 
-    function cuatroestrella(){     
-        let alt = document.getElementById('cuatrostart').alt
-        if (alt=="false"){
-            console.log("falso")
-            document.getElementById('cali').value=4
-            document.getElementById('cali1').value="Muy Bueno"
-            dosstart.src = "/img/m_estrella2.png"
-            unastart.src = "/img/m_estrella2.png"
-            tresstart.src= "/img/m_estrella2.png"
-            cuatrostart.src="/img/m_estrella2.png"
-            cincostart.src="/img/m_estrella.png"
-            document.getElementById('dosstart').alt = "true";
-            document.getElementById('unastart').alt = "true";
-            document.getElementById('tresstart').alt="true";
-            document.getElementById('cuatrostart').alt="true";
-            document.getElementById('cincostart').alt="false"
-        }
-        else{
-            console.log("true")
-            document.getElementById('cali').value=3
-            document.getElementById('cali1').value="Bueno"
-            unastart.src="/img/m_estrella2.png"
-            dosstart.src="/img/m_estrella2.png"
-            tresstart.src="/img/m_estrella2.png"
-            cuatrostart.src="/img/m_estrella.png"
-            cincostart.src="/img/m_estrella.png"
-            document.getElementById('unastart').alt = "true"
-            document.getElementById('dosstart').alt = "true"
-            document.getElementById('tresstart').alt= "true"
-            document.getElementById('cuatrostart').alt="false"
-            document.getElementById('cincostart').alt="false";
-        }  
+  function tresestrella() {
+    let alt = document.getElementById('tresstart').alt
+    if (alt == "false") {
+      console.log("falso")
+      document.getElementById('cali').value = 3
+      document.getElementById('cali1').value = "Bueno"
+      dosstart.src = "/img/m_estrella2.png"
+      unastart.src = "/img/m_estrella2.png"
+      tresstart.src = "/img/m_estrella2.png"
+      cuatrostart.src = cincostart.src = "/img/m_estrella.png"
+      document.getElementById('dosstart').alt = "true";
+      document.getElementById('unastart').alt = "true";
+      document.getElementById('tresstart').alt = "true";
+      document.getElementById('cuatrostart').alt =
+        document.getElementById('cincostart').alt = "false"
+    } else {
+      console.log("true")
+      document.getElementById('cali').value = 2
+      document.getElementById('cali1').value = "Regular"
+      unastart.src = "/img/m_estrella2.png"
+      dosstart.src = "/img/m_estrella2.png"
+      tresstart.src = "/img/m_.estrella.png"
+      cuatrostart.src =
+        cincostart.src = "/img/m_estrella.png"
+      document.getElementById('unastart').alt = "true"
+      document.getElementById('dosstart').alt = "true"
+      document.getElementById('tresstart').alt = "false"
+      document.getElementById('cuatrostart').alt =
+        document.getElementById('cincostart').alt = "false";
     }
+  }
 
-    function cincoestrella(){     
-        let alt = document.getElementById('cincostart').alt
-        if (alt=="false"){
-            console.log("falso")
-            document.getElementById('cali').value=5
-            document.getElementById('cali1').value="Excelente"
-            dosstart.src = "/img/m_estrella2.png"
-            unastart.src = "/img/m_estrella2.png"
-            tresstart.src= "/img/m_estrella2.png"
-            cuatrostart.src="/img/m_estrella2.png"
-            cincostart.src="/img/m_estrella2.png"
-            document.getElementById('dosstart').alt = "true";
-            document.getElementById('unastart').alt = "true";
-            document.getElementById('tresstart').alt="true";
-            document.getElementById('cuatrostart').alt="true";
-            document.getElementById('cincostart').alt="true"
-        }
-        else{
-            console.log("true")
-            document.getElementById('cali').value=4
-            document.getElementById('cali1').value="Muy Bueno"
-            unastart.src="/img/m_estrella2.png"
-            dosstart.src="/img/m_estrella2.png"
-            tresstart.src="/img/m_estrella2.png"
-            cuatrostart.src="/img/m_estrella2.png"
-            cincostart.src="/img/m_estrella.png"
-            document.getElementById('unastart').alt = "true"
-            document.getElementById('dosstart').alt = "true"
-            document.getElementById('tresstart').alt= "true"
-            document.getElementById('cuatrostart').alt="true"
-            document.getElementById('cincostart').alt="false";
-        }  
+  function cuatroestrella() {
+    let alt = document.getElementById('cuatrostart').alt
+    if (alt == "false") {
+      console.log("falso")
+      document.getElementById('cali').value = 4
+      document.getElementById('cali1').value = "Muy Bueno"
+      dosstart.src = "/img/m_estrella2.png"
+      unastart.src = "/img/m_estrella2.png"
+      tresstart.src = "/img/m_estrella2.png"
+      cuatrostart.src = "/img/m_estrella2.png"
+      cincostart.src = "/img/m_estrella.png"
+      document.getElementById('dosstart').alt = "true";
+      document.getElementById('unastart').alt = "true";
+      document.getElementById('tresstart').alt = "true";
+      document.getElementById('cuatrostart').alt = "true";
+      document.getElementById('cincostart').alt = "false"
+    } else {
+      console.log("true")
+      document.getElementById('cali').value = 3
+      document.getElementById('cali1').value = "Bueno"
+      unastart.src = "/img/m_estrella2.png"
+      dosstart.src = "/img/m_estrella2.png"
+      tresstart.src = "/img/m_estrella2.png"
+      cuatrostart.src = "/img/m_estrella.png"
+      cincostart.src = "/img/m_estrella.png"
+      document.getElementById('unastart').alt = "true"
+      document.getElementById('dosstart').alt = "true"
+      document.getElementById('tresstart').alt = "true"
+      document.getElementById('cuatrostart').alt = "false"
+      document.getElementById('cincostart').alt = "false";
     }
+  }
 
-    let dniorigen =    sessionStorage.getItem("dni");
-    let nombreorigen =  sessionStorage.getItem("nombre");
-    console.log("dni origen", dniorigen)
-    console.log("nombre origen", nombreorigen)
-    if (dniorigen>0){
-        document.getElementById('nombre').value = nombreorigen
-        document.getElementById('dniorigen').value = dniorigen
-        document.getElementById("nombre").readOnly = true;
+  function cincoestrella() {
+    let alt = document.getElementById('cincostart').alt
+    if (alt == "false") {
+      console.log("falso")
+      document.getElementById('cali').value = 5
+      document.getElementById('cali1').value = "Excelente"
+      dosstart.src = "/img/m_estrella2.png"
+      unastart.src = "/img/m_estrella2.png"
+      tresstart.src = "/img/m_estrella2.png"
+      cuatrostart.src = "/img/m_estrella2.png"
+      cincostart.src = "/img/m_estrella2.png"
+      document.getElementById('dosstart').alt = "true";
+      document.getElementById('unastart').alt = "true";
+      document.getElementById('tresstart').alt = "true";
+      document.getElementById('cuatrostart').alt = "true";
+      document.getElementById('cincostart').alt = "true"
+    } else {
+      console.log("true")
+      document.getElementById('cali').value = 4
+      document.getElementById('cali1').value = "Muy Bueno"
+      unastart.src = "/img/m_estrella2.png"
+      dosstart.src = "/img/m_estrella2.png"
+      tresstart.src = "/img/m_estrella2.png"
+      cuatrostart.src = "/img/m_estrella2.png"
+      cincostart.src = "/img/m_estrella.png"
+      document.getElementById('unastart').alt = "true"
+      document.getElementById('dosstart').alt = "true"
+      document.getElementById('tresstart').alt = "true"
+      document.getElementById('cuatrostart').alt = "true"
+      document.getElementById('cincostart').alt = "false";
     }
-    if (document.getElementById('dniorigen').value.trim()==0){
-        
-        document.getElementById('dniorigen').value = "99999999"
-        document.getElementById("nombre").readOnly = false;
-    }
+  }
 
-    function grabar(){
-        console.log("grabar")
-        if (document.getElementById("dniorigen").value.trim() == null){
-            console.log("dniorigen vacio")
-            document.getElementById("dniorigen").value=99999999
-        }
-        valid=validacampos()
-        if (valid){
-   
-          console.log("controles_ok")
-          procesa
-          document.getElementById("procesa").value="true"
-          document.getElementById("grabarcalificacion").submit();
-        }
+  let dniorigen = sessionStorage.getItem("dni");
+  let nombreorigen = sessionStorage.getItem("nombre");
+  console.log("dni origen", dniorigen)
+  console.log("nombre origen", nombreorigen)
+  if (dniorigen > 0) {
+    document.getElementById('nombre').value = nombreorigen
+    document.getElementById('dniorigen').value = dniorigen
+    document.getElementById("nombre").readOnly = true;
+  }
+  if (document.getElementById('dniorigen').value.trim() == 0) {
+
+    document.getElementById('dniorigen').value = "99999999"
+    document.getElementById("nombre").readOnly = false;
+  }
+
+  function grabar() {
+    console.log("grabar")
+    if (document.getElementById("dniorigen").value.trim() == null) {
+      console.log("dniorigen vacio")
+      document.getElementById("dniorigen").value = 99999999
     }
+    valid = validacampos()
+    if (valid) {
+
+      console.log("controles_ok")
+      procesa
+      document.getElementById("procesa").value = "true"
+      document.getElementById("grabarcalificacion").submit();
+    }
+  }
 
 
-    function validacampos(){
-        if (Chequeo_campo("cali", "Pulse alguna estrella") == true) {
-            console.log("cali_ok")
-            if (Chequeo_campo("nombre", "Debes cargar tu nombre") == true) {
-                console.log("nombre_ok") 
-                return true
-        }
-        return false
-        }      
-    }
-
-    
-      function Chequeo_campo(campo, mensaje) {
-      console.log("funcion chequeo ", campo)
-      mcampo = document.getElementById(campo).value.trim();
-      console.log(campo, mcampo)
-      if (mcampo == null || mcampo.length == 0) {
-        document.getElementById(campo).focus();
-        Swal.fire({
-          icon: 'error',
-          title: 'Uups...',
-          text: mensaje,
-          showConfirmButton: false,
-          timer: 2000
-        });
-        return false;
+  function validacampos() {
+    if (Chequeo_campo("cali", "Pulse alguna estrella") == true) {
+      console.log("cali_ok")
+      if (Chequeo_campo("nombre", "Debes cargar tu nombre") == true) {
+        console.log("nombre_ok")
+        return true
       }
-      return true
+      return false
     }
+  }
 
-    $("#presentacion").on({"oninput": function(event) {
-        console.log("cargo ")
-        $(event.target).select();
-      },
-      "keyup": function(event) {
-        console.log("cargo 2 ")
-        $(event.target).val(function(index, value) {
-            console.log("cargo ", index, value)
-          return value.replace(/[^A-Za-z0-9\s,.]/g, "")
-        });
-      }
-    });
 
-    presentdacion.oninput = function(e) {
-        tecla = (document.all) ? e.keyCode : e.which;
-        console.log("tecla", tecla)
-        console.log("algo apreto")
-        let expresion = new RegExp(/^[A-Za-z0-9\s]+$/g);
-    let resultado = expresion.exec(tecla);
-    console.log("resultado", resultado)
-    if (resultado>31  && resultado <240){
-        console.log("bien")
-        return resultado}
-    else {
-        console.log("else")
-        return String.fromCharCode(8)}
-
+  function Chequeo_campo(campo, mensaje) {
+    console.log("funcion chequeo ", campo)
+    mcampo = document.getElementById(campo).value.trim();
+    console.log(campo, mcampo)
+    if (mcampo == null || mcampo.length == 0) {
+      document.getElementById(campo).focus();
+      Swal.fire({
+        icon: 'error',
+        title: 'Uups...',
+        text: mensaje,
+        showConfirmButton: false,
+        timer: 2000
+      });
+      return false;
     }
+    return true
+  }
+// acepta todos los caracteres  
+  $("#presentaciones").on({
+    "oninput": function(event) {
+      console.log("cargo ")
+      $(event.target).select();
+    },
+    "keyup": function(event) {
+      console.log("cargo 2 ")
+      $(event.target).val(function(index, value) {
+        console.log("cargo ", index, value)
+        return value.replace(/[^A-Za-z0-9\s,.]/g, "")
+      });
+    }
+  });
 
-
-    function cheeck(e) {
+  presentdacione.oninput = function(e) {
     tecla = (document.all) ? e.keyCode : e.which;
-        console.log("tecla", tecla)
-    //Tecla de retroceso para borrar, siempre la permite
-    if (tecla == 8) {
-        return true;
-    }
-
-    // Patrón de entrada, en este caso solo acepta numeros y letras
-     // patron = /[A-Za-z0-9]/;
-     // tecla_final = String.fromCharCode(tecla);
-     // console.log("tecla_final", tecla_final)
+    console.log("tecla", tecla)
+    console.log("algo apreto")
     let expresion = new RegExp(/^[A-Za-z0-9\s]+$/g);
     let resultado = expresion.exec(tecla);
     console.log("resultado", resultado)
-    if (resultado>31  && resultado <240){
-        console.log("bien")
-        return resultado}
-    else {
-        console.log("else")
-        return value.replace(/\D/g, "")}
-}
+    if (resultado > 31 && resultado < 240) {
+      console.log("bien")
+      return resultado
+    } else {
+      console.log("else")
+      return String.fromCharCode(8)
+    }
+
+  }
+
+  var presentacion = document.querySelector('#presentacion');
+  var longitud = document.querySelector('#longitud');
+  var restan =0;
+
+  function contarLongitud(e) {
+    presentacion = document.querySelector('#presentacion');
+    longitud = document.querySelector('#longitud');
+   
+    restan = 200 - presentacion.value.length
+    longitud.innerHTML = `Restan : `+ restan + ' caracteres';
+    console.log("contar : ", restan)
+    
+    
+  }
+
+  function cheeck(e) {
+    tecla = (document.all) ? e.keyCode : e.which;
+    console.log("tecla", tecla)
+    //Tecla de retroceso para borrar, siempre la permite
+    if (tecla == 8) {
+      return true;
+    }
+
+    // Patrón de entrada, en este caso solo acepta numeros y letras
+    // patron = /[A-Za-z0-9]/;
+    // tecla_final = String.fromCharCode(tecla);
+    // console.log("tecla_final", tecla_final)
+    let expresion = new RegExp(/^[A-Za-z0-9\s]+$/g);
+    let resultado = expresion.exec(tecla);
+    console.log("resultado", resultado)
+    if (resultado > 31 && resultado < 240) {
+      console.log("bien")
+      return resultado
+    } else {
+      console.log("else")
+      return value.replace(/\D/g, "")
+    }
+  }
 </script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <% if(cierra==true) { %>
-    <script>
-        Swal.fire({
-            title: '<%= alertTitle %>',
-            text: '<%= alertMessage %>',
-            icon: '<%= alertIcon %>',
-            showConfirmButton: '<%= showConfirmButton %>',
-            timer: '<%= timer %>',})
-       window.close()
-    </script>
-<% } %>  
+<script>
+  Swal.fire({
+    title: '<%= alertTitle %>',
+    text: '<%= alertMessage %>',
+    icon: '<%= alertIcon %>',
+    showConfirmButton: '<%= showConfirmButton %>',
+    timer: '<%= timer %>',
+  })
+  window.close()
+</script>
+<% } %>
