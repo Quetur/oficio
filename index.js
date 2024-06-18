@@ -1,5 +1,5 @@
 if (process.env.NODE_ENV !== 'production'){
-  console.log("entrono = ", process.env.NODE_ENV)
+  //console.log("entrono = ", process.env.NODE_ENV)
 } 
 
 import dotenv from 'dotenv'
@@ -14,7 +14,12 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 //seteamos las variables de entorno
-console.log(dotenv.config({path: './env/.env'}))
+// solo para desarrollo muestro el entorno y las variables de entorno
+if (process.env.NODE_ENV !== 'production'){
+  console.log("entrono = ", process.env.NODE_ENV)
+  console.log(dotenv.config({path: './env/.env'}))
+} 
+
 console.log("region",  process.env.REGION)
 
 const app = express()

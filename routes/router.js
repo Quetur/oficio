@@ -692,6 +692,8 @@ let alertmesagge = "Felicidades " + pp.nombre
 
 
 router.post("/enviosugerencia", (req, res) => {
+ // console.log("users", process.env.MAIL_USER)
+ // console.log("pass", process.env.MAIL_PASS)
   console.log("envio sugerencia")
   
   const celular = req.body.celular;
@@ -738,6 +740,7 @@ pie = ``
     from: "administracion@mercadooficio.com.ar",
     bcc: "jrosavila@gmail.com",
     to: correo,
+    cc:"mercadooficio@gmail.com",
     subject: "Solicitud de sugerencia - Mercado Oficio",
     text: "",
     html: contentHTML,
