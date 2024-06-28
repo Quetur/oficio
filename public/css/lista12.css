@@ -201,7 +201,7 @@ tr.selected td:before {
   display: flex;
   justify-content: left;
   position: relative;
-  width: 150px;
+  width: auto;
   height: 24px;
 
 

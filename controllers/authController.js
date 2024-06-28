@@ -210,8 +210,8 @@ export const listado11= async (req, res)=>{
 }
 
 export const listado12= async (req, res)=>{  
-  console.log('authcontroler listado14') 
-  return res.redirect('/lista14')
+  console.log('authcontroler listado12') 
+  return res.redirect('/lista12')
 }
 
 export const archivo= async (req, res)=>{  

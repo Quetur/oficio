@@ -329,7 +329,7 @@
       ponerdatos(data)
     });
 
-    function ponerdatos(data){
+    async function ponerdatos(data){
       console.log("ponerdatos", data)
     document.getElementById('dni').value = data[0].dni;
     document.getElementById('mdni').value = data[0].dni;
@@ -342,7 +342,48 @@
     document.getElementById('numero').value = data[0].numero;
     document.getElementById('codigopostal').value = data[0].codigopostal;
     document.getElementById('presentacion').value = data[0].presentacion;
+    //fetch_data(_('pais'), _('provincia'), 'load_provincia');
+    //await busco_tabla('provincia',data[0].id_provincia);
+    console.log("pepe",document.getElementById('provincia').innerHTML)
+    console.log("provincia .>", data[0].id_provincia)  
+    await busco_tabla('provincia',data[0].id_provincia);
+    console.log("localidad .>", data[0].id_localidad)  
+    await busco_tabla('localidad',data[0].id_localidad);
+    console.log("categoria .>", data[0].id_categoria) 
+    await busco_tabla('categoria',data[0].id_categoria);
+
+    //            O F I C I O S
+    await busco_tabla('oficio',data[0].dni);
+    //document.getElementById('oficio').innerHTML = '<option value="'+'pepe'+'tabla"  selected="selected">pp</option>'
+
+    //   imagen
+    console.log("imagen .>", data[0].imagen) 
+    document.getElementById("output").src='https://oficio.s3.sa-east-1.amazonaws.com/' + data[0].imagen 
+    //data = '<img class="grid-img" src="https://oficio.s3.sa-east-1.amazonaws.com/' + row.imagen + '" />';
   }
+
+
+  async function busco_tabla(tabla,cod){
+    console.log("busco", tabla, cod)
+    fetch('/api/'+tabla+'/' + cod)
+        // Exito
+        .then((response) => { 
+            return response.json()
+        .then((data) => {
+                console.log("largo de tabla ",tabla,  data.length);
+                for (var count = 0; count < data.length; count++) {
+                  document.getElementById(tabla).innerHTML = '<option value="'+data[count].id_+'tabla"  selected="selected">'+data[count].descripcion+'</option>'
+                  console.log("largo de tabla ",count,  data[count].descripcion);
+                }
+                
+                return data;})
+        .catch((err) => {
+                console.log(err);
+            }) 
+        });
+  }
+
+
     function termCond() {
       window.open("/terminos", "byspel", "width=600,height=600,menubar=no");
     }
@@ -379,6 +420,7 @@
         var x = oficio.selectedOptions
         for (i = 0; i < x.length; i++) {
           console.log("oficio ->", x[i].value)
+
         }
         /*
          data_oficio = $('#oficio').select2('data').map(function(elem) {

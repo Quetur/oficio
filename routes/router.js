@@ -54,6 +54,7 @@ import {
  
 // configuro s3
 import aws from 'aws-sdk';
+import { assign } from "nodemailer/lib/shared/index.js";
 aws.config.update({
   secretAccessKey: process.env.SECRETACCESSKEY,
   accessKeyId: process.env.ACCESSKEYID,
@@ -86,13 +87,13 @@ router.get("/home", async (req, res) => {
         console.log("req.usr ", req.user);
         if (req.user) {
           console.log("existe user router/home");
-          res.render("lista13",{ user: req.user});
+          res.render("lista18",{ user: req.user});
           //res.render("lista10",{ user: req.user});
           //res.render("home", { registro: results, user: req.user });
         } else {
           console.log("NO esta adentro router/home");
           //res.render("home", { registro: results, user: false });
-          res.render("lista13",{ user: false});
+          res.render("lista18",{ user: false});
         }
       } catch (error) {
         console.log(error);
@@ -101,7 +102,7 @@ router.get("/home", async (req, res) => {
     else {
       console.log("no tiene cookies") 
       //res.render("lista10",{ user: false});
-      res.render("lista14",{ user: false});
+      res.render("lista18",{ user: false});
       //res.render("home", { registro: results, user: false });
     }
 
@@ -209,7 +210,7 @@ router.get('/api/calificacion/:id',async (req,res)=>{
 
 // mostrar solo las provincias ue tienen usuario
 router.get('/api/provincias',async (req,res)=>{
-  console.log("entro en api/provincia")
+  console.log("entro en api/provincias")
   try {
     const [filas] = await pool.query("SELECT DISTINCT p.descripcion as prov, p.id_provincia as id_provincia, p.descripcion as descripcion, p.id_provincia as cod FROM usuario x INNER JOIN provincia p on x.id_provincia = p.id_provincia;");
     console.log("provincias", filas.length);
@@ -221,6 +222,57 @@ router.get('/api/provincias',async (req,res)=>{
   }
 })
 
+router.get('/api/provincia/:cod',async (req,res)=>{
+  console.log("entro en api/provincia",[req.params.cod])
+  try {
+    const [filas] = await pool.query("select * from provincia where id_provincia= ?;", [req.params.cod]);
+    console.log("provincias", filas.length);
+    res.send(filas);
+  } catch (error) {
+    {
+      console.log(error);
+    }
+  }
+})
+
+router.get('/api/localidad/:cod',async (req,res)=>{
+  console.log("entro en api/localidad",[req.params.cod])
+  try {
+    const [filas] = await pool.query("select * from localidad where id_localidad= ?;", [req.params.cod]);
+    console.log("localidad", filas.length);
+    res.send(filas);
+  } catch (error) {
+    {
+      console.log(error);
+    }
+  }
+})
+
+router.get('/api/categoria/:cod',async (req,res)=>{
+  console.log("entro en api/categoria",[req.params.cod])
+  try {
+    const [filas] = await pool.query("select * from categoria where id_categoria= ?;", [req.params.cod]);
+    console.log("categoria", filas.length);
+    res.send(filas);
+  } catch (error) {
+    {
+      console.log(error);
+    }
+  }
+})
+
+router.get('/api/oficio/:cod',async (req,res)=>{
+  console.log("entro en api/oficio x usuario",[req.params.cod])
+  try {
+    const [filas] = await pool.query("SELECT * FROM `usuario_oficio` u INNER JOIN oficio o on u.id_oficio=o.id_oficio where dni= ?", [req.params.cod]);
+    console.log("oficios", filas.length);
+    res.send(filas);
+  } catch (error) {
+    {
+      console.log(error);
+    }
+  }
+})
 
 // mostrar solo las localidades ue tienen usuario
 router.get('/api/localidades',async (req,res)=>{
@@ -322,7 +374,66 @@ router.get("/acercade", (req, res) => {
   }
 });
 
+router.get("/lista14", async (req, res) => {
+  console.log("ejecuto acercade router");
+  console.log("req.user", req.user);
+  const [filas] = await pool.query("SELECT u.dni as dni, x.nombre,  x.apellido, x.calificacion, x.celular, x.codigopostal, x.imagen, l.descripcion as localidad, p.descripcion as provincia, GROUP_CONCAT(DISTINCT o.descripcion SEPARATOR ' - ') as oficio,  x.presentacion from usuario_oficio u INNER JOIN oficio o on u.id_oficio = o.id_oficio INNER JOIN usuario x on x.dni = u.dni INNER JOIN localidad l on l.id_localidad = x.id_localidad INNER JOIN provincia p on p.id_provincia = x.id_provincia GROUP by u.dni order by x.nombre, x.apellido ;");
+  console.log("usuarios lista 14", filas.length);
+  if (req.user) {
+    res.render("lista14", { alert: false, user: req.user[0] });
+  } else {
+    res.render("lista14", { alert: false, user: false, usuarios: filas });
+  }
+});
 
+router.get("/lista15", async (req, res) => {
+  console.log("ejecuto lista15 router");
+  console.log("req.user", req.user);
+  const [filas] = await pool.query("SELECT u.dni as dni, x.nombre,  x.apellido, x.calificacion, x.celular, x.codigopostal, x.imagen, l.descripcion as localidad, p.descripcion as provincia, GROUP_CONCAT(DISTINCT o.descripcion SEPARATOR ' - ') as oficio,  x.presentacion from usuario_oficio u INNER JOIN oficio o on u.id_oficio = o.id_oficio INNER JOIN usuario x on x.dni = u.dni INNER JOIN localidad l on l.id_localidad = x.id_localidad INNER JOIN provincia p on p.id_provincia = x.id_provincia GROUP by u.dni order by x.nombre, x.apellido ;");
+  console.log("usuarios lista 14", filas.length);
+  if (req.user) {
+    res.render("lista15", { alert: false, user: req.user[0] });
+  } else {
+    res.render("lista15", { alert: false, user: false, usuarios: filas });
+  }
+});
+
+
+router.get("/lista16", async (req, res) => {
+  console.log("ejecuto lista16 router");
+  console.log("req.user", req.user);
+  const [filas] = await pool.query("SELECT u.dni as dni, x.nombre,  x.apellido, x.calificacion, x.celular, x.codigopostal, x.imagen, l.descripcion as localidad, p.descripcion as provincia, GROUP_CONCAT(DISTINCT o.descripcion SEPARATOR ' - ') as oficio,  x.presentacion from usuario_oficio u INNER JOIN oficio o on u.id_oficio = o.id_oficio INNER JOIN usuario x on x.dni = u.dni INNER JOIN localidad l on l.id_localidad = x.id_localidad INNER JOIN provincia p on p.id_provincia = x.id_provincia GROUP by u.dni order by x.nombre, x.apellido ;");
+  console.log("usuarios lista 16", filas.length);
+  if (req.user) {
+    res.render("lista16", { alert: false, user: req.user[0] });
+  } else {
+    res.render("lista16", { alert: false, user: false, usuarios: filas });
+  }
+});
+
+router.get("/lista17", async (req, res) => {
+  console.log("ejecuto lista17 router");
+  console.log("req.user", req.user);
+  const [filas] = await pool.query("SELECT u.dni as dni, x.nombre,  x.apellido, x.calificacion, x.celular, x.codigopostal, x.imagen, l.descripcion as localidad, p.descripcion as provincia, GROUP_CONCAT(DISTINCT o.descripcion SEPARATOR ' - ') as oficio,  x.presentacion from usuario_oficio u INNER JOIN oficio o on u.id_oficio = o.id_oficio INNER JOIN usuario x on x.dni = u.dni INNER JOIN localidad l on l.id_localidad = x.id_localidad INNER JOIN provincia p on p.id_provincia = x.id_provincia GROUP by u.dni order by x.nombre, x.apellido ;");
+  console.log("usuarios lista 17", filas.length);
+  if (req.user) {
+    res.render("lista17", { alert: false, user: req.user[0] });
+  } else {
+    res.render("lista17", { alert: false, user: false, usuarios: filas });
+  }
+});
+
+router.get("/lista18", async (req, res) => {
+  console.log("ejecuto lista18 router");
+  console.log("req.user", req.user);
+  const [filas] = await pool.query("SELECT u.dni as dni, x.nombre,  x.apellido, x.calificacion, x.celular, x.codigopostal, x.imagen, l.descripcion as localidad, p.descripcion as provincia, GROUP_CONCAT(DISTINCT o.descripcion SEPARATOR ' - ') as oficio,  x.presentacion from usuario_oficio u INNER JOIN oficio o on u.id_oficio = o.id_oficio INNER JOIN usuario x on x.dni = u.dni INNER JOIN localidad l on l.id_localidad = x.id_localidad INNER JOIN provincia p on p.id_provincia = x.id_provincia GROUP by u.dni order by x.nombre, x.apellido ;");
+  console.log("usuarios lista 18", filas.length);
+  if (req.user) {
+    res.render("lista18", { alert: false, user: req.user[0] });
+  } else {
+    res.render("lista18", { alert: false, user: false, usuarios: filas });
+  }
+});
 
 router.get("/registro_ok", async (req, res) => {
   console.log("paso por router");
@@ -347,19 +458,31 @@ router.get("/editar/:id", async (req, res) => {
   try {
     const paises = await pool.query("SELECT * FROM pais");
     console.log("paises", paises[0]);
-    console.log("modifica 1 usuario ->", dniUSR)
+
     try {
-      const cat = await pool.query("SELECT * FROM categoria");
-      console.log("caterias ", cat[0]);
-      console.log("modifica 2 usuario ->", dniUSR)
-      let user = {dni: dniUSR }
-      res.render("user_modi", { title: "Express", pais_data: paises[0], categoria_data: cat[0], alert: false, user});
+      const provincias = await pool.query("SELECT * FROM provincia ");
+      console.log("provincias", provincias[0]);
+
+        try {
+          const cat = await pool.query("SELECT * FROM categoria");
+          console.log("caterias ", cat[0]);
+          console.log("modifica 2 usuario ->", dniUSR)
+          let user = {dni: dniUSR }
+          res.render("user_modi", { title: "Express", pais_data: paises[0], provincia_data: provincias[0], categoria_data: cat[0], alert: false, user});
+        }
+      
+        catch (error) {
+          {
+            console.log(error);
+          }
+        }
       }
-     catch (error) {
-      {
-        console.log(error);
+      catch (error) {
+        {
+          console.log(error);
+        }
       }
-    }
+    
   } catch (error) {
     {
       console.log(error);

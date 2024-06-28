@@ -1,7 +1,10 @@
+<%- include('menu2.ejs') %>
+
+
 
 
   <script src="https://code.jquery.com/jquery-latest.js"></script>
-  <link href="css/lista14.css" rel="stylesheet">
+  <link href="css/lista15.css" rel="stylesheet">
   <!--  <tr> 
             <td> <p>data + ' ' + row.apellido </p>
             </td>
@@ -27,113 +30,166 @@
   <script src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.js"></script>
 -->
 
-  <div class="">
+  <div class="container container-center">
     
 
     <!-- 
     <img src="/img/filter.png" height="50px" width="50px" type="button" value="Filtrar" id="boton-servicio" onclick="showHide()">
     <- Aplicar Filtros</img>
   -->
+    <div class="barra" style="align-items: center; justify-content: center;">
+      <div class="form-floating">
+        <select class="form-select" name="select_provi" id="select_provi" style="width: 180px;" onchange="functionProv(this)"></select>
+        <label for="select_provi" class="form-label" style="font-size:larger; text-decoration: underline;"> Provincia </label>
+      </div>
+
+      <div class="form-floating">
+        <select class="form-select" name="select_localidad" id="select_localidad" style="width: 180px;"></select>
+        <label for="select_provi" class="form-label" style="font-size:larger; text-decoration: underline;">Localidad</label>
+      </div>
+      <div class="form-floating">
+        <select class="form-select" name="select_oficio" id="select_oficio"></select>
+        <label for="select_oficio" class="form-label" style="font-size:larger; text-decoration: underline;">Oficio</label>
+        </select>
+      </div>
+    </div>
 
     <!-- <table id="example" class="table table-sm table-hover cards " style="width: 100%;">  -->
-      <style>
-        ul.unrenglon li {
-              display: inline;
-        }
-        .contenedor-testimonio {
-    max-width: 1000px;
-    width:95%;
+    <table id="example" class="table table-sm table-hover  cards " style="width: 100%;">
+      <thead>
+        <tr>
+          <th></th>
+          <th></th>
 
-    height: 368px;
-    margin: 10px 10px 50px;
-    align-items: center;
-    justify-content: left;
-    background-color: #ffffff; 
-    box-shadow: 0 3px 13px 1px rgb(0 0 0 / 9%);
-  }
+          <th></th>
+          <th></th>
+          <th>Localidad</th>
 
-  .contenedor-texto-testimonio {
-    text-align: left;
-    padding: 40px;
-    width: 80%;
-    font-family: Lato, sans-serif;
-    font-weight: 400;
-    line-height: 1.5rem;
-  }
-  .contenedor-texto-testimonio2 {
-    text-align: right;
-    padding: 40px;
-    width: 20%;
-    font-family: Lato, sans-serif;
-    font-weight: 400;
-    line-height: 1.5rem;
-  }
-      </style>
-   
-        <% for(var i = 0; i < usuarios.length; i++) { %>
-          <!--
-          <table class="letra" >
-            <tr >
-              <td class="nom" style="width: 800px; font-weight:bold;" ><%= usuarios[i].nombre %> <%= usuarios[i].apellido %> </td>
-              <td style="width: 100px; text-align: right;" class="calif"><%= usuarios[i]. calificacion %> </td>
-              <td class="imag"> <img class="img_estrellita calificar" src="img/m_estrella2.png"></img> </td> 
-            </tr>
-          </table>
-          -->
-          <div class="contenedor-testimonio">
-          <ul class="unrenglon ">
-            <li class="contenedor-texto-testimonio" style="width: 50%;"> <%= usuarios[i].nombre %> <%= usuarios[i].apellido %>  </li>
-            <li class="contenedor-texto-testimonio2"> <%= usuarios[i].calificacion %>  <img class="img_estrellita calificar" src="img/m_estrella2.png"></li> 
-          </ul>
-       
-          
-          <table >
-            <tr>
-              <td> 
-                
-              </td>
-            </tr>
-            <tr>
-              <td rowSpan=5 className="img">
-                <img class="grid-img" src="https://oficio.s3.sa-east-1.amazonaws.com/<%= usuarios[i].imagen %>" />
-              </td>
-            </tr>
-            <tr><td class="presentacion" style="width: 500px; padding-left: 10px;"><%= usuarios[i].oficio %></td></tr>
-            <tr><td class="presentacion" style="width: 700px; padding-left: 10px;"><%= usuarios[i].presentacion %></td></tr>
-            <tr><td class="localidad" style="width: 500px; padding-left: 10px;"><%= usuarios[i].localidad %></td></tr>
-            <tr style="text-align: center;"><td>'<button name="masinfo" style="align-items: center; width: 150px;" value="Mas info..." type="button" id="' + row.dni + '">Mas info...</button'
-            </td> <td>
-            <tr >  <td>  &nbsp </td> </tr>
-          </table>
-          <hr> 
-
-         <% } %>
+          <th>Provincia</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody style=" flex-wrap: wrap; border-top: none;">
 
 
+
+
+      </tbody>
+      <tfoot hidden>
+        <tr>
+          <th></th>
+          <th></th>
+
+          <th>Oficio</th>
+          <th></th>
+          <th>Localidad</th>
+
+          <th>Provincia</th>
+          <th>Celular</th>
+          <th></th>
+        </tr>
+      </tfoot>
       
-
+    </table>
     
   </div>
 
 
   <script>
-    console.log("lista14")
+    console.log("lista13")
     let filtro = "/1"
-    var select_oficio=''
 
 
-    
+
+    function functionProv(e) {
+      //datatable.columns.adjust().draw(); // Redraw the DataTable
+      // datatable.clear().draw();
+      // datatable.ajax.reload(null, false);
+      let prov = e.options[e.selectedIndex].getAttribute("title")
+      console.log(" function e provincia elejida", prov)
+      $("#select_localidad").find('option').remove(); // borro las localidades anteriores
+
+
+      console.log("eligio provincia : ", prov)
+
+      //document.getElementById("button").value =  document.getElementById("select_provi").value´
+      //table.buttons.text(document.getElementById("select_provi").value)
+      let url = "/api/localidades"
+      if (prov == undefined || prov < 1) {
+        console.log("prov", prov)
+      } else {
+        console.log("tiene prov", prov)
+        url = url + "/" + prov
+        filtro = "/u.id_provincia = " + prov
+      }
+      console.log("servidor ->", url)
+      fetch(url)
+        .then(response => response.json())
+        .then((responseData) => {
+          console.log("localidad ->", responseData)
+          // alert('HAY ' + lista_de_provincias.length) // Puedes poner este alert para ver si la llamada POST te devuelve algo
+          // creamos un elemento de tipo option
+          //var opt = document.createElement("option");
+          //let modelList = document.createElement("select_localidad");
+          var html = '<option id="select_localidad" name="select_localidad" value="">Todas</option>'
+
+          for (var count = 0; count < responseData.length; count++) {
+            console.log("dato1", responseData[count], "codigo ", responseData[count].cod)
+            console.log("codigo ", responseData[count].cod)
+
+            html = html + '<option id="select_localidad" name="select_localidad" value="' + responseData[count].descripcion + '" title="' + responseData[count].cod + '">' + responseData[count].descripcion + '</option>';
+          }
+
+          console.log("html ->", html)
+
+          select_localidad.innerHTML = html;
+
+        });
+    }
+
+    function showHide() {
+      // Definir elemento
+      let div = document.getElementById("div-servicios");
+      if (!div) {
+        // No existe, hay que crearlo
+        div = document.createElement("div");
+        div.setAttribute("id", "div-servicios");
+        document.body.appendChild(div);
+
+        var servicio1 = document.createElement("a");
+        servicio1.innerHTML = "This is a paragraph.";
+        servicio1.setAttribute("class", "servicios");
+        div.appendChild(servicio1);
+
+        var servicio2 = document.createElement("a");
+        servicio2.innerHTML = "Filtros";
+        servicio2.setAttribute("class", "servicios");
+        div.appendChild(servicio2);
+
+        var servicio3 = document.createElement("a");
+        servicio3.innerHTML = "This is a paragraph.";
+        servicio3.setAttribute("class", "servicios");
+        div.appendChild(servicio3);
+        // Retardar para que aparezca con transición
+        setTimeout(showHide, 50);
+      } else {
+        // Mostrar u ocultar
+        div.classList.toggle('activo');
+      }
+    }
+
 
     // saco de usuarios solo las prov que existen 
     // saco de usuario solo las localidades que existen SELECT DISTINCT l.descripcion as loc FROM usuario x INNER JOIN localidad l on x.id_localidad = l.id_localidad;
 
     let url = "/api/oficios"
- 
+
     console.log("servidor ->", url)
     fetch(url)
       .then(response => response.json())
       .then((responseData) => {
-        console.log("oficios ->", responseData)
+        console.log("oficio ->", responseData)
         // alert('HAY ' + lista_de_provincias.length) // Puedes poner este alert para ver si la llamada POST te devuelve algo
         // creamos un elemento de tipo option
         //var opt = document.createElement("option");
@@ -151,7 +207,7 @@
 
         select_oficio.innerHTML = html;
 
-    });
+      });
 
 
 
@@ -221,17 +277,16 @@
             render: function(data, type, row, meta) {
               return (function(data, type, row) {
 
-                return ' <div class="primer_renglon"> <div class="nom">' + data + ' ' + row.apellido + ' </div>' +
+                return '<table><tr> <div class="primer_renglon"> <div class="nom">' + data + ' ' + row.apellido + ' </div>' +
                   '<div class="calif">' + row.calificacion + ' </div>' +
                   '<div class="imag"> <img class="img_estrellita calificar" src="img/m_estrella2.png"></img> </div>' +
-                  '</div>'
+                  '</div></tr></table>'
               })(data, type, row, meta);  
             }
           },
           {
             render: function(data, type, row, meta, full) {
-              data = '<table><tbody><tr><td rowSpan={4} className="img"><img src="imagen" /></td></tr><tr><td className="name"><a >nombre </a></td></tr><tr><td className="contact">direccion</td></tr><tr><td className="country">pais</td></tr></tbody></table>';
-
+              data = '<table><tr><td rowSpan=5 class="img"><img class="grid-img" src="https://oficio.s3.sa-east-1.amazonaws.com/' + row.imagen + '" /></td></tr><td></table>';
               {
                 return data
               };
@@ -241,6 +296,7 @@
           {
             data: "oficio",
             name: "oficio",
+            visible: false,
             render: function(data, type, row, meta) {
               return data;
             }
@@ -249,6 +305,7 @@
             data: "presentacion",
             name: "presentacion",
             class: 'text-center',
+            visible: false,
             render: function(data, type, row, meta) {
               return data;
             }
@@ -285,6 +342,7 @@
           },
           {
             class: "vercard",
+            visible: false,
             render: function(data, type, row, meta, full) {
 
               data = '<button name="masinfo" style="width: 150px;" value="Mas info..." type="button" id="' + row.dni + '">Mas info...</button'
@@ -300,7 +358,7 @@
           var api = this.api();
           var $table = $(api.table().node());
 
-          if ($table.hasClass('cardsa')) {
+          if ($table.hasClass('cards')) {
 
             // Create an array of labels containing all table headers
             var labels = [];
@@ -316,9 +374,6 @@
             });
 
             var max = 0;
-            $('tbody tr', $table).each(function() {
-              max = Math.max($(this).height(), max);
-            }).height(max);
 
           } else {
             // Remove data-label attribute from each cell
@@ -420,7 +475,7 @@
         }
 
       })
-      
+
       // filtros de abajo tengo que agregar en html el footer
       //buildSelect(table);
 
@@ -522,32 +577,18 @@
 
     }
 
-   // $(document).ready(function() {
+    $(document).ready(function() {
       url = "/api/usuarios" + filtro
-      console.log("consulta usuarios ->", url)
-      var data =  consultausuario()
-      
-      async function consultausuario(){
+      console.log("servidor ->", url)
       fetch(url)
         .then(response => response.json())
         .then((data) => {
-          console.log("consulta fetch usuarios (data)->", data)
-          return data
-      //    createtabla(data)
+          createtabla(data)
         });
-    //});
-      }
-    //productosLS = obtenerProductosLocalStorage();
 
-    console.log("data", data)
-    productosLS.forEach(function (producto) {
-    $("#lista_usr tbody tr").each(function (idx, fila) {
-       row.innerHTML = `
-               <tr `
-      });
-      listaCompras.appendChild(row);
-    })
 
+
+    });
   </script>
 
 

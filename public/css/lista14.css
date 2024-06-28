@@ -1,0 +1,53 @@
+.img_whatsapp {
+    width: 20px;
+    height: 20px;
+    margin-bottom: 5px;
+  }
+  
+  .letra{
+    font-family: Arial, sans-serif;
+    font-size: 20px;
+    font-weight: 400;
+    color: #1a0dab;
+  }
+  
+  .nom{
+    width: 150px;
+    font-size: 2.5rem;
+  }
+  
+  .calif{
+   width: 20px;
+   font-size: 2.5rem;
+   text-align: right !important;
+  }
+  
+  .imag{
+    width: 20px;
+  }
+
+  .presentacion{
+    font-family: Arial, sans-serif;
+    font-size: 2rem;
+  }
+
+  .localidad{
+    font-family: Arial, sans-serif;
+    font-size: 2rem;
+  }
+
+
+
+.img_estrellita {
+    width: 50px;
+    height: 50px;
+    text-align: right !important;
+    margin-bottom: 10px;
+  }
+
+  .primer_renglon{
+    display: inline;
+
+  
+  
+  }

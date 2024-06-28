@@ -1,7 +1,10 @@
+<%- include('menu2.ejs') %>
+
+
 
 
   <script src="https://code.jquery.com/jquery-latest.js"></script>
-  <link href="css/lista14.css" rel="stylesheet">
+  <link href="css/lista18.css" rel="stylesheet">
   <!--  <tr> 
             <td> <p>data + ' ' + row.apellido </p>
             </td>
@@ -10,24 +13,31 @@
         </tr>
   <!--  return   data + ' ' + row.apellido + ' - ' + row.calificacion +' <img class="img_estrellita" src="img/m_estrella2.png"></img>'
     saque esto para ocultar el boton de grilla <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">-->
-  <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.5.2/animate.min.css">
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/b-1.5.6/sc-2.0.5/sl-1.3.0/datatables.min.css">
-
-  <script src="https://cdn.datatables.net/v/bs4/dt-1.10.18/b-1.5.6/sc-2.0.5/sl-1.3.0/datatables.min.js"></script>
-
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous" type="7caed6d53d62b29227787649-text/javascript"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous" type="7caed6d53d62b29227787649-text/javascript"></script>
+    
+    <link href="https://cdn.datatables.net/v/bs4/dt-2.0.0/b-3.0.0/sc-2.4.0/sl-2.0.0/datatables.min.css" rel="stylesheet">
+     
+    <script src="https://cdn.datatables.net/v/bs4/dt-2.0.0/b-3.0.0/sc-2.4.0/sl-2.0.0/datatables.min.js"></script>
 
 
   <!-- esto es para los filtros del footer
   <link href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
   <script src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.js"></script>
 -->
+<style>
 
-  <div class="">
+
+</style>
+
+  <div class="container container-center">
     
 
     <!-- 
@@ -35,105 +45,160 @@
     <- Aplicar Filtros</img>
   -->
 
+   <!--
+    <div class="barra" >
+      <div class="form-floating">
+        <select class="form-select" name="select_provi" id="select_provi" style="width: 180px;" onchange="functionProv(this)"></select>
+        <label for="select_provi" class="form-label" style="font-size:larger; text-decoration: underline;"> Provincia </label>
+      </div>
+
+      <div class="form-floating">
+        <select class="form-select" name="select_localidad" id="select_localidad" style="width: 180px;"></select>
+        <label for="select_provi" class="form-label" style="font-size:larger; text-decoration: underline;">Localidad</label>
+      </div>
+      <div class="form-floating">
+        <select class="form-select" name="select_oficio" id="select_oficio"></select>
+        <label for="select_oficio" class="form-label" style="font-size:larger; text-decoration: underline;">Oficio</label>
+        </select>
+      </div>
+    </div>
+  -->
     <!-- <table id="example" class="table table-sm table-hover cards " style="width: 100%;">  -->
-      <style>
-        ul.unrenglon li {
-              display: inline;
-        }
-        .contenedor-testimonio {
-    max-width: 1000px;
-    width:95%;
+    <table id="example" class="table table-sm table-hover  cards " style="width: 100%; margin-left: 0px;">
+      <thead>
+        <tr>
+          <th></th>
+          <th></th>
 
-    height: 368px;
-    margin: 10px 10px 50px;
-    align-items: center;
-    justify-content: left;
-    background-color: #ffffff; 
-    box-shadow: 0 3px 13px 1px rgb(0 0 0 / 9%);
-  }
+          <th></th>
+          <th></th>
+          <th>Localidad</th>
 
-  .contenedor-texto-testimonio {
-    text-align: left;
-    padding: 40px;
-    width: 80%;
-    font-family: Lato, sans-serif;
-    font-weight: 400;
-    line-height: 1.5rem;
-  }
-  .contenedor-texto-testimonio2 {
-    text-align: right;
-    padding: 40px;
-    width: 20%;
-    font-family: Lato, sans-serif;
-    font-weight: 400;
-    line-height: 1.5rem;
-  }
-      </style>
-   
-        <% for(var i = 0; i < usuarios.length; i++) { %>
-          <!--
-          <table class="letra" >
-            <tr >
-              <td class="nom" style="width: 800px; font-weight:bold;" ><%= usuarios[i].nombre %> <%= usuarios[i].apellido %> </td>
-              <td style="width: 100px; text-align: right;" class="calif"><%= usuarios[i]. calificacion %> </td>
-              <td class="imag"> <img class="img_estrellita calificar" src="img/m_estrella2.png"></img> </td> 
-            </tr>
-          </table>
-          -->
-          <div class="contenedor-testimonio">
-          <ul class="unrenglon ">
-            <li class="contenedor-texto-testimonio" style="width: 50%;"> <%= usuarios[i].nombre %> <%= usuarios[i].apellido %>  </li>
-            <li class="contenedor-texto-testimonio2"> <%= usuarios[i].calificacion %>  <img class="img_estrellita calificar" src="img/m_estrella2.png"></li> 
-          </ul>
-       
-          
-          <table >
-            <tr>
-              <td> 
-                
-              </td>
-            </tr>
-            <tr>
-              <td rowSpan=5 className="img">
-                <img class="grid-img" src="https://oficio.s3.sa-east-1.amazonaws.com/<%= usuarios[i].imagen %>" />
-              </td>
-            </tr>
-            <tr><td class="presentacion" style="width: 500px; padding-left: 10px;"><%= usuarios[i].oficio %></td></tr>
-            <tr><td class="presentacion" style="width: 700px; padding-left: 10px;"><%= usuarios[i].presentacion %></td></tr>
-            <tr><td class="localidad" style="width: 500px; padding-left: 10px;"><%= usuarios[i].localidad %></td></tr>
-            <tr style="text-align: center;"><td>'<button name="masinfo" style="align-items: center; width: 150px;" value="Mas info..." type="button" id="' + row.dni + '">Mas info...</button'
-            </td> <td>
-            <tr >  <td>  &nbsp </td> </tr>
-          </table>
-          <hr> 
-
-         <% } %>
+          <th>Provincia</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody style=" border-top: none;">
 
 
+
+
+      </tbody>
+      <tfoot hidden>
+        <tr>
+          <th></th>
+          <th></th>
+
+          <th>Oficio</th>
+          <th></th>
+          <th>Localidad</th>
+
+          <th>Provincia</th>
+          <th>Celular</th>
+          <th></th>
+        </tr>
+      </tfoot>
       
-
+    </table>
     
   </div>
 
 
   <script>
-    console.log("lista14")
+    console.log("lista13")
     let filtro = "/1"
-    var select_oficio=''
 
 
-    
+
+    function functionProv(e) {
+      //datatable.columns.adjust().draw(); // Redraw the DataTable
+      // datatable.clear().draw();
+      // datatable.ajax.reload(null, false);
+      let prov = e.options[e.selectedIndex].getAttribute("title")
+      console.log(" function e provincia elejida", prov)
+      $("#select_localidad").find('option').remove(); // borro las localidades anteriores
+
+
+      console.log("eligio provincia : ", prov)
+
+      //document.getElementById("button").value =  document.getElementById("select_provi").value´
+      //table.buttons.text(document.getElementById("select_provi").value)
+      let url = "/api/localidades"
+      if (prov == undefined || prov < 1) {
+        console.log("prov", prov)
+      } else {
+        console.log("tiene prov", prov)
+        url = url + "/" + prov
+        filtro = "/u.id_provincia = " + prov
+      }
+      console.log("servidor ->", url)
+      fetch(url)
+        .then(response => response.json())
+        .then((responseData) => {
+          console.log("localidad ->", responseData)
+          // alert('HAY ' + lista_de_provincias.length) // Puedes poner este alert para ver si la llamada POST te devuelve algo
+          // creamos un elemento de tipo option
+          //var opt = document.createElement("option");
+          //let modelList = document.createElement("select_localidad");
+          var html = '<option id="select_localidad" name="select_localidad" value="">Todas</option>'
+
+          for (var count = 0; count < responseData.length; count++) {
+            console.log("dato1", responseData[count], "codigo ", responseData[count].cod)
+            console.log("codigo ", responseData[count].cod)
+
+            html = html + '<option id="select_localidad" name="select_localidad" value="' + responseData[count].descripcion + '" title="' + responseData[count].cod + '">' + responseData[count].descripcion + '</option>';
+          }
+
+          console.log("html ->", html)
+
+          select_localidad.innerHTML = html;
+
+        });
+    }
+
+    function showHide() {
+      // Definir elemento
+      let div = document.getElementById("div-servicios");
+      if (!div) {
+        // No existe, hay que crearlo
+        div = document.createElement("div");
+        div.setAttribute("id", "div-servicios");
+        document.body.appendChild(div);
+
+        var servicio1 = document.createElement("a");
+        servicio1.innerHTML = "This is a paragraph.";
+        servicio1.setAttribute("class", "servicios");
+        div.appendChild(servicio1);
+
+        var servicio2 = document.createElement("a");
+        servicio2.innerHTML = "Filtros";
+        servicio2.setAttribute("class", "servicios");
+        div.appendChild(servicio2);
+
+        var servicio3 = document.createElement("a");
+        servicio3.innerHTML = "This is a paragraph.";
+        servicio3.setAttribute("class", "servicios");
+        div.appendChild(servicio3);
+        // Retardar para que aparezca con transición
+        setTimeout(showHide, 50);
+      } else {
+        // Mostrar u ocultar
+        div.classList.toggle('activo');
+      }
+    }
+
 
     // saco de usuarios solo las prov que existen 
     // saco de usuario solo las localidades que existen SELECT DISTINCT l.descripcion as loc FROM usuario x INNER JOIN localidad l on x.id_localidad = l.id_localidad;
 
     let url = "/api/oficios"
- 
+
     console.log("servidor ->", url)
     fetch(url)
       .then(response => response.json())
       .then((responseData) => {
-        console.log("oficios ->", responseData)
+        console.log("oficio ->", responseData)
         // alert('HAY ' + lista_de_provincias.length) // Puedes poner este alert para ver si la llamada POST te devuelve algo
         // creamos un elemento de tipo option
         //var opt = document.createElement("option");
@@ -151,7 +216,7 @@
 
         select_oficio.innerHTML = html;
 
-    });
+      });
 
 
 
@@ -175,7 +240,7 @@
             previous: "Ant"
           }
         },
-        pageLength: 6,
+        pageLength: 100, /*registros por pagina*/
         pagingType: `simple_numbers`,
         data: sampleData,
         'dom': "<'row'<'col-sm-12'<'float-md-right ml-2'B>f>>" +
@@ -221,16 +286,24 @@
             render: function(data, type, row, meta) {
               return (function(data, type, row) {
 
-                return ' <div class="primer_renglon"> <div class="nom">' + data + ' ' + row.apellido + ' </div>' +
-                  '<div class="calif">' + row.calificacion + ' </div>' +
-                  '<div class="imag"> <img class="img_estrellita calificar" src="img/m_estrella2.png"></img> </div>' +
-                  '</div>'
+                return ' <div class="primer_renglon">'+
+                            '<div class="nom">' + data + ' ' + row.apellido + ' </div>' +
+                            '<div class="calif">'+
+                              '<div class="puntos">' + row.calificacion + '<img class="img_estrellita calificar" src="img/m_estrella2.png"></img> </div>' +
+                             '</div>'
+                        
               })(data, type, row, meta);  
             }
           },
           {
             render: function(data, type, row, meta, full) {
-              data = '<table><tbody><tr><td rowSpan={4} className="img"><img src="imagen" /></td></tr><tr><td className="name"><a >nombre </a></td></tr><tr><td className="contact">direccion</td></tr><tr><td className="country">pais</td></tr></tbody></table>';
+              data =   '<div class="contenedor-testimonio">'+
+                                    
+                '<img class="imagen-testimonio" src="https://oficio.s3.sa-east-1.amazonaws.com/'+row.imagen +'"/>'+
+                '<div class="contenedor-texto-testimonio"><p class="cargo-testimonio">'+row.oficio+'</p>'+
+                  '<p class="texto-testimonio" >'+row.presentacion+'</p>'+
+                  '<p class="texto-testimonio" ><strong>'+row.localidad+'</strong></p>'+
+              '</div></div>';
 
               {
                 return data
@@ -241,6 +314,7 @@
           {
             data: "oficio",
             name: "oficio",
+            visible: false,
             render: function(data, type, row, meta) {
               return data;
             }
@@ -249,6 +323,7 @@
             data: "presentacion",
             name: "presentacion",
             class: 'text-center',
+            visible: false,
             render: function(data, type, row, meta) {
               return data;
             }
@@ -300,7 +375,7 @@
           var api = this.api();
           var $table = $(api.table().node());
 
-          if ($table.hasClass('cardsa')) {
+          if ($table.hasClass('cards')) {
 
             // Create an array of labels containing all table headers
             var labels = [];
@@ -420,7 +495,7 @@
         }
 
       })
-      
+
       // filtros de abajo tengo que agregar en html el footer
       //buildSelect(table);
 
@@ -522,32 +597,18 @@
 
     }
 
-   // $(document).ready(function() {
+    $(document).ready(function() {
       url = "/api/usuarios" + filtro
-      console.log("consulta usuarios ->", url)
-      var data =  consultausuario()
-      
-      async function consultausuario(){
+      console.log("servidor ->", url)
       fetch(url)
         .then(response => response.json())
         .then((data) => {
-          console.log("consulta fetch usuarios (data)->", data)
-          return data
-      //    createtabla(data)
+          createtabla(data)
         });
-    //});
-      }
-    //productosLS = obtenerProductosLocalStorage();
 
-    console.log("data", data)
-    productosLS.forEach(function (producto) {
-    $("#lista_usr tbody tr").each(function (idx, fila) {
-       row.innerHTML = `
-               <tr `
-      });
-      listaCompras.appendChild(row);
-    })
 
+
+    });
   </script>
 
 
