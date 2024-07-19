@@ -118,44 +118,6 @@
     -ms-user-select: none;
     user-select: none;
     }
-
-    .radiogeo {
-        background:#aaa;
-        color:#fff;
-        border-radius:8px;   
-        padding:1em;
-        margin:1em;
-        cursor:pointer;
-    }
-
-    .radiogeo:hover {
-        background:#ccc;   
-        cursor:pointer;
-    }
-
-   .pepe{
-    display: inline-block;
-    height: 22px;
-    width: 22px;
-    position: relative;
-  --clickable-space-around-button: -100px;
-    padding: 12px 15px;
-    cursor: pointer;
-    
-  }
-
-  .pepe::after {
-    content: "";
-    left: var(--clickable-space-around-button);
-    right: var(--clickable-space-around-button);
-    bottom: var(--clickable-space-around-button);
-    top: var(--clickable-space-around-button);
-    position: absolute;
-  }
-  .tdlocalidad {
-    visibility: hidden;
-  }
-
   </style>
 
 
@@ -205,41 +167,6 @@
                 </div>
 
               </div>
-              <div class="tab">
-                <h2 class="fs-subtitle subti" style="text-decoration: underline;">Ubicación</h2>
-                <style> .ubica{
-                  width: 500px;
-                }</style>
-                <div class="ubica">
-                <fieldset>
-                  <table style="width:600px;" >
-                    <tr >
-                      <legend> Seleccione la localizacion </legend>
-                      <td style="width:200px;" >
-                        <input class="radiogeo pepe" style="width: 20px;" type="radio" id="radio_geoloc" name="radio_geoloc" value="auto" checked>Mi ubicacion</input>        
-                      </td>
-                      <td style="width:200px;" >              
-                        <input class="radiogeo pepe" style="width: 20px;" type="radio" id="radio_geoloc" name="radio_geoloc" value="manual" >Carga manual</input>
-                     </td>
-                    </tr>
-                    <tr >
-                      <td colspan="2">
-                        <div id="map">                   
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td colspan="2">
-                        <h2 class="fs-subtitle subti" style="width: 500px; text-decoration: underline;" id="direc" name="direc" ></h2>
-                      </td>
-                    </tr>
-                  </table>
-                 
-                  <input type="text" name="localizacion" id="localizacion" hidden></input>
-                  <input type="text" name="lati" id="lati" hidden></input>
-                  <input type="text" name="longi" id="longi" hidden></input>
-                </div>
-              </div>
 
               <div class="tab">
                 <h2 class="fs-subtitle subti" style="text-decoration: underline;">Ubicación</h2>
@@ -254,18 +181,16 @@
 
                     <% } %>
                   </select>
-                  <input id="cod_pais" name="cod_pais" value="AR" hidden></input>
                 </div>
                 <div class="mb-3 material-textfield">
                   <select name="provincia" id="provincia" class="form-select" onchange="myFunction(this)">
                     <option value="">Seleccione provincia</option>
                   </select>
                 </div>
-                <input id="cod_provincia" name="cod_provincia"  hidden></input>
                 <div class="mb-3 form-group">
                   <table>
                     <tr>
-                      <td id="tdlocalidad">
+                      <td>
                         <select name="localidad" id="localidad" type="text" class="mb3-3 form-select select2" style="font-size: 15px !important;">
                           <option value="" style="font-size: 15px !important; width: 200px;">Seleccione localidad</option>
                         </select>
@@ -275,13 +200,9 @@
                           <div class="emoji"></div>
                         </div>
                       </td>
-                      <td style="width: 65%;" class="material-textfield">
-                        <input id="locali" name="locali" type="text" class="form-control" placeholder="Calle">
-                        <label id="label_locali" for="locali" class="form-label">Localidad</label>
-                      </td>
                     </tr>
                   </table>
-                  <input id="cod_localidad" name="cod_localidad" hidden ></input>
+
                 </div>
 
                 <table style="border-collapse: collapse; width: 100%;" class="mb-3">
@@ -311,10 +232,32 @@
                     </div>
                 </table>
                 <input type="text" id="dire" name ="dire" readonly hidden></input>
-                <input type="text" id="geo_dire" name ="geo_dire" readonly hidden></input>
+                <input type="text" id="geo_dire" name ="geo_dire" readonly></input>
               </div>
 
-          
+              <div class="tab">
+                <fieldset>
+                  <table style="width:500px;" >
+                    <tr>
+                      <legend> Seleccione la localizacion </legend>
+                      <td style="width:150px;">
+                        <input style="width: 20px;" type="radio" name="geo_loc" value="Direccion" checked>Direccion</input>        
+                      </td>
+                      <td style="width:150px;">
+                         <input style="width: 20px;" type="radio" name="geo_loc" value="GPS" >GPS</input>           
+                      </td>
+                      <td style="width:150px;">
+                        <input style="width: 20px;" type="radio" name="geo_loc" value="Manual" >Manual</input>
+                     </td>
+                      <td style="width:150px;">
+                      
+                      </td>
+                    </tr>
+                  </table>
+                  <div id="map">                   
+                  </div>
+                  <input type="text" name="localizacion" id="localizacion"></input>
+              </div>
 
               <div class="tab">
                 <h2 class="fs-subtitle subti" style="text-decoration: underline;">Datos Laborales</h2>
@@ -451,148 +394,73 @@
 
 
   <script>
-    //let buscaDom = "https://api.geoapify.com/v1/geocode/search?house"
-    //let keyDom = "8de8aa5d1a844209ba753c750a641f7b"
-    document.getElementById('pais').value ="AR" 
-    let geoloc = {lat:"",
-      lon:"",
-      cod_pais:"AR",
-      cod_prov:"",
-      cod_loc:""
-    };
-    leo_geolocalizacion()
-
-
-    async function leo_geolocalizacion(){
-      if (navigator.geolocation) {
-              navigator.geolocation.getCurrentPosition(onSuccess, onError);
-          }
-          function onSuccess(position){
-            busca_localizacion(position)
-
-          }
-          
-          
-          
-          function onError(error) {
-            var txt;
-            switch(error.code)
-            {
-              case error.PERMISSION_DENIED:
-              txt = 'Permiso de localizacion denegada';
-              break;
-              case error.POSITION_UNAVAILABLE:
-              txt = 'Permiso de localizacion inhabilitada';
-              break;
-              case error.TIMEOUT:
-              txt = 'Tiempo de espera para la localizacion agotado';
-              break;
-              default:
-              txt = 'no encontro la localizacion'
-            }
-            alert(txt)
-          }
-      }
-
-      async function busca_localizacion(position){
-        
-        latitude = position.coords.latitude;
-        longitude = position.coords.longitude;
-        geoloc.lat = latitude
-        geoloc.lon = longitude
-        document.getElementById('lati').value = latitude
-        document.getElementById('longi').value =  longitude
-        document.getElementById('localizacion').value = latitude + ',' + longitude
-        map.innerHTML = '<iframe width="400" height="200" src="https://www.google.com/maps?q='+latitude+','+longitude+'&amp;z=15&amp;output=embed"></iframe';
-        await fetch('/api/direccion/lat=' +latitude+'&lon='+longitude)
-        // Exito
-        .then(response => response.json()) // convertir a json
-        .then(json => coloca(json))
-        function coloca(json){
-          console.log("busco localizacion", json)
-          document.getElementById('direc').textContent = json.calle+' '+json.numero+' - '+json.provincia+' - '+json.pais
-          document.getElementById('pais').value = json.country_code.toUpperCase()
-          console.log("localidad",json.country_code.toUpperCase()+'-'+json.state_code.toUpperCase())
-          document.getElementById('provincia').value = json.country_code.toUpperCase()+'-'+json.state_code.toUpperCase()
-          document.getElementById('cod_provincia').value = json.country_code.toUpperCase()+'-'+json.state_code.toUpperCase()
-          console.log("localidad buscada", json.localidad.toUpperCase())
-          document.getElementById('locali').value = json.localidad.toUpperCase()
-          document.getElementById('calle').value = json.calle.toUpperCase()
-          document.getElementById('numero').value = json.numero.toUpperCase()
-          document.getElementById('codigopostal').value = json.cp.toUpperCase()
-          // document.getElementById('locali').style.visibility= 'hidden'
-          //console.log("localidad .>", data[0].id_localidad)  
-          //$('localidad').prop('disabled', true);
-          // document.getElementById('localidad').style.visibility = 'hidden' //select2-localidad-container
-          // document.getElementById("tdlocalidad").className = "tdhidden";
-          document.getElementById('tdlocalidad').hidden = true
-          geoloc.cod_prov =  json.country_code.toUpperCase()+'-'+json.state_code.toUpperCase()
-          pongo_localidad()
-        }
-      }  
-        
+    let buscaDom = "https://api.geoapify.com/v1/geocode/search?house"
+    let keyDom = "8de8aa5d1a844209ba753c750a641f7b"
+    let domBusca = ""
     // geolocalizacion le pasas unadireccion y retorna una lat y lon
     // https://api.geoapify.com/v1/geocode/search?housenumber=721&street=Cnel.%20Manuel%20Medina&postcode=B1714&city=ituzaingo&state=Buenos%20Aires&country=Argentina&apiKey=8de8aa5d1a844209ba753c750a641f7b
-    /*
     document.getElementById('dni').value = "5";
     document.getElementById('mdni').value = "21.707.047";
     document.getElementById('nombre').value = "Jesus";
     document.getElementById('apellido').value = "Rosales";
     document.getElementById('celular').value = "(11) 5126-0188";
-    document.getElementById('email').value = "jrosavila@gmail.com";  
+    document.getElementById('email').value = "jrosavila@gmail.com";
     document.getElementById('calle').value = "Medina";
     document.getElementById('numero').value = "721";
-    document.getElementById('codigopostal').value = "1714"; 
+    document.getElementById('codigopostal').value = "1714";
     document.getElementById('presentacion').value = "Esta es la presentacion";
     document.getElementById('password').value = "1234";
     document.getElementById('confirm_password').value = "1234";
-    */
 
     function termCond() {
       window.open("/terminos", "byspel", "width=600,height=600,menubar=no");
     }
 
-    $('input[type=radio][name=radio_geoloc]').change(function() {
-      console.log("cambio radio", this.value)
-      if (this.value == 'manual') {
-        console.log("entro en if manual")
-        document.getElementById('map').hidden = true
-        console.log("paso por aca 1",  document.getElementsByClassName("tab"))
-        document.getElementById('tdlocalidad').hidden = false
-        document.getElementById('locali').hidden = true
-        document.getElementById('label_locali').hidden = true
-        document.getElementById('provincia').value ="" 
-        document.getElementById('cod_provincia').value =""
-        document.getElementById('cod_localidad').value =""
-        document.getElementById('nextBtn').click()
-        //console.log("geo_dire",document.getElementById('geo_dire').value)
-       // map.innerHTML = '<iframe width="400" height="200" src="https://www.google.com/maps?q='+document.getElementById('geo_dire').value +'&amp;z=15&amp;output=embed"></iframe';
+    $('input[type=radio][name=geo_loc]').change(function() {
+      console.log("cambio radio")
+      if (this.value == 'Direccion') {
+        console.log("geo_dire",document.getElementById('geo_dire').value)
+        map.innerHTML = '<iframe width="400" height="200" src="https://www.google.com/maps?q='+document.getElementById('geo_dire').value +'&amp;z=15&amp;output=embed"></iframe';
       }
-      else if (this.value == 'auto') {
-        leo_geolocalizacion()
-        pongo_localidad()
-      } 
-    });
-     
-    async function pongo_localidad(){
-      console.log("pongo localidad :", document.getElementById('locali').value)
-      document.getElementById('map').hidden = false
-      let condi = 'municipio="'+document.getElementById('locali').value+
-              '" and provincia="'+geoloc.cod_prov+
-              '" and descripcion="'+document.getElementById('locali').value+'"'
-      console.log("provincia buscada", geoloc.cod_prov)        
-      console.log("condi para buscar localidad", condi)
-      await fetch('/api/locali/' +condi)
-        // Exito
-          .then(response => response.json()) // convertir a json
-          .then(json => coloca(json))
-          function coloca(json){
-            console.log("json :",json[0])
-            console.log("codigo de localidad", json.id_localidad)
-            document.getElementById('cod_localidad').value = json[0].id_localidad
+      else if (this.value == 'GPS') {
+        let latitude =""
+        let longitude = ""
+
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(onSuccess, onError);
+        }
+        function onSuccess(position){
+          latitude = position.coords.latitude;
+          longitude = position.coords.longitude;
+          document.getElementById('localizacion').value = latitude + ',' + longitude
+          map.innerHTML = '<iframe width="400" height="200" src="https://www.google.com/maps?q='+latitude+','+longitude+'&amp;z=15&amp;output=embed"></iframe';
+        }
+      
+        function onError(error) {
+          var txt;
+          switch(error.code)
+          {
+            case error.PERMISSION_DENIED:
+            txt = 'Permiso de localizacion denegada';
+            break;
+            case error.POSITION_UNAVAILABLE:
+            txt = 'Permiso de localizacion inhabilitada';
+            break;
+            case error.TIMEOUT:
+            txt = 'Tiempo de espera para la localizacion agotado';
+            break;
+            default:
+            txt = 'no encontro la localizacion'
           }
-    }
-    
+          alert(txt)
+        }
+      }
+      else if (this.value == 'Manual') {
+        document.getElementById("localizacion").focus(); 
+      }
+    });
+
     document.getElementById("pais").onchange = function(event) {
 
     let get_val = event.target.selectedOptions[0].getAttribute("title");
@@ -735,7 +603,7 @@
           console.log("cargando localidades de ", document.getElementById('provincia').selectedOptions[0].getAttribute("title"))
   
           document.querySelector(".preload").style.display = "none" //stop the load
-          html = '<option value="">Seleccione su localidad</option>';
+          html = '<option value="">Seleccione una localidad</option>';
 
         }
         if (type == 'load_oficio') {
@@ -785,17 +653,14 @@
 
     _('provincia').onchange = function() {
       console.log("eligio la provincia", provincia)
-
       cargo_relojito()
       fetch_data(_('provincia'), _('localidad'), 'load_localidad')
 
-      document.getElementById('cod_provincia').value = document.getElementById('provincia').value
+
 
 
     };
     let json = ""
-
-    
     async function pongo_dire(){
       document.getElementById('dire').value = 'https://api.geoapify.com/v1/geocode/search?&street='+document.getElementById('calle').value +
       '&housenumber='+document.getElementById('numero').value +
@@ -812,23 +677,10 @@
         }
         json = await response.json();
         console.log("resultado de la consulta",json);
-        console.log("rtamño de json features",json.features.length);
-        if (json.features.length >1){
-          Swal.fire({
-          icon: 'error',
-          title: 'LA DIRECCION INGESADA NO ES VALIDA',
-          text: "No aparecera en la busqueda por cercania",
-          showConfirmButton: true,
-          timer: 10000
-        });
-        }
-        else{
-          document.getElementById('localizacion').value=json.features[0].properties.lat+','+json.features[0].properties.lon
-          document.getElementById('geo_dire').value = json.features[0].properties.lat+','+json.features[0].properties.lon
-          map.innerHTML = '<iframe width="400" height="200" src="https://www.google.com/maps?q='+json.features[0].properties.lat+','+json.features[0].properties.lon+'&amp;z=15&amp;output=embed"></iframe';
-          console.log("map", map.innerHTML)
-        }
-   
+        document.getElementById('localizacion').value=json.features[0].properties.lat+','+json.features[0].properties.lon
+        document.getElementById('geo_dire').value = json.features[0].properties.lat+','+json.features[0].properties.lon
+        map.innerHTML = '<iframe width="400" height="200" src="https://www.google.com/maps?q='+json.features[0].properties.lat+','+json.features[0].properties.lon+'&amp;z=15&amp;output=embed"></iframe';
+        console.log("map", map.innerHTML)
       } catch (error) {
          console.error(error.message);
       }
@@ -866,8 +718,7 @@
     _('localidad').onchange = function() {
 
       console.log("eligio la localidad", document.getElementById('localidad').value)
-      /// 
-      document.getElementById('cod_localidad').value = document.getElementById('localidad').value
+
     };
 
     _('categoria').onchange = function() {
@@ -933,9 +784,9 @@
 
       if (Chequeo_campo("pais", "Cargue su pais") == true) {
         console.log("pais_ok")
-        if (Chequeo_campo("cod_provincia", "Cargue su provincia") == true) {
+        if (Chequeo_campo("provincia", "Cargue su provincia") == true) {
           console.log("provincia_ok")
-          if (Chequeo_campo("cod_localidad", "Cargue su localidad") == true) {
+          if (Chequeo_campo("localidad", "Cargue su localidad") == true) {
             console.log("localidad_ok")
             pongo_dire()
             return true
@@ -1011,8 +862,6 @@
     });
 
     function showTab(n) {
-      console.log("paso por n", n ,document.getElementById('radio_geoloc').value )
-
       var x = document.getElementsByClassName("tab");
       x[n].style.display = "Block";
       if (n == 0) {
@@ -1077,7 +926,7 @@
           console.log("devuelve valida1", valid)
           break;
         }
-        case "cod_pais": { //calle
+        case "calle": {
           console.log("case calle")
           valid = valida2()
           console.log("devuelve valida2", valid)

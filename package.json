@@ -24,6 +24,7 @@
     "express-handlebars": "^7.1.2",
     "handlebars": "^4.7.8",
     "jsonwebtoken": "^9.0.2",
+    "mapkick": "^0.2.6",
     "multer": "^1.4.5-lts.1",
     "multer-sharp-s3": "^0.2.5",
     "mysql2": "^3.9.2",

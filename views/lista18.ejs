@@ -106,9 +106,49 @@
 
 
   <script>
+    // SELECT provincia, descripcion, ST_Distance_Sphere(POINT(latitud,longitug),POINT(-34.6564185,-58.6780789))/1000 as distances FROM localidad where municipio = 'ituzaingo';
     console.log("lista18")
     let filtro = "/1"
+    if (navigator.geolocation) {
+       navigator.geolocation.getCurrentPosition(onSuccess, onError);
+    }
 
+
+
+function onSuccess(position)
+{
+  latitude = position.coords.latitude;
+  longitude = position.coords.longitude;
+  //alert(latitude);
+  //alert(longitude);
+  today = new Date();
+  date = today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear();
+  time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+  dateTime = date+' '+time;
+  //alert(dateTime);
+
+
+
+}
+
+function onError(error) {
+  var txt;
+  switch(error.code)
+  {
+    case error.PERMISSION_DENIED:
+    txt = 'Location permission denied';
+    break;
+    case error.POSITION_UNAVAILABLE:
+    txt = 'Location position unavailable';
+    break;
+    case error.TIMEOUT:
+    txt = 'Location position lookup timed out';
+    break;
+    default:
+    txt = 'Unknown position.'
+  }
+  alert(txt)
+}
 
 
     function functionProv(e) {

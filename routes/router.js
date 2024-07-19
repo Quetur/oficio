@@ -61,6 +61,8 @@ aws.config.update({
   region: process.env.REGION
 });
 
+
+
 const s3 = new aws.S3();
 // termino de configurar s3
 
@@ -314,6 +316,23 @@ router.get('/api/localidades/:id',async (req,res)=>{
     }
   }
 })
+
+router.get('/api/locali/:id',async (req,res)=>{
+  console.log("busco localidad por condicion variable", [req.params.id])
+  let linea = "SELECT * FROM `localidad` where "+ req.params.id
+  console.log(linea)
+  try {
+    const [filas] = await pool.query(linea);
+    console.log("localidad", filas.length, filas[0]);
+
+    res.send(filas);
+  } catch (error) {
+    {
+      console.log(error);
+    }
+  }
+})
+
 
 router.get('/api/usuario/:id' , async (req,res) => {
   console.log("entro en api/usuario/", [req.params.id])
@@ -759,8 +778,10 @@ const upload2 = multer({ storage: storage2 });
 
 router.post("/new_user", upload2.single("image"), async (req, res) => {
   console.log("/new_user",req.body)
+  console.log("provincia", req.body.cod_provincia)
+  console.log("localidad", req.body.cod_localidad)
+  console.log("pais", req.body.cod_pais)
   const imagen = req.file
-
   console.log("imagen 1:", imagen)
 
   // const destination = "./public/file_user/"
@@ -799,11 +820,12 @@ router.post("/new_user", upload2.single("image"), async (req, res) => {
   //console.log(eeeee)
   let tienearchivo = false;
   console.log("tiene archivo ?", req.file)
-  const filename = req.file.Key
+  const filename = ""
   if (req.file){
+    filename = req.file.Key
     tienearchivo = true
     console.log("graba_archivo 1", req.file)
-     console.log("graba_archivo 2", filename)
+    console.log("graba_archivo 2", filename)
   
   }
 
@@ -902,5 +924,38 @@ pie = ``
     })
  })
   
+
+
+ // de una latitud y longitud devuelve la direccion
+router.get('/api/direccion/:ubi',async (req,res)=>{
+console.log("entro en api direccion/",  [req.params.ubi] ) 
+let buscaDom = "https://api.geoapify.com/v1/geocode/search?house"
+let keyDom = process.env.GEOPASS
+// console.log(eeee)
+//console.log( `https://api.geoapify.com/v1/geocode/reverse?${req.params.ubi}&apiKey=${keyDom}`)
+
+fetch(`https://api.geoapify.com/v1/geocode/reverse?${req.params.ubi}&apiKey=${keyDom}`)
+    .then(response => response.json())
+    .then(result => {
+      if (result.features.length) {
+        console.log("JSON", result.features[0].properties.street)
+        let dire = {
+          calle : result.features[0].properties.street,
+          numero : result.features[0].properties.housenumber,
+          localidad : result.features[0].properties.city,
+          cp : result.features[0].properties.postcode,
+          state_code : result.features[0].properties.state_code,
+          provincia : result.features[0].properties.state,
+          country_code : result.features[0].properties.country_code,
+          pais : result.features[0].properties.country
+        }
+        console.log(result.features[0].properties.formatted);
+        res.send(dire);
+      } else {
+        console.log("No address found");
+      }
+    });
+    
+})
 
 export default router;

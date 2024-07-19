@@ -109,10 +109,12 @@ export const  usuario_nuevo = async (req, tienearchivo, filename) => {
   const apellido = req.body.apellido;
   const calle = req.body.calle;
   const numero = req.body.numero;
-  const localidad = req.body.localidad;
-  const provincia = req.body.provincia;
-  const pais = req.body.pais;
+  const localidad = req.body.cod_localidad;
+  const provincia = req.body.cod_provincia;
+  const pais = req.body.cod_pais;
   const codigopostal = req.body.codigopostal;
+  const lati = req.body.lati;
+  const longi = req.body.longi;
   const dni = req.body.dni;
   const celular = req.body.celular;
   const email = req.body.email;
@@ -122,7 +124,7 @@ export const  usuario_nuevo = async (req, tienearchivo, filename) => {
   const pass = req.body.password;
   let img = "user.png";
   if (tienearchivo){img = filename;}
-  const califi = '';
+  const califi = '1';
   var date;
   console.log("img", img )
   date = new Date();
@@ -156,6 +158,8 @@ export const  usuario_nuevo = async (req, tienearchivo, filename) => {
     id_provincia: provincia,
     id_pais: pais,
     codigopostal: codigopostal,
+    latitud: lati,
+    longitud: longi,
     dni: dni,
     celular: celular,
     email: email,
