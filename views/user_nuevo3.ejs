@@ -1,0 +1,1178 @@
+<%- include('includes/cabecera.ejs') %>
+<%- include('menu2.ejs') %>
+
+<head>
+
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap CSS -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/register.css" rel="stylesheet">
+  <link href="css/loading.css" rel="stylesheet">
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!--<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>-->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+  <!-- select con busqueda -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+
+  <style>
+    
+
+    .floating {
+      animation-name: floating;
+      animation-duration: 1s;
+      animation-iteration-count: infinite;
+      animation-timing-function: ease-in-out;
+      margin-left: 0px;
+      margin-top: 5px;
+    }
+
+    @keyframes floating {
+      from {
+        transform: translate(0, 0px);
+      }
+
+      30% {
+        transform: translate(0, 15px);
+      }
+
+      to {
+        transform: translate(0, -0px);
+      }
+    }
+
+    .select2-container .select2-selection--single {
+      box-sizing: border-box;
+      cursor: pointer;
+      display: block;
+      height: 28px;
+      user-select: none;
+      -webkit-user-select: none;
+      font-size: 15px !important;
+    }
+
+    .select2-selection__choice {
+      background-color: var(--bs-gray-200);
+      border: none !important;
+      font-size: 15px !important;
+      padding-right: 30px !important;
+    }
+
+    .select2-container--default .select2-selection--multiple:before {
+      content: ' ';
+      display: block;
+      position: absolute;
+      border-color: #888 transparent transparent transparent;
+      border-style: solid;
+      border-width: 5px 4px 0 4px;
+      height: 0;
+      right: 6px;
+      margin-left: -4px;
+      font-size: 2px !important;
+      margin-top: -2px;
+      top: 50%;
+      width: 0;
+      cursor: pointer
+    }
+
+    .select2-container--open .select2-selection--multiple:before {
+      content: ' ';
+      display: block;
+      position: absolute;
+      border-color: transparent transparent #888 transparent;
+      border-width: 0 4px 5px 4px;
+      height: 0;
+      right: 6px;
+      font-size: 15px !important;
+      margin-left: -4px;
+      margin-top: -2px;
+      top: 50%;
+      width: 0;
+      cursor: pointer
+    }
+
+    input.largerCheckbox {
+      width: 30px;
+      height: 30px;
+    }
+
+    .form-group2>input {
+      display: none;
+    }
+
+    .contenedor{
+      width: 90%;
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    padding-top: 12px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 18px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    }
+
+    .radiogeo {
+        background:#aaa;
+        color:#fff;
+        border-radius:8px;   
+        padding:1em;
+        margin:1em;
+        cursor:pointer;
+    }
+
+    .radiogeo:hover {
+        background:#ccc;   
+        cursor:pointer;
+    }
+
+   .pepe{
+    display: inline-block;
+    height: 22px;
+    width: 22px;
+    position: relative;
+  --clickable-space-around-button: -100px;
+    padding: 12px 15px;
+    cursor: pointer;
+    
+  }
+
+  .pepe::after {
+    content: "";
+    left: var(--clickable-space-around-button);
+    right: var(--clickable-space-around-button);
+    bottom: var(--clickable-space-around-button);
+    top: var(--clickable-space-around-button);
+    position: absolute;
+  }
+  .tdlocalidad {
+    visibility: hidden;
+  }
+  
+  #map { height: 180px; }
+
+  </style>
+
+
+</head>
+
+<body>
+
+  <div>
+    <div class="contenedor">
+      <div class="col-lg-12 shadow-lg p-3 mb-5">
+
+        <div class="card border-primary">
+          <div class="card-header bg-primary text-white">Registrarse</div>
+          <div class="card-body text-primary" style="padding-top: 0px;padding-bottom: 0px;">
+            <!-- <form id="registro-usuario" action="/usuario_nuevo" method="post" enctype="multipart/form-data"> -->
+            <form id="registro-usuario" action="/new_user" method="post" enctype="multipart/form-data">
+              <div class="all-steps" id="all-steps">
+                <span class="step"></span> <span class="step"></span>
+                <span class="step"></span> <span class="step"></span>
+              </div>
+              <div class="tab" style="padding-top: 0px !important;padding-bottom: 0px !important">
+
+
+                <h2 class="fs-subtitle subti">Datos Personales 3</h2>
+
+                <div class="mb-3 material-textfield">
+                  <!--<label for="dni" class="form-label">DNI (Su DNI sera su cuenta de usuario)</label>-->
+                  <input id="dni" name="dni" type="text" class="form-control input-number" placeholder="DNI (*)" maxlength="10">
+                  <label for="dni" class="">Numero de DNI : </label>
+                </div>
+                <div class="mb-3 material-textfield">
+                  <input id="nombre" name="nombre" type="text" class="form-control" placeholder="Nombre (*)">
+                  <label for="nombre" class="">Nombre(*)</label>
+                </div>
+                <div class="mb-3 material-textfield">
+                  <input id="apellido" name="apellido" type="text" class="form-control" placeholder="Apellido (*)">
+                  <label for="apellido" class="">Apellido (*)</label>
+                </div>
+                <div class="mb-3 material-textfield">
+                  <input id="celular" name="celular" type="text" class="form-control input-number" placeholder="Celular(*) Ej.(11) 1111-1111" maxlength="14">
+                  <label for="celular" class="form-label">celular(*)</label>
+                </div>
+                <div class="mb-3 material-textfield">
+                  <input id="email" name="email" type="text" class="form-control" placeholder="Email(*)" maxlength="30">
+                  <label for="email" class="form-label">Email(*)</label>
+                  <span id="emailOK"></span>
+                </div>
+
+              </div>
+              <div class="tab">
+                <h2 class="fs-subtitle subti" style="text-decoration: underline;">Ubicación</h2>
+                <style> .ubica{
+                  width: 500px;
+                }</style>
+                <div class="ubica">
+                <fieldset>
+                  <table style="width:600px;" >
+                    <tr >
+                      <legend> Seleccione la localizacion </legend>
+                      <td style="width:200px;" >
+                        <input class="radiogeo pepe" style="width: 20px;" type="radio" id="radio_geoloc" name="radio_geoloc" value="auto" checked>Mi ubicacion</input>        
+                      </td>
+                      <td style="width:200px;" >              
+                        <input class="radiogeo pepe" style="width: 20px;" type="radio" id="radio_geoloc" name="radio_geoloc" value="manual" >Carga manual</input>
+                     </td>
+                    </tr>
+                    <tr >
+                      <td colspan="2">
+                        <div id="map">                   
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="2">
+                        <h2 class="fs-subtitle subti" style="width: 500px; text-decoration: underline;" id="direc" name="direc" ></h2>
+                      </td>
+                    </tr>
+                  </table>
+                 
+                  <input type="text" name="localizacion" id="localizacion" hidden></input>
+                  <input type="text" name="lati" id="lati" hidden></input>
+                  <input type="text" name="longi" id="longi" hidden></input>
+                </div>
+              </div>
+
+              <div class="tab">
+                <h2 class="fs-subtitle subti" style="text-decoration: underline;">Ubicación</h2>
+                <div class="mb-3 material-textfield">
+                  <select name="pais" id="pais" class="form-select" onchange="cambio_pais(this)">
+                    <label for="pais" class="form-label">pais</label>
+                    <option value="">Seleccione pais</option>
+                    <option value='AR' selected disabled hidden title="argentina">Argentina</option>
+                    <% for(var count = 0; count < pais_data.length; count++) { %>
+
+                    <option value="<%= pais_data[count].codigo %>" title="<%= pais_data[count].descripcion %>"><%= pais_data[count].descripcion %></option>
+
+                    <% } %>
+                  </select>
+                  <input id="cod_pais" name="cod_pais" value="AR" hidden></input>
+                </div>
+                <div class="mb-3 material-textfield">
+                  <select name="provincia" id="provincia" class="form-select" onchange="myFunction(this)">
+                    <option value="">Seleccione provincia</option>
+                  </select>
+                </div>
+                <input id="cod_provincia" name="cod_provincia"  hidden></input>
+                <div class="mb-3 form-group">
+                  <table>
+                    <tr>
+                      <td id="tdlocalidad">
+                        <select name="localidad" id="localidad" type="text" class="mb3-3 form-select select2" style="font-size: 15px !important;">
+                          <option value="" style="font-size: 15px !important; width: 200px;">Seleccione localidad</option>
+                        </select>
+                      </td>
+                      <td>
+                        <div class="preload">
+                          <div class="emoji"></div>
+                        </div>
+                      </td>
+                      <td style="width: 65%;" class="material-textfield">
+                        <input id="locali" name="locali" type="text" class="form-control" placeholder="Calle">
+                        <label id="label_locali" for="locali" class="form-label">Localidad</label>
+                      </td>
+                    </tr>
+                  </table>
+                  <input id="cod_localidad" name="cod_localidad" hidden ></input>
+                </div>
+
+                <table style="border-collapse: collapse; width: 100%;" class="mb-3">
+                  <tr style="height: 25px;">
+                    <td> <a></a> </td>
+                  <tr>
+                    <div class="mb-3">
+                      <td style="width: 65%;" class="material-textfield">
+                        <input id="calle" name="calle" type="text" class="form-control" placeholder="Calle">
+                        <label for="calle" class="form-label">calle</label>
+                      </td>
+                      <td style="width: 35%;" class="material-textfield">
+                        <input id="numero" name="numero" type="text" class="form-control" placeholder="Numero">
+                        <label for="numero" class="form-label">numero</label>
+                      </td>
+                    </div>
+                  </tr>
+                  <tr style="height: 30px;">
+                    <div class="mb-3">
+                      <td style="width: 65%;" class="material-textfield">
+                        <input id="codigopostal" name="codigopostal" type="text" class="form-control" placeholder="Codigo Postal">
+                        <label for="codigopostal" class="form-label">Codigo Postal</label>
+                      </td>
+                      <td style="width: 35%;" class="material-textfield">
+
+                      </td>
+                    </div>
+                </table>
+                <input type="text" id="dire" name ="dire" readonly hidden></input>
+                <input type="text" id="geo_dire" name ="geo_dire" readonly hidden></input>
+              </div>
+
+          
+
+              <div class="tab">
+                <h2 class="fs-subtitle subti" style="text-decoration: underline;">Datos Laborales</h2>
+                <div class="mb-3 material-textfield">
+                  <select name="categoria" id="categoria" class="form-select">
+                    <label for="categoria" class="form-label">categoria</label>
+                    <option value="">Seleccione una Categoria</option>
+                    <% for(var count = 0; count < categoria_data.length; count++) { %>
+                    <option value="<%= categoria_data[count].id_categoria %>"><%= categoria_data[count].descripcion %></option>
+                    <% } %>
+                  </select>
+                  <input id="id_categoria" name="id_categoria" type="text" hidden>
+                </div>
+                <table>
+                  <tr>
+                    <td>
+                      <div class="mb-3 material-textfield">
+                        <div class="mb-3 form-group col-6">
+                          <!--<select class="form-select" id="multiple-select-field" data-placeholder="Choose anything" multiple></select>-->
+                          <select name="oficio[]" id="oficio" type="text" class="mb3-3 form-select" style="width: 200px !important;" multiple>
+                            <!--<option value="">Seleccione oficio</option>-->
+                          </select>
+                        </div>
+                      </div>
+                    </td>
+                    <td> </td>
+                  </tr>
+                </table>
+                <TABLE>
+                  <TR>
+                    <TD ROWSPAN=2>
+                      <div class="mb-3 material-textfield">
+                        <textarea id="presentacion" name="presentacion" cols='30' rows='5' style="font-size: 1rem !important;font-family: inherit; line-height: inherit;" placeholder="Presentacion Laboral" class="mb-3 material-textfield form-control" maxlength="200" onkeyup="contarLongitud()"></textarea>
+                        <label for="presentacion" class="form-label"></label>
+                      </div>
+                    </TD>
+                    <span id="longitud"></span>
+                    <td style="text-align: left;">
+
+                      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+                      <input type="file" id="image" name="image" style="display:none" onchange="openFile(event)">
+
+                      <label></label>Subir archivo ->&nbsp;&nbsp;<a href="#">
+                        <i id="icon_upload" class="fa fa-upload floating" onclick="_upload()"></i></a>
+
+                      <script>
+                        function _upload() {
+                          document.getElementById('image').click();
+                        }
+                      </script>
+                    </td>
+
+                  </TR>
+                  <TR>
+                    <TD> <img src="img/user.png" id="output" height="150" alt="Image preview..."> </TD>
+                  </TR>
+                </TABLE>
+
+                <table>
+                  <tr style="height: 10px;">
+                    <td> <a></a> </td>
+                </table>
+
+              </div>
+
+
+
+              <div class="tab">
+
+                <h2 class="fs-subtitle subti" style="text-decoration: underline;">Seguridad</h2>
+                <h2 style="font-size: medium;">(El usuario es su DNI)</h2>
+                <table>
+                  <tr style="height: 5px;">
+                    <td> <a></a> </td>
+                </table>
+                <table>
+                  <tr style="height: 70px;">
+                    <td style="width: 100px;">
+                      <input style="text-decoration: underline;font-size: 1.5rem; color: red; font-size: 1.2rem;border: 0; text-align: right;" value="Usuario:"></h2>
+                    </td>
+                    <td><input id="mdni" style="color: red; font-size: 1.2rem; border: 0; text-align: left;"></td>
+
+                  <tr style="height: 30px;">
+                    <td> <a></a> </td>
+                  </tr>
+                </table>
+                <div class="mb-3 material-textfield">
+                  <input id="password" name="password" type="text" class="form-control " placeholder="Contraseña" autocapitalize="off">
+                  <label for="password" class="">Contraseña</label>
+                </div>
+                <div class="mb-3 material-textfield">
+                  <input id="confirm_password" name="confirm_password" type="text" class="form-control " placeholder="confirme la contraseña" autocapitalize="off">
+                  <label for="confirm_password" class="">Confirme la contraseña</label>
+                  <span id='message'></span>
+                </div>
+                <table>
+                  <tr>
+                    <td style="width: 30;">
+                      <input class="largerCheckbox" type="checkbox" id="terminos" name="terminos" />
+                    </td>
+                    <td style="width: auto !important;">
+                      <a style="font-size: 16px !important;"> &nbsp &nbsp leí y acepto los</a>
+                    </td>
+                    <td class="mb-3" style="width: auto">
+                      <input class="" type="button" id="link_termino los" value="terminos y condiciones" style="width: auto; font-size: 18px;font-family: var(--bs-body-font-family); border:none;color:inherit; background-color: var(--bs-body-bg);text-decoration: underline; margin-bottom: none !important;" onclick="termCond()">
+                      </input>
+                    </td>
+                </table>
+
+              </div>
+          </div>
+          <div id="nextprevious">
+            <div style="float: right;">
+              <button type="button" id="prevBtn" onclick="nextPrev(-1)">
+                Anterior
+              </button>
+              <button type="button" id="nextBtn" onclick="nextPrev(1)">
+                Proximo
+              </button>
+            </div>
+          </div>
+          <div class="card-footer bg-transparent border-primary">
+            <a href="/" type="button" class="btn btn-secondary">Cancelar</a>
+            <!--<input class="btn btn-primary" id="Registrarse" value="Registrarse" onclick=validar()></input>
+                  <button onclick=validar() class="btn btn-primary">Registrar</button>-->
+          </div>
+          </form>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    //let buscaDom = "https://api.geoapify.com/v1/geocode/search?house"
+    //let keyDom = "8de8aa5d1a844209ba753c750a641f7b"
+    document.getElementById('pais').value ="AR" 
+    let geoloc = {lat:"",
+      lon:"",
+      cod_pais:"AR",
+      cod_prov:"",
+      cod_loc:""
+    };
+    leo_geolocalizacion()
+
+
+    async function leo_geolocalizacion(){
+      if (navigator.geolocation) {
+              navigator.geolocation.getCurrentPosition(onSuccess, onError);
+          }
+          function onSuccess(position){
+            busca_localizacion(position)
+
+          }
+          
+          
+          
+          function onError(error) {
+            var txt;
+            switch(error.code)
+            {
+              case error.PERMISSION_DENIED:
+              txt = 'Permiso de localizacion denegada';
+              break;
+              case error.POSITION_UNAVAILABLE:
+              txt = 'Permiso de localizacion inhabilitada';
+              break;
+              case error.TIMEOUT:
+              txt = 'Tiempo de espera para la localizacion agotado';
+              break;
+              default:
+              txt = 'no encontro la localizacion'
+            }
+            alert(txt)
+          }
+      }
+
+      async function busca_localizacion(position){
+        
+        latitude = position.coords.latitude;
+        longitude = position.coords.longitude;
+        geoloc.lat = latitude
+        geoloc.lon = longitude
+        document.getElementById('lati').value = latitude
+        document.getElementById('longi').value =  longitude
+        document.getElementById('localizacion').value = latitude + ',' + longitude
+        map.innerHTML = '<iframe width="400" height="200" src="https://www.google.com/maps?q='+latitude+','+longitude+'&amp;z=15&amp;output=embed"></iframe';
+        await fetch('/api/direccion/lat=' +latitude+'&lon='+longitude)
+        // Exito
+        .then(response => response.json()) // convertir a json
+        .then(json => coloca(json))
+        function coloca(json){
+          console.log("busco localizacion", json)
+          document.getElementById('direc').textContent = json.calle+' '+json.numero+' - '+json.provincia+' - '+json.pais
+          document.getElementById('pais').value = json.country_code.toUpperCase()
+          console.log("localidad",json.country_code.toUpperCase()+'-'+json.state_code.toUpperCase())
+          document.getElementById('provincia').value = json.country_code.toUpperCase()+'-'+json.state_code.toUpperCase()
+          document.getElementById('cod_provincia').value = json.country_code.toUpperCase()+'-'+json.state_code.toUpperCase()
+          console.log("localidad buscada", json.localidad.toUpperCase())
+          document.getElementById('locali').value = json.localidad.toUpperCase()
+          document.getElementById('calle').value = json.calle.toUpperCase()
+          document.getElementById('numero').value = json.numero.toUpperCase()
+          document.getElementById('codigopostal').value = json.cp.toUpperCase()
+          // document.getElementById('locali').style.visibility= 'hidden'
+          //console.log("localidad .>", data[0].id_localidad)  
+          //$('localidad').prop('disabled', true);
+          // document.getElementById('localidad').style.visibility = 'hidden' //select2-localidad-container
+          // document.getElementById("tdlocalidad").className = "tdhidden";
+          document.getElementById('tdlocalidad').hidden = true
+          geoloc.cod_prov =  json.country_code.toUpperCase()+'-'+json.state_code.toUpperCase()
+          pongo_localidad()
+        }
+      }  
+        
+    // geolocalizacion le pasas unadireccion y retorna una lat y lon
+    // https://api.geoapify.com/v1/geocode/search?housenumber=721&street=Cnel.%20Manuel%20Medina&postcode=B1714&city=ituzaingo&state=Buenos%20Aires&country=Argentina&apiKey=8de8aa5d1a844209ba753c750a641f7b
+    /*
+    document.getElementById('dni').value = "5";
+    document.getElementById('mdni').value = "21.707.047";
+    document.getElementById('nombre').value = "Jesus";
+    document.getElementById('apellido').value = "Rosales";
+    document.getElementById('celular').value = "(11) 5126-0188";
+    document.getElementById('email').value = "jrosavila@gmail.com";  
+    document.getElementById('calle').value = "Medina";
+    document.getElementById('numero').value = "721";
+    document.getElementById('codigopostal').value = "1714"; 
+    document.getElementById('presentacion').value = "Esta es la presentacion";
+    document.getElementById('password').value = "1234";
+    document.getElementById('confirm_password').value = "1234";
+    */
+
+    function termCond() {
+      window.open("/terminos", "byspel", "width=600,height=600,menubar=no");
+    }
+
+    $('input[type=radio][name=radio_geoloc]').change(function() {
+      console.log("cambio radio", this.value)
+      if (this.value == 'manual') {
+        console.log("entro en if manual")
+        document.getElementById('map').hidden = true
+        console.log("paso por aca 1",  document.getElementsByClassName("tab"))
+        document.getElementById('tdlocalidad').hidden = false
+        document.getElementById('locali').hidden = true
+        document.getElementById('label_locali').hidden = true
+        document.getElementById('provincia').value ="" 
+        document.getElementById('cod_provincia').value =""
+        document.getElementById('cod_localidad').value =""
+        document.getElementById('nextBtn').click()
+        //console.log("geo_dire",document.getElementById('geo_dire').value)
+       // map.innerHTML = '<iframe width="400" height="200" src="https://www.google.com/maps?q='+document.getElementById('geo_dire').value +'&amp;z=15&amp;output=embed"></iframe';
+      }
+      else if (this.value == 'auto') {
+        leo_geolocalizacion()
+        pongo_localidad()
+      } 
+    });
+     
+    async function pongo_localidad(){
+      console.log("pongo localidad :", document.getElementById('locali').value)
+      document.getElementById('map').hidden = false
+      let condi = 'municipio="'+document.getElementById('locali').value+
+              '" and provincia="'+geoloc.cod_prov+
+              '" and descripcion="'+document.getElementById('locali').value+'"'
+      console.log("provincia buscada", geoloc.cod_prov)        
+      console.log("condi para buscar localidad", condi)
+      await fetch('/api/locali/' +condi)
+        // Exito
+          .then(response => response.json()) // convertir a json
+          .then(json => coloca(json))
+          function coloca(json){
+            console.log("json :",json[0])
+            console.log("codigo de localidad", json.id_localidad)
+            document.getElementById('cod_localidad').value = json[0].id_localidad
+          }
+    }
+    
+    document.getElementById("pais").onchange = function(event) {
+
+    let get_val = event.target.selectedOptions[0].getAttribute("title");
+    console.log("Value from the Attribute: ", get_val)
+    }
+
+    fetch_data(_('pais'), _('provincia'), 'load_provincia');
+
+    $(function() {
+
+      $("#localidad").select2();
+      $("#oficio").select2({
+        width: '200px',
+        closeOnSelect: false,
+        minimumResultsForSearch: Infinity,
+
+        //createTag: function() {
+        // Disable tagging
+        //  return null;
+        //}
+      });
+
+      $('#oficio').on('select2:opening select2:closing', function(event) {
+        var $searchfield = $(this).parent().find('.select2-search__field');
+        $searchfield.prop('disabled', true);
+      })
+
+      /*$('#oficio').on('select2:select', function(e) {
+        var data = e.params.data;
+        console.log("data",data.id);
+        console.log(data.text);
+      })
+      */
+
+
+      var data_oficio = {};
+      $('#oficio').on('change', function(e) {
+        var x = oficio.selectedOptions
+        for (i = 0; i < x.length; i++) {
+          console.log("oficio ->", x[i].value)
+        }
+        /*
+         data_oficio = $('#oficio').select2('data').map(function(elem) {
+          console.log("pepe2", data_oficio)
+          return elem.text
+        });
+        console.log("datos :", data_oficio);
+        document.getElementById('oficio2').value = data_oficio
+        console.log("je: ",document.getElementById('oficio').value);
+        console.log("jesus", document.getElementById('select2-oficio-container'));
+        */
+      })
+      $('#terminos').on('change', function(e) {
+        console.log(document.getElementById('terminos').checked)
+      })
+    });
+
+
+
+
+    // formato dni
+    $("#dni").on({
+      "focus": function(event) {
+        $(event.target).select();
+      },
+      "keyup": function(event) {
+        $(event.target).val(function(index, value) {
+          return value.replace(/\D/g, "")
+            .replace(/([0-9])/, '$1')
+            .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ".");
+        });
+      }
+    });
+
+
+    // formato Celular
+    $("input[name='celular']").keyup(function() {
+      console.log("celular")
+      var num = $(this).val().replace(/\D/g, '');
+      //$(this).val($(this).val().replace(/^(\d{2})(\d{4})(\d+)$/, "($1)$2-$3"));
+      $(this).val($(this).val().replace(/^(\d{2})(\d{4})(\d+)$/, "($1) $2-$3"));
+    });
+
+    $('.input-number').on('input', function() {
+      this.value = this.value.replace(/[^0-9,]/g, '');
+    });
+
+    function _(element) {
+      console.log("paso element", element)
+      let seleccion = document.getElementById(element);
+      console.log("elemento",seleccion)
+      return document.getElementById(element);
+    }
+
+    let title_pais="AR"
+    function cambio_pais(e) {
+      console.log("entro cambio pais")
+      
+    }
+    /*
+    $("#presentacion").on({"oninput": function(event) {
+        console.log("cargo ")
+        $(event.target).select();
+      },
+      "keyup": function(event) {
+        console.log("cargo 2 ")
+        $(event.target).val(function(index, value) {
+            console.log("cargo ", index, value)
+          return value.replace(/[^A-Za-z0-9\s]/g, "")
+        });
+      }
+    });
+    */
+    // funcion para validar el password
+    $('#confirm_password').on('keyup', function() {
+      console.log("entro password")
+      if ($('#password').val() == $('#confirm_password').val()) {
+        $('#message').html('Contraseña igual').css('color', 'green');
+      } else
+        $('#message').html('Contraseña desigual').css('color', 'red');
+    });
+
+
+
+    function fetch_data(parent_element, child_element, type) {
+      console.log("fetch: ", parent_element)
+      fetch('/get_data?type=' + type + '&parent_value=' + parent_element.value + '').then(function(response) {
+        return response.json();
+      }).then(function(responseData) {
+
+        var html = '';
+
+        if (type == 'load_provincia') { //console.log("cargando provincias")
+          console.log("cargando provincias ->", )
+
+          html = '<option value="">Seleccione provincia</option>';
+        }
+
+        if (type == 'load_localidad') {
+          console.log("cargando localidades de ", document.getElementById('provincia').selectedOptions[0].getAttribute("title"))
+  
+          document.querySelector(".preload").style.display = "none" //stop the load
+          html = '<option value="">Seleccione su localidad</option>';
+
+        }
+        if (type == 'load_oficio') {
+          console.log("cargando oficios")
+          html = '';
+
+        }
+
+        for (var count = 0; count < responseData.length; count++) {
+          //console.log("dato1", responseData[count], "codigo ",responseData[count].cod)
+          //console.log("codigo ",responseData[count].cod)
+          html += '<option value="' + responseData[count].cod + '" title="'+responseData[count].descripcion+'">' + responseData[count].descripcion + '</option>';
+        }
+        // cierro relogito
+
+        child_element.innerHTML = html;
+
+      });
+
+    }
+
+    _('pais').onchange = function(e) {
+      console.log("pais ->", e )
+      fetch_data(_('pais'), _('provincia'), 'load_provincia');
+
+
+    };
+
+    _('dni').onchange = function() {
+      var temp = document.getElementById('dni').value
+      temp = temp.replaceAll('.', '')
+      console.log("nuevo dni", temp)
+      document.getElementById('mdni').value = temp
+      console.log("mdni >", document.getElementById('mdni').value)
+      // fetch('/get_data?type=' + type +
+      fetch('/chequeo_dni?dni=' + document.getElementById('mdni').value)
+        // Exito
+        .then(response => response.json()) // convertir a json
+        .then(json => Swal.fire({
+          icon: 'error',
+          title: "usuario ya existente",
+          text: "Ingrese a la aplicacion con su DNI",
+          showConfirmButton: true
+        })) //imprimir los datos en la consola
+        .catch(err => console.log('Solicitud fallida', err)); // Capturar errores
+    };
+
+    _('provincia').onchange = function() {
+      console.log("eligio la provincia", provincia)
+
+      cargo_relojito()
+      fetch_data(_('provincia'), _('localidad'), 'load_localidad')
+
+      document.getElementById('cod_provincia').value = document.getElementById('provincia').value
+
+
+    };
+    let json = ""
+
+    
+    async function pongo_dire(){
+      document.getElementById('dire').value = 'https://api.geoapify.com/v1/geocode/search?&street='+document.getElementById('calle').value +
+      '&housenumber='+document.getElementById('numero').value +
+      '&city=' +document.getElementById('localidad').selectedOptions[0].getAttribute("title")+
+      '&state='+document.getElementById('provincia').selectedOptions[0].getAttribute("title")+
+      '&country='+document.getElementById('pais').selectedOptions[0].getAttribute("title")+'&apiKey=8de8aa5d1a844209ba753c750a641f7b'
+      let url = document.getElementById('dire').value 
+
+      console.log("api a buscar", url)
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+           throw new Error(`Response status: ${response.status}`);
+        }
+        json = await response.json();
+        console.log("resultado de la consulta",json);
+        console.log("rtamño de json features",json.features.length);
+        if (json.features.length >1){
+          Swal.fire({
+          icon: 'error',
+          title: 'LA DIRECCION INGESADA NO ES VALIDA',
+          text: "No aparecera en la busqueda por cercania",
+          showConfirmButton: true,
+          timer: 10000
+        });
+        }
+        else{
+          document.getElementById('localizacion').value=json.features[0].properties.lat+','+json.features[0].properties.lon
+          document.getElementById('geo_dire').value = json.features[0].properties.lat+','+json.features[0].properties.lon
+          map.innerHTML = '<iframe width="400" height="200" src="https://www.google.com/maps?q='+json.features[0].properties.lat+','+json.features[0].properties.lon+'&amp;z=15&amp;output=embed"></iframe';
+          console.log("map", map.innerHTML)
+        }
+   
+      } catch (error) {
+         console.error(error.message);
+      }
+    } 
+
+    function cargo_relojito() {
+      const loader = document.querySelector('.preload');
+
+
+      const emoji = loader.querySelector('.emoji');
+
+      const emojis = ["🕐", "🕜", "🕑", "🕝", "🕒", "🕞", "🕓", "🕟", "🕔", "🕠", "🕕", "🕡", "🕖", "🕢", "🕗", "🕣", "🕘", "🕤", "🕙", "🕥", "🕚", "🕦", "🕛", "🕧"];
+
+      const interval = 125;
+
+      const loadEmojis = (arr) => {
+        setInterval(() => {
+          emoji.innerText = arr[Math.floor(Math.random() * arr.length)];
+          //console.log(Math.floor(Math.random() * arr.length))
+        }, interval);
+      }
+
+      const init = () => {
+        loadEmojis(emojis);
+      }
+      init();
+
+    }
+
+    function pepe() {
+      console.log("adentro de pepe")
+      document.querySelector(".preload").style.display = "none" //stop the load
+    }
+
+    _('localidad').onchange = function() {
+
+      console.log("eligio la localidad", document.getElementById('localidad').value)
+      /// 
+      document.getElementById('cod_localidad').value = document.getElementById('localidad').value
+    };
+
+    _('categoria').onchange = function() {
+      console.log("eligio la categoria", categoria)
+      fetch_data(_('categoria'), _('oficio'), 'load_oficio');
+
+    };
+
+
+
+
+    // funcion para validar el correo
+    document.getElementById('email').addEventListener('input', function() {
+      campo = event.target;
+      valido = document.getElementById('emailOK');
+
+      emailRegex = /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i;
+      //Se muestra un texto a modo de ejemplo, luego va a ser un icono
+      if (emailRegex.test(campo.value)) {
+        valido.innerText = "";
+      } else {
+        valido.innerText = "email incorrecto";
+      }
+    });
+
+    function valida1() {
+      console.log("valida1");
+      // corrijo lospuntos del dni
+      var temp = document.getElementById('dni').value
+      temp = temp.replaceAll('.', '')
+      document.getElementById('dni').value = temp
+
+      // corrijo celular
+      var temp = document.getElementById('celular').value
+      temp = temp.replaceAll('(', '')
+      console.log("validar cel (", temp);
+      temp = temp.replaceAll(')', '')
+      console.log("validar cel )", temp);
+      temp = temp.replaceAll('-', '')
+      temp = temp.replaceAll(' ', '')
+      console.log("validar cel (", temp);
+      console.log("validar cel (", temp);
+      document.getElementById('celular').value = temp
+
+      if (Chequeo_campo("dni", "Cargue su Numero de DNI") == true) {
+        console.log("dni_ok")
+        if (Chequeo_campo("nombre", "Cargue su Nombre") == true) {
+          console.log("nombre_ok")
+          if (Chequeo_campo("celular", "Cargue su Numero de celular") == true) {
+            console.log("celular_ok")
+            if (Chequeo_campo("email", "Cargue su correo electrónico") == true) {
+              console.log("email_ok")
+              return true
+            }
+          }
+        }
+      }
+      return false
+    }
+
+    function valida2() {
+      console.log("valida2");
+
+      if (Chequeo_campo("pais", "Cargue su pais") == true) {
+        console.log("pais_ok")
+        if (Chequeo_campo("cod_provincia", "Cargue su provincia") == true) {
+          console.log("provincia_ok")
+          if (Chequeo_campo("cod_localidad", "Cargue su localidad") == true) {
+            console.log("localidad_ok")
+            pongo_dire()
+            return true
+          }
+        }
+      }
+      return false
+    }
+
+    function valida3() {
+      console.log("valida3");
+
+      if (Chequeo_campo("categoria", "Cargue una categoria") == true) {
+        console.log("categoria_ok")
+        if (Chequeo_campo("oficio", "Cargue un oficio") == true) {
+          console.log("poficio_ok")
+          if (Chequeo_campo("presentacion", "Cargue una presentacion") == true) {
+            console.log("presentacion_ok")
+            return true
+          }
+        }
+      }
+      return false
+    }
+
+    function valida4() {
+      console.log("valida4");
+
+      if (Chequeo_campo("password", "Cargue un password") == true) {
+        console.log("password_ok")
+        if (Chequeo_campo("confirm_password", "Cargue un oficio") == true) {
+          console.log("confirm_password_ok")
+
+        }
+        return
+      }
+    }
+
+    function wait(espera_segundos) {
+      espera = espera_segundos * 1000
+      const tiempo_inicio = Date.now();
+      let tiempo_actual = null;
+      do {
+        tiempo_actual = Date.now();
+      } while (tiempo_actual - tiempo_inicio < espera);
+    }
+
+    function Chequeo_campo(campo, mensaje) {
+      console.log("funcion chequeo ", campo)
+      mcampo = document.getElementById(campo).value.trim();
+      console.log(campo, mcampo)
+      if (mcampo == null || mcampo.length == 0) {
+        document.getElementById(campo).focus();
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: mensaje,
+          showConfirmButton: false,
+          timer: 2000
+        });
+        return false;
+      }
+      return true
+    }
+
+
+
+    // tab
+    console.log("paso por aca")
+    var currentTab = 0;
+    document.addEventListener("DOMContentLoaded", function(event) {
+      showTab(currentTab);
+    });
+
+    function showTab(n) {
+      console.log("paso por n", n ,document.getElementById('radio_geoloc').value )
+
+      var x = document.getElementsByClassName("tab");
+      x[n].style.display = "Block";
+      if (n == 0) {
+        document.getElementById("prevBtn").style.display = "none";
+      } else {
+        document.getElementById("prevBtn").style.display = "inline";
+      }
+      if (n == (x.length - 1)) {
+        document.getElementById("nextBtn").innerHTML = "Grabar";
+      } else {
+        document.getElementById("nextBtn").innerHTML = "Próximo";
+      }
+      fixStepIndicator(n)
+    }
+
+    function nextPrev(n) {
+      var x = document.getElementsByClassName("tab");
+      if (n == 1 && !validateForm()) return false;
+      x[currentTab].style.display = "none";
+      currentTab = currentTab + n;
+      if (currentTab >= 5) {
+        valid = valida4()
+        if ((document.getElementById('terminos').checked) == true) {
+          console.log("terminos_ok")
+          document.getElementById("registro-usuario").submit();
+        } else {
+          valid = false
+          currentTab = 3
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'tiene que aceptar los terminos y condiciones',
+            showConfirmButton: true
+          });
+          document.getElementById('terminos').focus();
+          showTab(currentTab);
+          document.getElementById('terminos').focus();
+          return false
+        }
+        return true
+        document.getElementById("nextprevious").style.display = "none";
+        document.getElementById("all-steps").style.display = "none";
+        document.getElementById("register").style.display = "none";
+        document.getElementById("text-message").style.display = "block";
+      }
+      showTab(currentTab);
+    }
+
+    function validateForm() {
+
+      var x, y, i, valid = true;
+
+      x = document.getElementsByClassName("tab");
+      y = x[currentTab].getElementsByTagName("input");
+      console.log("valida x", x.length, "valida y", y.length)
+      pp = y[0].id
+      console.log("campo", pp)
+      switch (pp) {
+        case "dni": {
+          console.log("case dni")
+          valid = valida1()
+          console.log("devuelve valida1", valid)
+          break;
+        }
+        case "cod_pais": { //calle
+          console.log("case calle")
+          valid = valida2()
+          console.log("devuelve valida2", valid)
+          break;
+        }
+        case "id_categoria": {
+          console.log("case id_categoria")
+          valid = valida3()
+          console.log("devuelve valida3", valid)
+          break;
+        }
+        case "password": {
+          console.log("case password")
+          valid = valida4()
+          console.log("devuelve valida4", valid)
+          break;
+        }
+      }
+      console.log("pasovalid")
+      return valid
+      /*
+      for (i = 0; i < y.length; i++) {
+        if (y[i].value == "") {
+          y[i].className += " invalid";
+          valid = false;
+        }
+      }
+      if (valid) {
+        document.getElementsByClassName("step")[currentTab].className += " finish";
+      }
+      return valid;
+      */
+    }
+
+    var openFile = function(event) {
+      var input = event.target;
+
+      var reader = new FileReader();
+      reader.onload = function() {
+        var dataURL = reader.result;
+        var output = document.getElementById('output');
+        output.src = dataURL;
+      };
+      reader.readAsDataURL(input.files[0]);
+      var file = document.querySelector('input[type=file]').files[0];
+      console.dir(file);
+    };
+    $('#file_upload_id').change(function(event) {
+      console.log("hola");
+
+      var tmppath = URL.createObjectURL(event.target.files[0]);
+
+      console.log(tmppath);
+      $("img").fadeIn("fast").attr('src', URL.createObjectURL(event.target.files[0]));
+
+      $("#disp_tmp_path").html("Temporary Path(Copy it and try pasting it in browser address bar) --> <strong>[" + tmppath + "]</strong>");
+    });
+
+
+    function fixStepIndicator(n) {
+      var i, x = document.getElementsByClassName("step");
+      for (i = 0; i < x.length; i++) {
+        x[i].className = x[i].className.replace(" active", "");
+      }
+      x[n].className += " active";
+    }
+
+    var presentacion = document.querySelector('#presentacion');
+    var longitud = document.querySelector('#longitud');
+    var restan = 0;
+
+    function contarLongitud(e) {
+      presentacion = document.querySelector('#presentacion');
+      longitud = document.querySelector('#longitud');
+
+      restan = 200 - presentacion.value.length
+      longitud.innerHTML = `Restan : ` + restan + ' caracteres';
+      console.log("contar : ", restan)
+    }
+  </script>
+  <% if(alert) { %>
+  <script>
+    Swal.fire({
+      title: '<%= alertTitle %>',
+      text: '<%= alertMessage %>',
+      icon: '<%= alertIcon %>',
+      showConfirmButton: <%= showConfirmButton %>,
+      timer: <%= timer %>
+    }).then(() => {
+      window.location = '/<%= ruta %>'
+    })
+  </script>
+  <% } %>
+</body>
+
+</html>

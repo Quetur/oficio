@@ -145,7 +145,7 @@ Testing
     }
     let dni =    sessionStorage.getItem("dni");
     let mnombre =  sessionStorage.getItem("nombre");
-    document.getElementById('nombre').value = mnombre
+    //document.getElementById('nombre').value = mnombre
     console.log(" menu dni ", dni, mnombre )
     if ((dni>1) && (nombre.length==0)){
       url="/api/usuario/"+dni
@@ -157,6 +157,6 @@ Testing
          nombre = data[0].nombre
     });
     }
-    console.log(" menu dni ", dni, nombre )
+    //console.log(" menu dni ", dni, nombre )
   </script>
 </header>

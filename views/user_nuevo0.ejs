@@ -1,0 +1,321 @@
+<div class="contenedor">
+    <div class="col-lg-12 shadow-lg p-3 mb-5">
+      <div class="card border-primary">
+        <div class="card-header bg-primary text-white">Registrarse</div>
+        <div class="card-body text-primary" style="padding-top: 0px;padding-bottom: 0px;">
+          <!-- <form id="registro-usuario" action="/usuario_nuevo" method="post" enctype="multipart/form-data"> -->
+          <form id="registro-usuariop"  >
+
+
+
+  function termCond() {
+    window.open("/terminos", "byspel", "width=600,height=600,menubar=no");
+  }
+
+ 
+
+  
+
+
+
+
+
+
+  // funcion para validar el correo
+  document.getElementById('email').addEventListener('input', function() {
+    campo = event.target;
+    valido = document.getElementById('emailOK');
+
+    emailRegex = /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i;
+    //Se muestra un texto a modo de ejemplo, luego va a ser un icono
+    if (emailRegex.test(campo.value)) {
+      valido.innerText = "";
+    } else {
+      valido.innerText = "email incorrecto";
+    }
+  });
+
+  function valida1() {
+    console.log("valida1");
+    // corrijo lospuntos del dni
+    var temp = document.getElementById('dni').value
+    temp = temp.replaceAll('.', '')
+    document.getElementById('dni').value = temp
+
+    // corrijo celular
+    var temp = document.getElementById('celular').value
+    temp = temp.replaceAll('(', '')
+    console.log("validar cel (", temp);
+    temp = temp.replaceAll(')', '')
+    console.log("validar cel )", temp);
+    temp = temp.replaceAll('-', '')
+    temp = temp.replaceAll(' ', '')
+    console.log("validar cel (", temp);
+    console.log("validar cel (", temp);
+    document.getElementById('celular').value = temp
+
+    if (Chequeo_campo("dni", "Cargue su Numero de DNI") == true) {
+      console.log("dni_ok")
+      if (Chequeo_campo("nombre", "Cargue su Nombre") == true) {
+        console.log("nombre_ok")
+        if (Chequeo_campo("celular", "Cargue su Numero de celular") == true) {
+          console.log("celular_ok")
+          if (Chequeo_campo("email", "Cargue su correo electrónico") == true) {
+            console.log("email_ok")
+            return true
+          }
+        }
+      }
+    }
+    return false
+  }
+
+  function valida2() {
+    console.log("valida2");
+
+    if (Chequeo_campo("pais", "Cargue su pais") == true) {
+      console.log("pais_ok")
+      if (Chequeo_campo("cod_provincia", "Cargue su provincia") == true) {
+        console.log("provincia_ok")
+        if (Chequeo_campo("cod_localidad", "Cargue su localidad") == true) {
+          console.log("localidad_ok")
+          pongo_dire()
+          return true
+        }
+      }
+    }
+    return false
+  }
+
+  function valida3() {
+    console.log("valida3");
+
+    if (Chequeo_campo("categoria", "Cargue una categoria") == true) {
+      console.log("categoria_ok")
+      if (Chequeo_campo("oficio", "Cargue un oficio") == true) {
+        console.log("poficio_ok")
+        if (Chequeo_campo("presentacion", "Cargue una presentacion") == true) {
+          console.log("presentacion_ok")
+          return true
+        }
+      }
+    }
+    return false
+  }
+
+  function valida4() {
+    console.log("valida4");
+
+    if (Chequeo_campo("password", "Cargue un password") == true) {
+      console.log("password_ok")
+      if (Chequeo_campo("confirm_password", "Cargue un oficio") == true) {
+        console.log("confirm_password_ok")
+
+      }
+      return
+    }
+  }
+
+  function wait(espera_segundos) {
+    espera = espera_segundos * 1000
+    const tiempo_inicio = Date.now();
+    let tiempo_actual = null;
+    do {
+      tiempo_actual = Date.now();
+    } while (tiempo_actual - tiempo_inicio < espera);
+  }
+
+  function Chequeo_campo(campo, mensaje) {
+    console.log("funcion chequeo ", campo)
+    mcampo = document.getElementById(campo).value.trim();
+    console.log(campo, mcampo)
+    if (mcampo == null || mcampo.length == 0) {
+      document.getElementById(campo).focus();
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: mensaje,
+        showConfirmButton: false,
+        timer: 2000
+      });
+      return false;
+    }
+    return true
+  }
+
+
+
+  // tab
+  console.log("paso por aca")
+  var currentTab = 0;
+  document.addEventListener("DOMContentLoaded", function(event) {
+    showTab(currentTab);
+  });
+
+  function showTab(n) {
+    console.log("paso por n", n, document.getElementById('radio_geoloc').value)
+
+    var x = document.getElementsByClassName("tab");
+    x[n].style.display = "Block";
+    if (n == 0) {
+      document.getElementById("prevBtn").style.display = "none";
+    } else {
+      document.getElementById("prevBtn").style.display = "inline";
+    }
+    if (n == (x.length - 1)) {
+      document.getElementById("nextBtn").innerHTML = "Grabar";
+    } else {
+      document.getElementById("nextBtn").innerHTML = "Próximo";
+    }
+    fixStepIndicator(n)
+  }
+
+ 
+
+
+  function anulanextPrev(n) {
+    var x = document.getElementsByClassName("tab");
+    if (n == 1 && !validateForm()) return false;
+    x[currentTab].style.display = "none";
+    currentTab = currentTab + n;
+    if (currentTab >= 5) {
+      valid = valida4()
+      if ((document.getElementById('terminos').checked) == true) {
+        console.log("terminos_ok")
+        //  document.getElementById("registro-usuario").submit();
+      } else {
+        valid = false
+        currentTab = 3
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'tiene que aceptar los terminos y condiciones',
+          showConfirmButton: true
+        });
+        document.getElementById('terminos').focus();
+        showTab(currentTab);
+        document.getElementById('terminos').focus();
+        return false
+      }
+    }
+    document.getElementById("nextprevious").style.display = "none";
+    document.getElementById("all-steps").style.display = "none";
+    document.getElementById("register").style.display = "none";
+    document.getElementById("text-message").style.display = "block";
+  }
+  showTab(currentTab);
+  
+
+  function validateForm() {
+
+    var x, y, i, valid = true;
+
+    x = document.getElementsByClassName("tab");
+    y = x[currentTab].getElementsByTagName("input");
+    console.log("valida x", x.length, "valida y", y.length)
+    pp = y[0].id
+    console.log("campo", pp)
+    switch (pp) {
+      case "dni": {
+        console.log("case dni")
+        valid = valida1()
+        console.log("devuelve valida1", valid)
+        break;
+      }
+      case "cod_pais": { //calle
+        console.log("case calle")
+        valid = valida2()
+        console.log("devuelve valida2", valid)
+        break;
+      }
+      case "id_categoria": {
+        console.log("case id_categoria")
+        valid = valida3()
+        console.log("devuelve valida3", valid)
+        break;
+      }
+      case "password": {
+        console.log("case password")
+        valid = valida4()
+        console.log("devuelve valida4", valid)
+        break;
+      }
+    }
+    console.log("pasovalid")
+    return valid
+    /*
+    for (i = 0; i < y.length; i++) {
+      if (y[i].value == "") {
+        y[i].className += " invalid";
+        valid = false;
+      }
+    }
+    if (valid) {
+      document.getElementsByClassName("step")[currentTab].className += " finish";
+    }
+    return valid;
+    */
+  }
+
+  var openFile = function(event) {
+    var input = event.target;
+
+    var reader = new FileReader();
+    reader.onload = function() {
+      var dataURL = reader.result;
+      var output = document.getElementById('output');
+      output.src = dataURL;
+    };
+    reader.readAsDataURL(input.files[0]);
+    var file = document.querySelector('input[type=file]').files[0];
+    console.dir(file);
+  };
+  $('#file_upload_id').change(function(event) {
+    console.log("hola");
+
+    var tmppath = URL.createObjectURL(event.target.files[0]);
+
+    console.log(tmppath);
+    $("img").fadeIn("fast").attr('src', URL.createObjectURL(event.target.files[0]));
+
+    $("#disp_tmp_path").html("Temporary Path(Copy it and try pasting it in browser address bar) --> <strong>[" + tmppath + "]</strong>");
+  });
+
+
+  function fixStepIndicator(n) {
+    var i, x = document.getElementsByClassName("step");
+    for (i = 0; i < x.length; i++) {
+      x[i].className = x[i].className.replace(" active", "");
+    }
+    x[n].className += " active";
+  }
+
+
+
+  var presentacion = document.querySelector('#presentacion');
+  var longitud = document.querySelector('#longitud');
+  var restan = 0;
+
+  function contarLongitud(e) {
+    presentacion = document.querySelector('#presentacion');
+    longitud = document.querySelector('#longitud');
+
+    restan = 200 - presentacion.value.length
+    longitud.innerHTML = `Restan : ` + restan + ' caracteres';
+    console.log("contar : ", restan)
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
