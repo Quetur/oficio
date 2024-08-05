@@ -28,7 +28,7 @@ export const getdata = async (request, response, next) => {
 
   if (type == "load_localidad") {
     console.log("load_localidad", search_query);
-    linea = `SELECT descripcion AS Data, id_localidad as Cod  FROM localidad WHERE provincia = '${search_query}' order by descripcion`;
+    linea = `SELECT descripcion AS Data, id_localidad as Cod, lati, longi  FROM localidad WHERE provincia = '${search_query}' order by descripcion`;
   }
 
   if (type == "load_oficio") {
@@ -50,7 +50,8 @@ export const getdata = async (request, response, next) => {
       //data_arr.push('descripcion:' row.Data );
       //cod_arr.push(row.Cod)
       //console.log("data_arr",row.Data, row.Cod)
-      let lin = `{"cod": "` + row.Cod + `", "descripcion": "` + row.Data + `"}`;
+      // ant  let lin = `{"cod": "` + row.Cod + `", "descripcion": "` + row.Data + `"}`; 
+      let lin = `{"cod": "` + row.Cod + `", "descripcion": "` + row.Data + `", "lati": "` + row.lati +`", "longi": "` + row.longi + `"}`;
       //console.log("lin ",lin)
       let obj = JSON.parse(lin);
       //console.log("obj", obj)

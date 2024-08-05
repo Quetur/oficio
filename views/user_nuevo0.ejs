@@ -35,73 +35,11 @@
     }
   });
 
-  function valida1() {
-    console.log("valida1");
-    // corrijo lospuntos del dni
-    var temp = document.getElementById('dni').value
-    temp = temp.replaceAll('.', '')
-    document.getElementById('dni').value = temp
+  
 
-    // corrijo celular
-    var temp = document.getElementById('celular').value
-    temp = temp.replaceAll('(', '')
-    console.log("validar cel (", temp);
-    temp = temp.replaceAll(')', '')
-    console.log("validar cel )", temp);
-    temp = temp.replaceAll('-', '')
-    temp = temp.replaceAll(' ', '')
-    console.log("validar cel (", temp);
-    console.log("validar cel (", temp);
-    document.getElementById('celular').value = temp
+ 
 
-    if (Chequeo_campo("dni", "Cargue su Numero de DNI") == true) {
-      console.log("dni_ok")
-      if (Chequeo_campo("nombre", "Cargue su Nombre") == true) {
-        console.log("nombre_ok")
-        if (Chequeo_campo("celular", "Cargue su Numero de celular") == true) {
-          console.log("celular_ok")
-          if (Chequeo_campo("email", "Cargue su correo electrónico") == true) {
-            console.log("email_ok")
-            return true
-          }
-        }
-      }
-    }
-    return false
-  }
-
-  function valida2() {
-    console.log("valida2");
-
-    if (Chequeo_campo("pais", "Cargue su pais") == true) {
-      console.log("pais_ok")
-      if (Chequeo_campo("cod_provincia", "Cargue su provincia") == true) {
-        console.log("provincia_ok")
-        if (Chequeo_campo("cod_localidad", "Cargue su localidad") == true) {
-          console.log("localidad_ok")
-          pongo_dire()
-          return true
-        }
-      }
-    }
-    return false
-  }
-
-  function valida3() {
-    console.log("valida3");
-
-    if (Chequeo_campo("categoria", "Cargue una categoria") == true) {
-      console.log("categoria_ok")
-      if (Chequeo_campo("oficio", "Cargue un oficio") == true) {
-        console.log("poficio_ok")
-        if (Chequeo_campo("presentacion", "Cargue una presentacion") == true) {
-          console.log("presentacion_ok")
-          return true
-        }
-      }
-    }
-    return false
-  }
+ 
 
   function valida4() {
     console.log("valida4");
@@ -125,23 +63,7 @@
     } while (tiempo_actual - tiempo_inicio < espera);
   }
 
-  function Chequeo_campo(campo, mensaje) {
-    console.log("funcion chequeo ", campo)
-    mcampo = document.getElementById(campo).value.trim();
-    console.log(campo, mcampo)
-    if (mcampo == null || mcampo.length == 0) {
-      document.getElementById(campo).focus();
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: mensaje,
-        showConfirmButton: false,
-        timer: 2000
-      });
-      return false;
-    }
-    return true
-  }
+  
 
 
 
@@ -230,7 +152,7 @@
       }
       case "id_categoria": {
         console.log("case id_categoria")
-        valid = valida3()
+        
         console.log("devuelve valida3", valid)
         break;
       }

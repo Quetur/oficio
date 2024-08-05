@@ -1,7 +1,15 @@
 <%- include('includes/cabecera.ejs') %>
 <%- include('menu2.ejs') %>
 
+
 <head>
+
+  <header>
+
+    <!-- Modal -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="/path/to/bootstrap/js/bootstrap.min.js"></script>
+  </header>
 
   <!-- Required meta tags -->
   <meta charset="utf-8">
@@ -173,6 +181,14 @@
 
 
 <body>
+
+  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+
+  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script>
+
+  </script>
   <div class="contenedor">
     <!-- formato  -->
     <div class="col-lg-12 shadow-lg p-3 mb-5">
@@ -184,12 +200,21 @@
         <div class="card-body text-primary" style="padding-top: 0px;padding-bottom: 0px;">
           <!-- redondelito arriba de cada pestaña -->
           <div class="all-steps" id="all-steps">
-            <span class="step"></span> <span class="step"></span><span class="step"></span><span class="step"></span><span class="step"></span>
+            <span class="step"></span>
+
+            <span class="step"></span>
+
+            <span class="step"></span>
+
+            <span class="step"></span>
+
+            <span class="step"></span>
           </div>
-          <form id="registro-usuariop">
+          <form id="registro-usuario" action="/new_user" method="post" enctype="multipart/form-data">
 
             <div id="tab1">
-              <h2 class="fs-subtitle subti">Datos Personalesisdaf</h2>
+
+              <h2 class="fs-subtitle subti">Datos Personales</h2>
               <div class="mb-3 material-textfield">
 
                 <input id="dni" name="dni" type="text" class="form-control input-number" placeholder="DNI (*)" maxlength="10">
@@ -213,14 +238,13 @@
                 <span id="emailOK"></span>
               </div>
               <div style="float: right;">
-                <button type="button" id="nextBtn" onclick="next(1)"> Proximo
+                <button type="button" id="nextBtn" onclick="next(1,id)"> Proximo
                 </button>
               </div>
             </div>
 
-
             <div id="tab2" style="display: inline;">
-              <h2 class="fs-subtitle subti" style="text-decoration: underline;">Ubicación</h2>
+              <h2 class="fs-subtitle subti" style="text-decoration: underline;">Seleccione la localizacion</h2>
               <style>
                 .mapita {
                   width: 100%px
@@ -228,12 +252,11 @@
               </style>
               <div style="width: 100%;">
 
-                <legend> Seleccione la localizacion </legend>
 
-                <input class="radiogeo " style="width: 20px;" type="radio" id="radio_geoloc" name="radio_geoloc" value="auto" checked>Geolocalizacion</input>
+                <input class="radiogeo" style="width: 20px;" type="radio" id="radio_auto" name="radio_geoloc" value="auto" checked>Geolocalizacion</input>
 
 
-                <input class="radiogeo " style="width: 20px;" type="radio" id="radio_geoloc" name="radio_geoloc" value="manual"> Manual</input>
+                <input class="radiogeo" style="width: 20px;" type="radio" id="radio_manual" name="radio_geoloc" value="manual" onclick=""> Manual</input>
 
                 <div style="width: 90%;" id="map"> </div>
 
@@ -242,14 +265,14 @@
 
                 </table>
                 <input type="text" name="localizacion" id="localizacion" hidden></input>
-                <input type="text" name="lati" id="lati"></input>
-                <input type="text" name="longi" id="longi"></input>
+                <input type="text" name="lati" id="lati" ></input>
+                <input type="text" name="longi" id="longi" ></input>
               </div>
               <div style="float: right;">
-                <button type="button" id="prevBtn2" onclick="Prev(2)">
+                <button type="button" id="prevBtn2" onclick="Prev(2,id)">
                   Anterior
                 </button>
-                <button type="button" id="nextBtn2" onclick="next(2)">
+                <button type="button" id="nextBtn2" onclick="next(2,id)">
                   Proximo
                 </button>
               </div>
@@ -280,7 +303,7 @@
                 <table>
                   <tr>
                     <td id="tdlocalidad">
-                      <select name="localidad" id="localidad" type="text" class="mb3-3 form-select select2" style="font-size: 15px !important;">
+                      <select name="localidad" id="localidad" type="text" class="mb3-3 form-select select2" onchange="myFunction(this)" style="font-size: 15px !important;" disabled>
                         <option value="" style="font-size: 15px !important; width: 200px;">Seleccione localidad</option>
                       </select>
                     </td>
@@ -318,9 +341,6 @@
                     <td style="width: 65%;" class="material-textfield">
                       <input id="codigopostal" name="codigopostal" type="text" class="form-control" placeholder="Codigo Postal">
                       <label for="codigopostal" class="form-label">Codigo Postal</label>
-                    </td>
-                    <td style="width: 35%;" class="material-textfield">
-
                     </td>
                   </div>
                 </tr>
@@ -464,7 +484,28 @@
     </div>
   </div>
 
+  <div class="modal fade" id="modelWindow" role="dialog">
+    <div class="modal-dialog modal-sm vertical-align-center">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Verificar direccion</h4>
+        </div>
+        <div class="modal-body">
+          <div style="width: 90%;" id="mapita"> </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
+    var map
+    var marker
+    var mapita
+
     //var mymap = L.map('map').setView([-34.65, -58.67], 14);
     //L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', { foo: 'bar', attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }).addTo(mymap);
 
@@ -474,13 +515,14 @@
     //let buscaDom = "https://api.geoapify.com/v1/geocode/search?house"
     //let keyDom = "8de8aa5d1a844209ba753c750a641f7b"
     document.getElementsByClassName("step")[0].className += " active"
+    //document.getElementById("localidad").disabled = true;
     document.getElementById("tab2").style.display = "none";
     document.getElementById("tab3").style.display = "none";
     document.getElementById("tab4").style.display = "none";
     document.getElementById("tab5").style.display = "none";
     document.getElementById('pais').value = "AR"
-    /*
-    document.getElementById('dni').value = "1";
+
+    document.getElementById('dni').value = "2";
     document.getElementById('mdni').value = "21.707.047";
     document.getElementById('nombre').value = "Jesus";
     document.getElementById('apellido').value = "Rosales";
@@ -496,10 +538,6 @@
     */
 
 
-    function onSuccess(position) {
-      busca_localizacion(position)
-
-    }
 
 
     // formato dni
@@ -563,15 +601,21 @@
       cod_loc: ""
     };
 
-    
+
 
 
     async function leo_geolocalizacion() {
-      navigator.geolocation.getCurrentPosition(onSuccess, onError);
+      //alert("1 - leo_geolocalizacion")
+      await navigator.geolocation.getCurrentPosition(onSuccess, onError);
     }
 
 
+    function onSuccess(position) {
+      //alert("2 - onSucess" + position)
+      busca_localizacion(position)
+      llena_locali(latitude, longitude)
 
+    }
 
     function onError(error) {
       var txt;
@@ -596,7 +640,8 @@
     // geolocalizacion le pasas unadireccion y retorna una lat y lon
     // https://api.geoapify.com/v1/geocode/search?housenumber=721&street=Cnel.%20Manuel%20Medina&postcode=B1714&city=ituzaingo&state=Buenos%20Aires&country=Argentina&apiKey=8de8aa5d1a844209ba753c750a641f7b
     async function busca_localizacion(position) {
-
+      //alert("3 - busca_localizacion " + position.coords.latitude + " , " + position.coords.longitude)
+      //document.getElementById("tab3").style.display = "inline";
       latitude = position.coords.latitude;
       longitude = position.coords.longitude;
       geoloc.lat = latitude
@@ -605,21 +650,31 @@
       document.getElementById('longi').value = longitude
       document.getElementById('localizacion').value = latitude + ',' + longitude
 
-      var map = L.map('map').setView([latitude, longitude], 15);
+      //buildMap(latitude,longitude)
+
+
+
+      map = L.map('map').setView([latitude, longitude], 15);
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
       }).addTo(map);
-      var marker = L.marker([latitude, longitude]).addTo(map);
+      marker = L.marker([latitude, longitude]).addTo(map);
+    }
 
+    async function llena_locali(latitude, longitude) {
 
+      let texto_fetch = '/api/direccion/lat=' + latitude + '&lon=' + longitude
+      document.getElementById('locali').hidden = false
+      //alert(texto_fetch)
       //map.innerHTML = '<iframe width="400" height="200" src="https://www.google.com/maps?q=' + latitude + ',' + longitude + '&amp;z=15&amp;output=embed"></iframe';
-      await fetch('/api/direccion/lat=' + latitude + '&lon=' + longitude)
+      await fetch(texto_fetch)
         // Exito
         .then(response => response.json()) // convertir a json
         .then(json => coloca(json))
 
-      function coloca(json) {
+      async function coloca(json) {
+        //alert("4- entro en coloca" + json)
         console.log("busco localizacion", json)
         document.getElementById('direc').textContent = json.calle + ' ' + json.numero + ' - ' + json.provincia + ' - ' + json.pais
         document.getElementById('pais').value = json.country_code.toUpperCase()
@@ -643,11 +698,28 @@
     }
 
 
+    /*
+        function buildMap(lat,lon)  {
+        document.getElementById('map').innerHTML = "<div id='map' style='width: 100%; height: 100%;'></div>";
+        var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                        osmAttribution = 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors,' +
+                            ' <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+        osmLayer = new L.TileLayer(osmUrl, {maxZoom: 18, attribution: osmAttribution});
+        var map = new L.Map('map');
+        map.setView(new L.LatLng(lat,lon), 9 );
+        map.addLayer(osmLayer);
+        //var validatorsLayer = new OsmJs.Weather.LeafletLayer({lang: 'en'});
+        //map.addLayer(validatorsLayer);
+        var marker = L.marker([latitude, longitude]).addTo(map);
+    }
+    */
+
     $('input[type=radio][name=radio_geoloc]').change(function() {
+      //alert("cambio radio" + this.value)
       console.log("cambio radio", this.value)
-      if (this.value == 'manual') {
+      if (document.getElementById('radio_manual').checked) {
         console.log("entro en if manual")
-        document.getElementById('map').hidden = true
+        //document.getElementById('map').hidden = true
         console.log("paso por aca 1", document.getElementsByClassName("tab"))
         document.getElementById('tdlocalidad').hidden = false
         document.getElementById('locali').hidden = true
@@ -655,32 +727,51 @@
         document.getElementById('provincia').value = ""
         document.getElementById('cod_provincia').value = ""
         document.getElementById('cod_localidad').value = ""
-        document.getElementById('nextBtn').click()
+        document.getElementById('lati').value = ""
+        document.getElementById('longi').value = ""
+        document.getElementById('direc').hidden = true
+        map.removeLayer(marker); // remove
+        // document.getElementById('nextBtn2').click()
         //console.log("geo_dire",document.getElementById('geo_dire').value)
         // map.innerHTML = '<iframe width="400" height="200" src="https://www.google.com/maps?q='+document.getElementById('geo_dire').value +'&amp;z=15&amp;output=embed"></iframe';
-      } else if (this.value == 'auto') {
-        //leo_geolocalizacion()
-        pongo_localidad()
+      } else if (document.getElementById('radio_auto').checked) {
+        marker = L.marker([latitude, longitude]).addTo(map);
+        // leo_geolocalizacion()
+        document.getElementById('lati').value = latitude
+        document.getElementById('longi').value = longitude
+        document.getElementById('direc').hidden = false
+        llena_locali(latitude, longitude)
       }
     });
 
+    function verifica_dire() {
+      //alert("busca_dire")
+      leo_geolocalizacion()
+      $('#modelWindow').modal('show');
+    }
+
     async function pongo_localidad() {
+      //alert("5- pongo localidad" + document.getElementById('locali').value)
       console.log("pongo localidad :", document.getElementById('locali').value)
-      document.getElementById('map').hidden = false
+      // document.getElementById('map').hidden = false
       let condi = 'municipio="' + document.getElementById('locali').value +
         '" and provincia="' + geoloc.cod_prov +
         '" and descripcion="' + document.getElementById('locali').value + '"'
       console.log("provincia buscada", geoloc.cod_prov)
       console.log("condi para buscar localidad", condi)
+      //alert("antes")
       await fetch('/api/locali/' + condi)
         // Exito
         .then(response => response.json()) // convertir a json
-        .then(json => coloca(json))
+        .then(json => coloca2(json))
 
-      function coloca(json) {
+      function coloca2(json) {
+        //alert("coloca2")
         console.log("json :", json[0])
         console.log("codigo de localidad", json.id_localidad)
         document.getElementById('cod_localidad').value = json[0].id_localidad
+        //document.getElementById('lati').value = json[0].lati
+        //document.getElementById('longi').value = json[0].longi
       }
     }
 
@@ -722,7 +813,7 @@
       fetch('/get_data?type=' + type + '&parent_value=' + parent_element.value + '').then(function(response) {
         return response.json();
       }).then(function(responseData) {
-
+        //console.log("trajo ", responseData)
         var html = '';
 
         if (type == 'load_provincia') { //console.log("cargando provincias")
@@ -736,6 +827,7 @@
 
           document.querySelector(".preload").style.display = "none" //stop the load
           html = '<option value="">Seleccione su localidad</option>';
+          
 
         }
         if (type == 'load_oficio') {
@@ -747,10 +839,14 @@
         for (var count = 0; count < responseData.length; count++) {
           //console.log("dato1", responseData[count], "codigo ",responseData[count].cod)
           //console.log("codigo ",responseData[count].cod)
-          html += '<option value="' + responseData[count].cod + '" title="' + responseData[count].descripcion + '">' + responseData[count].descripcion + '</option>';
+          //console.log("lati ",responseData[count].lati)
+          html += '<option value="' + responseData[count].cod + '" title="' + responseData[count].descripcion +
+            '" lati="' + responseData[count].lati + '" longi="' + responseData[count].longi + '">' + responseData[count].descripcion + '</option>';
         }
         // cierro relogito
-
+        // console.log("lati ", responseData[count].lati )
+        //document.getElementById("localidad").properties.disabled = false
+       
         child_element.innerHTML = html;
 
       });
@@ -774,12 +870,15 @@
 
       document.getElementById('cod_provincia').value = document.getElementById('provincia').value
 
+      document.getElementById("localidad").disabled = false;
 
     };
+
+
     let json = ""
 
 
-    async function pongo_dire() {
+    async function busca_dire() {
       document.getElementById('dire').value = 'https://api.geoapify.com/v1/geocode/search?&street=' + document.getElementById('calle').value +
         '&housenumber=' + document.getElementById('numero').value +
         '&city=' + document.getElementById('localidad').selectedOptions[0].getAttribute("title") +
@@ -795,7 +894,7 @@
         }
         json = await response.json();
         console.log("resultado de la consulta", json);
-        console.log("rtamño de json features", json.features.length);
+        console.log("tamño de json features", json.features.length);
         if (json.features.length > 1) {
           Swal.fire({
             icon: 'error',
@@ -845,11 +944,14 @@
       document.querySelector(".preload").style.display = "none" //stop the load
     }
 
-    _('localidad').onchange = function() {
+    _('localidad').onchange = function(e) {
 
-      console.log("eligio la localidad", document.getElementById('localidad').value)
+      console.log("eligio la localidad", localidad[localidad.selectedIndex].getAttribute("lati"))
       /// 
+      //alert(e.options[e.selectedIndex].getAttribute("lati"))
       document.getElementById('cod_localidad').value = document.getElementById('localidad').value
+      document.getElementById('lati').value = localidad[localidad.selectedIndex].getAttribute("lati")
+      document.getElementById('longi').value = localidad[localidad.selectedIndex].getAttribute("longi")
     };
 
     _('categoria').onchange = function() {
@@ -874,11 +976,6 @@
         width: '200px',
         closeOnSelect: false,
         minimumResultsForSearch: Infinity,
-
-        //createTag: function() {
-        // Disable tagging
-        //  return null;
-        //}
       });
 
       $('#oficio').on('select2:opening select2:closing', function(event) {
@@ -955,42 +1052,199 @@
     });
 
 
-    function next(n) {
-      desmarcastep()
-      document.getElementsByClassName("step")[n].className += " active"
+    function valida1() {
+      console.log("valida1");
+      // corrijo lospuntos del dni
+      var temp = document.getElementById('dni').value
+      temp = temp.replaceAll('.', '')
+      document.getElementById('dni').value = temp
+
+      // corrijo celular
+      var temp = document.getElementById('celular').value
+      temp = temp.replaceAll('(', '')
+      console.log("validar cel (", temp);
+      temp = temp.replaceAll(')', '')
+      console.log("validar cel )", temp);
+      temp = temp.replaceAll('-', '')
+      temp = temp.replaceAll(' ', '')
+      console.log("validar cel (", temp);
+      console.log("validar cel (", temp);
+      document.getElementById('celular').value = temp
+
+      if (Chequeo_campo("dni", "Cargue su Numero de DNI") == true) {
+        console.log("dni_ok")
+        if (Chequeo_campo("nombre", "Cargue su Nombre") == true) {
+          console.log("nombre_ok")
+          if (Chequeo_campo("celular", "Cargue su Numero de celular") == true) {
+            console.log("celular_ok")
+            if (Chequeo_campo("email", "Cargue su correo electrónico") == true) {
+              console.log("email_ok")
+              return true
+            }
+          }
+        }
+      }
+      return false
+    }
+
+    function valida2() {
+      console.log("valida2");
+
+      if (Chequeo_campo("pais", "Cargue su pais") == true) {
+        console.log("pais_ok")
+        if (Chequeo_campo("cod_provincia", "Cargue su provincia") == true) {
+          console.log("provincia_ok")
+          if (Chequeo_campo("cod_localidad", "Cargue su localidad") == true) {
+            console.log("localidad_ok")
+
+            return true
+          }
+        }
+      }
+      return false
+    }
+
+    function Chequeo_campo(campo, mensaje) {
+      console.log("funcion chequeo ", campo)
+      mcampo = document.getElementById(campo).value.trim();
+      console.log(campo, mcampo)
+      if (mcampo == null || mcampo.length == 0) {
+        document.getElementById(campo).focus();
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: mensaje,
+          showConfirmButton: false,
+          timer: 2000
+        });
+        return false;
+      }
+      return true
+    }
+
+    function valida3() {
+      console.log("valida3");
+
+      if (Chequeo_campo("categoria", "Cargue una categoria") == true) {
+        console.log("categoria_ok")
+        if (Chequeo_campo("oficio", "Cargue un oficio") == true) {
+          console.log("poficio_ok")
+          if (Chequeo_campo("presentacion", "Cargue una presentacion") == true) {
+            console.log("presentacion_ok")
+            return true
+          }
+        }
+      }
+      return false
+    }
+
+    function valida4() {
+    console.log("valida4");
+    valida =false
+    if (Chequeo_campo("password", "Cargue un password") == true) {
+      console.log("password_ok")
+      if (Chequeo_campo("confirm_password", "Cargue un password ") == true) {
+        console.log("confirm_password_ok")
+        if ((document.getElementById('terminos').checked) == true) {
+          console.log("terminos_ok")
+          valida = true
+        }
+        else { 
+          Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'tiene que aceptar los terminos y condiciones',
+          showConfirmButton: true
+          });
+          document.getElementById('terminos').focus();
+        }
+        return valida
+      }  
+    }
+    } 
+  
+
+    function next(n, id) {
+      var termino = false
+      const radioButtons = document.querySelectorAll('input[name="radio_geoloc"]');
+      //alert(n)
+      if ((radioButtons == 'auto') && (id == "nextBtn2")) {
+
+        document.getElementById("tab2").style.display = "none";
+        document.getElementById("tab3").style.display = "inline";
+
+        n = 3
+
+      }
+
+      //document.getElementsByClassName("step")[n].className += " active"
+      desmarcastep(n)
       switch (n) {
         case 1: {
-          document.getElementById("tab1").style.display = "none";
-          document.getElementById("tab2").style.display = "inline";
-          leo_geolocalizacion()
+          if (valida1()) {
+            document.getElementById("tab1").style.display = "none";
+            document.getElementById("tab2").style.display = "inline";
+            document.getElementsByClassName("step")[1].className += " active"
+            leo_geolocalizacion()
 
+          }
           break;
         }
 
         case 2: {
+          document.getElementsByClassName("step")[2].className += " active"
           document.getElementById("tab2").style.display = "none";
           document.getElementById("tab3").style.display = "inline";
           break;
         }
 
         case 3: {
-          document.getElementById("tab3").style.display = "none";
-          document.getElementById("tab4").style.display = "inline";
+          valida = valida2()
+          console.log("valida ", valida)
+          if (valida) {
+            document.getElementsByClassName("step")[3].className += " active"
+            document.getElementById("tab3").style.display = "none";
+            document.getElementById("tab4").style.display = "inline";
+          } else {
+            /*
+            let texto = ""
+
+            Swal.fire({
+              title: 'Direccion Invalida',
+              text: 'texto',
+              icon: 'alert',
+              showConfirmButton: true,
+              timer: '5000'
+            })
+              */
+          }
+
           break;
         }
 
         case 4: {
-          document.getElementById("tab4").style.display = "none";
-          document.getElementById("tab5").style.display = "inline";
+          valida = valida3()
+          console.log("valida 3 ", valida)
+          if (valida) {
+            document.getElementsByClassName("step")[4].className += " active"
+
+            document.getElementById("tab4").style.display = "none";
+            document.getElementById("tab5").style.display = "inline";
+          }
+
           break;
         }
 
         case 5: {
           console.log("case5  a grabar")
+          termino = valida4()
+          console.log("devuelve valida4", termino)
           break;
         }
       }
-
+      if (termino) {
+        document.getElementById("registro-usuario").submit();
+      }
 
     }
 
@@ -1031,6 +1285,7 @@
         x[i].className = x[i].className.replace(" active", "");
       }
     }
+    //$('#verifica_dire').modal('hide');
   </script>
 
 
