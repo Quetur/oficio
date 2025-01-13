@@ -895,7 +895,7 @@ pie = ``
     bcc: "jrosavila@gmail.com",
     to: correo,
     cc:"mercadooficio@gmail.com",
-    subject: "Solicitud de sugerencia - Mercado Oficio",
+    subject: "Solicitud de sugerencia - Mercado Laboral",
     text: "",
     html: contentHTML,
   };
