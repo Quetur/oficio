@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="Mercado Laboral" content="Mercado Laboral clasificados
+  <meta name="Mercado Laboral" content="Mercado Laboral clasificados mercadolaboral
   Agricultor
 Alambrador
 Albañil
@@ -72,55 +72,77 @@ Testing
   <title>Mercado Laboral</title>
   <link rel="icon" href="../img/logo.ico">
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <!-- <link rel="stylesheet" href="fonts.css"> -->
+  <!-- <link rel="stylesheet" href="fonts.css">-->
   <script src="https://code.jquery.com/jquery-latest.js"></script>
   <link href="/css/menu2.css" rel="stylesheet">
+  <!-- <link href="css/navbar.css" rel="stylesheet">-->
+
 </head>
 <header>
-  <div class="menu_bar fixed-top">
-    <table>
-      <tr>
-        <td style="width: 400px;">
-          <a href="#" class="bt-menu"><span class="icon-list2"></span>Menú</a>
-        </td>
-      </tr>
-    </table>
-  </div>
+ 
   <nav>
     <ul>
-      <li><a href="/home"><span class="icon-house"></span>Inicio</a></li>
-      <li class="submenu">
-      
+
+      <li class="submenu"  style="margin-top: 5px; margin-bottom: 5px;" >
+
         <% if(user){ %>
-          <input id="nombre" name="nombre" href="#" readonly></input>
-          <ul class="children">
-              <li><a href="/editar/<%= user.dni %>">Editar Perfil <span class="icon-dot"></span></a></li>
-              <!-- <li><a href="/editar/<%= user.dni %>">Calificar otro usuario<span class="icon-dot"></span></a></li>-->
-              <li><a href="/editar/<%= user.dni %>">Ver mis calificaciones<span class="icon-dot"></span></a></li>
-              <li><a href="/salir">Salir </a></li>
-        
-              <!--<li><a href="/editar">Editar su perfil</a></li>-->
-        <% }  else{ %>
-          <a href="#"><span class="icon-rocket"></span>Mi cuenta<span class="caret icon-arrow-down6"></span></a>
-          <ul class="children">
-              <!--<li><a href="/register"><span class="icon-suitcase"></span>Registrarse</a></li>-->
-            <li><a href="/login"> Ingresar </a></li>
-            <li><a href="/register"> Abrir una cuenta nueva </a></li>        
-        <% } %>
+
+        <img style="width: 150px; margin-left: -25px;" id="imglogo"  src="https://inmobiliari.s3.sa-east-1.amazonaws.com/<%= logo %>">
+        <input id="logo_inmo" value="<%= logo %>"hidden></input>
+        <input id="userid" value="<%= userid %>" hidden></input>
+        <input id="m_inmobili" hidden></input>
+        <input id="m_inmobiliCod"  value="<%= userid %>" hidden ></input>
+        <ul class="children"  style="width: 300px; margin-left: -25px;">
+          <li><a href="/prop_nueva/<%= user.dni %>">Nueva Propiedad <span class="icon-dot"></span></a></li>
+          <!-- <li><a href="/editar/<%= user.dni %>">Calificar otro usuario<span class="icon-dot"></span></a></li>
+          <li><a href="/editar/<%= user.dni %>">Ver mis calificaciones<span class="icon-dot"></span></a></li>-->
+          <li><a href="/salir">Salir </a></li>
+
+          <!--<li><a href="/editar">Editar su perfil</a></li>-->
         </ul>
+        <li style="width: 180px !important; font-size: 12px;">&nbsp &lt- Pulsa aqui para mas opciones</li>
+    
+      <% }  else{ %>
+        <input id="userid" value="0"  hidden></input>
+        <input id="m_inmobili" hidden></input>
+        <input id="m_inmobiliCod"  value="0" hidden  ></input>
+        <table>
+          <tr>
+            <td style="width: 150px !important;">
+              <img style="width: 150px; margin-left: -25px;" id="imglogo"  src="/img/logo.png">
+            </td>
+        <!-- 
+        <li><a href=""><span class="icon-mail"></span>Propiedades</a></li>
+        <li><a href=""><span class="icon-mail"></span>Subastas</a></li>
+        <li><a href=""><span class="icon-mail"></span>Tasaciones</a></li>
+        <li><a href=""><span class="icon-mail"></span>Emprendimientos</a></li>
+        </li>
+        <li><a href="/contacto"><span class="icon-mail"></span>Contacto</a></li>
+        -->
+
+            <td style="width: 95px !important;">
+              <li ><a id="acerca" style="width: 95px; font-size: 16px; margin-left: -10px;" href="/acercade">Acerca de</a></li>
+            </td>
+            <td style="width: 130px !important; font-size: 16px; margin-left: -10px;">
+              <div class="divbotonmenu" >
+                <li><a  id="ingresar" href="/login" style=" font-size: 16px;margin-left: -10px; width: 120px !important;"> Ingresar <img type="button" style="width: 30px; " src="/img/ingreso2.png"></a></li>
+              </div>
+            </td>
+          </tr>
+        </table>
+      <% } %>
+
       </li>
-      <li><a href="/contacto"><span class="icon-mail"></span>Contacto</a></li>
-      <li style="width: 200px;" ><a style="width: 200px;" href="/acercade"><span class="icon-mail"></span>Acerca de</a></li>
   </nav>
 
 
 
 
+
   <script>
-   
+  
 
-    $(document).ready(main);
-
+    lineSpinner.register()
     var contador = 1;
 
     function main() {
@@ -143,19 +165,25 @@ Testing
         $(this).children('.children').slideToggle();
       });
     }
-    let dni =    sessionStorage.getItem("dni");
-    let mnombre =  sessionStorage.getItem("nombre");
-    //document.getElementById('nombre').value = mnombre
-    console.log(" menu dni ", dni, mnombre )
-    if ((dni>1) && (nombre.length==0)){
-      url="/api/usuario/"+dni
-      console.log("entro menu2 servidor ->",url)
+    $(document).ready(main);
+    dni = 0
+    mnombre = ""
+
+    if (sessionStorage.getItem("dni") !== null) {
+      document.getElementById('m_inmobili').value = sessionStorage.getItem("nombre");
+      document.getElementById('m_inmobiliCod').value = sessionStorage.getItem("dni");
+    }
+    console.log(" menu dni ", dni, mnombre)
+
+    if ((dni > 1) && (mnombre.length == 0)) {
+      url = "/api/usuario/" + dni
+      console.log("entro menu2 servidor ->", url)
       fetch(url)
-      .then(response => response.json())
-      .then((data) => {
-         console.log("menu data", data)
-         nombre = data[0].nombre
-    });
+        .then(response => response.json())
+        .then((data) => {
+          console.log("menu data", data)
+          nombre = data[0].nombre
+        });
     }
     //console.log(" menu dni ", dni, nombre )
   </script>

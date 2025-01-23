@@ -215,11 +215,16 @@
             <div id="tab1">
 
               <h2 class="fs-subtitle subti">Datos Personales</h2>
-              <div class="mb-3 material-textfield">
 
-                <input id="dni" name="dni" type="text" class="form-control input-number" placeholder="DNI (*)" maxlength="10">
-                <label for="dni" class="">Numero de DNI : </label>
+              <div class="mb-3 material-textfield">
+                <input id="celular" name="celular" type="text" class="form-control input-number" placeholder="Celular(*) Ej.(11) 1111-1111" maxlength="14">
+                <label for="celular" class="form-label">celular(*)</label>
               </div>
+              <div class="mb-3 material-textfield">
+                <input id="mcelular" name="mcelular" type="text" class="form-control input-number" placeholder="Celular(*) Ej.(11) 1111-1111" maxlength="14" readonly hidden>
+
+              </div>
+
               <div class="mb-3 material-textfield">
                 <input id="nombre" name="nombre" type="text" class="form-control" placeholder="Nombre (*)">
                 <label for="nombre" class="">Nombre(*)</label>
@@ -228,10 +233,7 @@
                 <input id="apellido" name="apellido" type="text" class="form-control" placeholder="Apellido (*)">
                 <label for="apellido" class="">Apellido (*)</label>
               </div>
-              <div class="mb-3 material-textfield">
-                <input id="celular" name="celular" type="text" class="form-control input-number" placeholder="Celular(*) Ej.(11) 1111-1111" maxlength="14">
-                <label for="celular" class="form-label">celular(*)</label>
-              </div>
+
               <div class="mb-3 material-textfield">
                 <input id="email" name="email" type="text" class="form-control" placeholder="Email(*)" maxlength="30">
                 <label for="email" class="form-label">Email(*)</label>
@@ -440,7 +442,7 @@
                   <td style="width: 100px;">
                     <input style="text-decoration: underline;font-size: 1.5rem; color: red; font-size: 1.2rem;border: 0; text-align: right;" value="Usuario:"></h2>
                   </td>
-                  <td><input id="mdni" style="color: red; font-size: 1.2rem; border: 0; text-align: left;"></td>
+                  <td><input id="mcelular2" name="mcelular2" style="color: red; font-size: 1.2rem; border: 0; text-align: left;"></td>
 
                 <tr style="height: 30px;">
                   <td> <a></a> </td>
@@ -574,22 +576,41 @@
       return document.getElementById(element);
     }
 
-    _('dni').onchange = function() {
-      var temp = document.getElementById('dni').value
-      temp = temp.replaceAll('.', '')
-      console.log("nuevo dni", temp)
-      document.getElementById('mdni').value = temp
-      console.log("mdni >", document.getElementById('mdni').value)
+    _('celular').onchange = function() {
+      var temp = document.getElementById('celular').value
+      temp = temp.replaceAll('(', '')
+      console.log("validar cel (", temp);
+      temp = temp.replaceAll(')', '')
+      console.log("validar cel )", temp);
+      temp = temp.replaceAll('-', '')
+      temp = temp.replaceAll(' ', '')
+      console.log("validar cel ", temp);
+      document.getElementById('mcelular').value = temp
+      console.log("nuevo celular", temp)
+      document.getElementById('mcelular').value = temp
+      console.log("mcelular >", document.getElementById('mcelular').value)
       // fetch('/get_data?type=' + type +
-      fetch('/chequeo_dni?dni=' + document.getElementById('mdni').value)
+      consulta = '/chequeo_celular?mcelular=' + document.getElementById('mcelular').value
+      console.log("consulta : ", consulta)
+      fetch(consulta)
         // Exito
         .then(response => response.json()) // convertir a json
+        
         .then(json => Swal.fire({
-          icon: 'error',
-          title: "usuario ya existente",
-          text: "Ingrese a la aplicacion con su DNI",
-          showConfirmButton: true
-        })) //imprimir los datos en la consola
+                        icon: 'error',
+                        title: "usuario ya existente",
+                        text: "Ingrese a la aplicacion con su celular",
+                        showConfirmButton: true})
+                        
+                        )
+        /*                
+        .then((data) => { 
+                        document.getElementById('celular').focus();
+                        console.log("pase");
+  
+                      } //imprimir los datos en la consola
+              )
+        */     
         .catch(err => console.log('Solicitud fallida', err)); // Capturar errores
     };
 
@@ -1054,25 +1075,11 @@
 
     function valida1() {
       console.log("valida1");
-      // corrijo lospuntos del dni
-      var temp = document.getElementById('dni').value
-      temp = temp.replaceAll('.', '')
-      document.getElementById('dni').value = temp
-
       // corrijo celular
-      var temp = document.getElementById('celular').value
-      temp = temp.replaceAll('(', '')
-      console.log("validar cel (", temp);
-      temp = temp.replaceAll(')', '')
-      console.log("validar cel )", temp);
-      temp = temp.replaceAll('-', '')
-      temp = temp.replaceAll(' ', '')
-      console.log("validar cel (", temp);
-      console.log("validar cel (", temp);
-      document.getElementById('celular').value = temp
 
-      if (Chequeo_campo("dni", "Cargue su Numero de DNI") == true) {
-        console.log("dni_ok")
+
+      if (Chequeo_campo("celular", "Cargue su Numero de celular") == true) {
+        console.log("celular_ok")
         if (Chequeo_campo("nombre", "Cargue su Nombre") == true) {
           console.log("nombre_ok")
           if (Chequeo_campo("celular", "Cargue su Numero de celular") == true) {
@@ -1105,9 +1112,15 @@
     }
 
     function Chequeo_campo(campo, mensaje) {
-      console.log("funcion chequeo ", campo)
+ 
+
+      console.log("funcion chequeo por campo", campo)
+      if (campo="celular"){
+        console.log("entro")
+        campo = "mcelular"
+      }
       mcampo = document.getElementById(campo).value.trim();
-      console.log(campo, mcampo)
+      console.log("campo",campo, mcampo)
       if (mcampo == null || mcampo.length == 0) {
         document.getElementById(campo).focus();
         Swal.fire({

@@ -42,6 +42,7 @@ import {
 import {
   getdata,
   chequeo_dni,
+  chequeo_celular,
   usuario_nuevo,
   usuario_modi,
   sendmail,
@@ -89,13 +90,13 @@ router.get("/home", async (req, res) => {
         console.log("req.usr ", req.user);
         if (req.user) {
           console.log("existe user router/home");
-          res.render("lista18",{ user: req.user});
+          res.render("lista17",{ user: req.user});
           //res.render("lista10",{ user: req.user});
           //res.render("home", { registro: results, user: req.user });
         } else {
           console.log("NO esta adentro router/home");
           //res.render("home", { registro: results, user: false });
-          res.render("lista18",{ user: false});
+          res.render("lista17",{ user: false});
         }
       } catch (error) {
         console.log(error);
@@ -103,7 +104,7 @@ router.get("/home", async (req, res) => {
     }
     else {
       console.log("no tiene cookies") 
-      //res.render("lista10",{ user: false});
+      //aca es donde entran todos
       res.render("lista18",{ user: false});
       //res.render("home", { registro: results, user: false });
     }
@@ -144,9 +145,11 @@ router.get("/archivo", (req, res) => {
 
 // mostrar todos los usuarios
 router.get('/api/usuarios/:id',async (req,res)=>{
-  console.log("entro en api/usuarios",  [req.params.id] )
+  console.log("entro en api/usuarios :",  [req.params.id] )
   try {
-    const [filas] = await pool.query("SELECT u.dni as dni, x.nombre,  x.apellido, x.calificacion, x.celular, x.codigopostal, x.imagen, l.descripcion as localidad, p.descripcion as provincia, GROUP_CONCAT(DISTINCT o.descripcion SEPARATOR ' - ') as oficio,  x.presentacion from usuario_oficio u INNER JOIN oficio o on u.id_oficio = o.id_oficio INNER JOIN usuario x on x.dni = u.dni INNER JOIN localidad l on l.id_localidad = x.id_localidad INNER JOIN provincia p on p.id_provincia = x.id_provincia where ? GROUP by u.dni order by x.nombre, x.apellido ;", [req.params.id]);
+    // si no tengo ubicacion no anda
+    //const [filas] = await pool.query("SELECT u.dni as dni, x.nombre,  x.apellido, x.calificacion, x.celular, x.codigopostal, x.imagen, l.descripcion as localidad, p.descripcion as provincia, GROUP_CONCAT(DISTINCT o.descripcion SEPARATOR ' - ') as oficio,  x.presentacion from usuario_oficio u INNER JOIN oficio o on u.id_oficio = o.id_oficio INNER JOIN usuario x on x.dni = u.dni INNER JOIN localidad l on l.id_localidad = x.id_localidad INNER JOIN provincia p on p.id_provincia = x.id_provincia where ? GROUP by u.dni order by x.nombre, x.apellido ;", [req.params.id]);
+    const [filas] = await pool.query("SELECT u.celular as dni, x.nombre, x.apellido, x.calificacion, x.celular, x.codigopostal, x.imagen, l.descripcion as localidad, GROUP_CONCAT(DISTINCT o.descripcion SEPARATOR ' - ') as oficio, x.presentacion       from usuario_oficio u INNER JOIN oficio o on u.id_oficio = o.id_oficio INNER JOIN usuario x on x.celular = u.celular INNER JOIN localidad l on l.id_localidad = x.id_localidad GROUP by u.celular order by x.nombre, x.apellido;", [req.params.id]);
     console.log("usuarios", filas.length);
     res.send(filas);
   } catch (error) {
@@ -159,7 +162,8 @@ router.get('/api/usuarios/:id',async (req,res)=>{
 router.get('/vercard/:id',async (req,res)=>{
   console.log("entro en vercard",  [req.params.id] )
   try {
-    const [usuario] = await pool.query("SELECT u.dni as dni, x.nombre,  x.calle, x.numero, x.apellido, x.calificacion, x.celular, x.codigopostal, x.imagen, l.descripcion as localidad, p.descripcion as provincia, GROUP_CONCAT(DISTINCT o.descripcion SEPARATOR ' - ') as oficio,  x.presentacion from usuario_oficio u INNER JOIN oficio o on u.id_oficio = o.id_oficio INNER JOIN usuario x on x.dni = u.dni INNER JOIN localidad l on l.id_localidad = x.id_localidad INNER JOIN provincia p on p.id_provincia = x.id_provincia where u.dni = ? GROUP by u.dni order by x.nombre, x.apellido ;", [req.params.id])
+    const [usuario] = await pool.query("SELECT u.celular as dni, u.celular as celular, x.nombre, x.calle, x.numero, x.apellido, x.calificacion, x.celular, x.codigopostal, x.imagen, l.descripcion as localidad, GROUP_CONCAT(DISTINCT o.descripcion SEPARATOR ' - ') as oficio, x.presentacion, q.descripcion as provincia from usuario_oficio u INNER JOIN oficio o on u.id_oficio = o.id_oficio INNER JOIN usuario x on x.celular = u.celular INNER JOIN localidad l on l.id_localidad = x.id_localidad INNER JOIN provincia q on q.id_provincia = x.id_provincia where u.celular = ? GROUP by u.celular order by x.nombre, x.apellido;", [req.params.id])
+    //SELECT u.celular as dni, x.nombre,  x.calle, x.numero, x.apellido, x.calificacion, x.celular, x.codigopostal, x.imagen, l.descripcion as localidad, p.descripcion as provincia, GROUP_CONCAT(DISTINCT o.descripcion SEPARATOR ' - ') as oficio,  x.presentacion from usuario_oficio u INNER JOIN oficio o on u.id_oficio = o.id_oficio INNER JOIN usuario x on x.celular = u.celular INNER JOIN localidad l on l.id_localidad = x.id_localidad INNER JOIN provincia p on p.id_provincia = x.id_provincia where u.celular = ? GROUP by u.celular order by x.nombre, x.apellido ;", [req.params.id])
     //SELECT x.dni, x.nombre, x.apellido, x.calle, x.numero, l.descripcion as loc, l.id_localidad as id_localidad, p.descripcion as provincia, l.id_localidad as id_provincia, x.imagen, x.celular, x.presentacion FROM usuario x INNER JOIN localidad l on x.id_localidad = l.id_localidad INNER JOIN provincia p on x.id_provincia = p.id_provincia where x.dni= ? ;",[req.params.id]);
     console.log("usuarios", usuario.length);
     console.log("usuario", usuario)
@@ -294,7 +298,7 @@ router.get('/api/localidades',async (req,res)=>{
 router.get('/api/oficios',async (req,res)=>{
   console.log("entro en api/oficios")
   try {
-    const [filas] = await pool.query("SELECT DISTINCT  p.id_oficio as cod, o.descripcion as descripcion FROM usuario_oficio p INNER JOIN usuario u on u.dni = p.dni INNER JOIN oficio o on o.id_oficio = p.id_oficio order by o.descripcion;");
+    const [filas] = await pool.query("SELECT DISTINCT  p.id_oficio as cod, o.descripcion as descripcion FROM usuario_oficio p INNER JOIN usuario u on u.celular = p.celular INNER JOIN oficio o on o.id_oficio = p.id_oficio order by o.descripcion;");
     console.log("oficios ->", filas.length);
     res.send(filas);
   } catch (error) {
@@ -589,6 +593,7 @@ router.post("/usuario_modi", usuario_modi);
 router.post("/archivo", archivo);
 router.get("/get_data", getdata); // trae datos de provincia,localidad,oficio
 router.get("/chequeo_dni", chequeo_dni);
+router.get("/chequeo_celular", chequeo_celular);
 router.get("/listado", listado);
 router.get("/listado3", listado3);
 router.get("/listado4", listado4);
@@ -830,7 +835,7 @@ router.post("/new_user", upload2.single("image"), async (req, res) => {
   }
 
   const pp = await usuario_nuevo(req, tienearchivo, filename)
-  console.log("pp", pp.nombre, pp.dni, pp.pass, pp.apellido)
+  console.log("pp", pp)
 
 let alertmesagge = "Felicidades " + pp.nombre
   res.render("login",{   alert: true,

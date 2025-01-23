@@ -47,12 +47,13 @@
 
    
     <div class="barra" >
+      <!-- 
       <div class="form-floating">
         <label for="select_provi" class="form-label" style="font-size:larger; text-decoration: underline;"> Provincia </label>
         <select class="form-select" name="select_provi" id="select_provi" style="width: 180px;" onchange="functionProv(this)"></select>
 
       </div>
-
+    -->
       <div class="form-floating">
         <select class="form-select" name="select_localidad" id="select_localidad" style="width: 180px;"></select>
         <label for="select_provi" class="form-label" style="font-size:larger; text-decoration: underline;">Localidad</label>
@@ -110,9 +111,11 @@
     // SELECT provincia, descripcion, ST_Distance_Sphere(POINT(latitud,longitug),POINT(-34.6564185,-58.6780789))/1000 as distances FROM localidad where municipio = 'ituzaingo';
     console.log("lista18")
     let filtro = "/1"
-    if (navigator.geolocation) {
+   /* 
+   if (navigator.geolocation) {
        navigator.geolocation.getCurrentPosition(onSuccess, onError);
     }
+   */ 
 
 
 

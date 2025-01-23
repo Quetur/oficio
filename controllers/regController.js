@@ -98,14 +98,45 @@ export const chequeo_dni = async (request, response, next) => {
   }
 }
 
+export const chequeo_celular = async (request, response, next) => {
+  var celular = request.query.mcelular;
+  console.log("controler chequeo celular ", celular);
+  try {
+    const [results]  = await pool.query(`SELECT * FROM usuario WHERE celular = ?`, celular);
+    console.log ("cantidad de resultados", results.length)
+    console.log("encontr", results)
+        let registro = results[0]
+    if (results.length==0) {
+       console.log("no hay celular");
+       return next();
+    } 
+    else {
+      //console.log("encontr", results[0].celular)
+      console.log("registro", registro)
+      console.log("duplicado", registro.celular, registro.nombre);
+      let lin =`{"celular": "` +
+            registro.celular +
+            `", "nombre": "` +
+            registro.nombre +
+            `"}`;
+          let obj = JSON.parse(lin);
+          console.log(obj);
+          response.json(obj);
+    }
+  }
+  catch (error) {
+    console.log(error);
+  }
+}
+
 
 //procedimiento para  usuarios nuevo
 export const  usuario_nuevo = async (req, tienearchivo, filename) => {
-
   console.log("usuario_nuevo dentro de regControler");
   console.log("tienearchivo",tienearchivo)
   const user = req.body.user;
   console.log("upresentacion", req.body.presentacion)
+  const celular = req.body.mcelular;
   const nombre = req.body.nombre;
   const apellido = req.body.apellido;
   const calle = req.body.calle;
@@ -116,8 +147,7 @@ export const  usuario_nuevo = async (req, tienearchivo, filename) => {
   const codigopostal = req.body.codigopostal;
   const lati = req.body.lati;
   const longi = req.body.longi;
-  const dni = req.body.dni;
-  const celular = req.body.celular;
+ // const dni = req.body.dni;
   const email = req.body.email;
   const categoria = req.body.categoria;
   const oficio = req.body.oficio;
@@ -161,7 +191,7 @@ export const  usuario_nuevo = async (req, tienearchivo, filename) => {
     codigopostal: codigopostal,
     latitud: lati,
     longitud: longi,
-    dni: dni,
+    //dni: dni,
     celular: celular,
     email: email,
     id_categoria: categoria,
@@ -171,20 +201,21 @@ export const  usuario_nuevo = async (req, tienearchivo, filename) => {
     pass: passHash,
     imagen: img,
   });
-
-  console.log("carga ok", dni, registro);
+  let id_usuario = registro[0].insertId
+  console.log("registro numero", id_usuario);
   console.log("total de oficios", oficio.length);
+  //console.log(eeee);
   for (let i = 0; i < oficio.length; i++) {
-    let usuario_oficio = dni + oficio[i];
+    let usuario_oficio = celular + oficio[i];
     console.log("usuariooficio ->", usuario_oficio);
     console.log("grabando, ", usuario_oficio);
     let registro = await pool.query("INSERT INTO usuario_oficio SET ?", {
-      dni: dni,
+      celular: celular,
       id_oficio: oficio[i],
     });
   }
-  console.log("termin ok");
- return {nombre,dni, pass }
+  console.log("termin ok", registro);
+ return registro
   //res.redirect("/registro_ok");
 /*
   let alertmesagge = "Felicidades "+nombre
@@ -385,14 +416,14 @@ export const  newcomment = async (req, res) => {
   console.log("new_coment", dni )
  
   try {
-    const [results]  = await pool.query(`SELECT * FROM usuario WHERE dni = ?`, dni);
+    const [results]  = await pool.query(`SELECT * FROM usuario WHERE celular = ?`, dni);
     console.log ("cantidad de resultados", results.length)
-    console.log("encontro", results[0].dni)
+    console.log("encontro", results[0].celular)
     let usuario = results[0]
     if (results.length>0) {
-      console.log("registro", usuario.dni, usuario.nombre);
+      console.log("registro", usuario.celular, usuario.nombre);
       let lin =`{"dni": "` +
-            usuario.dni +
+            usuario.celular +
             `", "nombre": "` +
             usuario.nombre +
             `"}`;
